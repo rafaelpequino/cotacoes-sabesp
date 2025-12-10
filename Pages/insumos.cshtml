@@ -1,0 +1,809 @@
+@page
+@model CotacoesEPC.Pages.insumosModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Insumos";
+}
+
+<link rel="stylesheet" href="~/css/dashboard.css" />
+
+<header class="dashboard-header">
+    <div class="logo-area">
+        <img src="~/images/sabesp.svg" alt="sabesp" class="logo" />
+    </div>
+
+    <nav class="menu">
+        <a class="menu-item" href="/dashboard">Dashboard</a>
+        <a class="menu-item" href="/servicos">Serviços</a>
+        <a class="menu-item active" href="/insumos">Insumos</a>
+        <a class="menu-item" href="/planilhas">Planilhas</a>
+    </nav>
+
+    <div class="user-area">
+        <div class="user">
+            <div class="user-icon">R</div>
+            <span class="user-name">Rafael</span>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard-container">
+    <div class="servicos-header">
+        <h2 class="title">Insumos</h2>
+        <button class="btn-nova-cotacao">+ Nova Cotação</button>
+    </div>
+
+    <section class="servicos-filters">
+        <input type="text" class="search-input" placeholder="Pesquisar por item" />
+        
+        <div class="filter-group">
+            <label class="filter-label">Ordenar por:</label>
+            <select class="filter-select">
+                <option>Relevância</option>
+                <option>Mais Recentes</option>
+                <option>Preço: Menor</option>
+                <option>Preço: Maior</option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label class="filter-label">Filtrar por:</label>
+            <select class="filter-select">
+                <option>Minhas Cotações</option>
+                <option>Todas as Cotações</option>
+                <option>Cotações Aprovadas</option>
+            </select>
+        </div>
+
+        <button class="btn-limpar">Limpar Filtros</button>
+    </section>
+
+    <section class="servicos-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID original</th>
+                    <th>Data</th>
+                    <th>Item</th>
+                    <th>Unidade</th>
+                    <th>Preço instalação</th>
+                    <th>Preço adotado</th>
+                    <th>Responsável</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>00001</td>
+                    <td>25/09/2025</td>
+                    <td>Tubo PVC 100mm</td>
+                    <td>m</td>
+                    <td>R$25.000,00</td>
+                    <td>R$28.000,00</td>
+                    <td>Rafael Pequino Freire</td>
+                    <td class="actions">
+                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
+                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
+                        <button class="action-btn btn-editar" title="Editar" onclick="openEditModal()">✏️</button>
+                        <button class="action-btn btn-excluir" title="Excluir">🗑</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>00002</td>
+                    <td>22/09/2025</td>
+                    <td>Cimento CP II-Z</td>
+                    <td>Kg</td>
+                    <td>R$15.000,00</td>
+                    <td>R$16.500,00</td>
+                    <td>Kauê Guedes Duarte</td>
+                    <td class="actions">
+                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
+                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>00003</td>
+                    <td>10/08/2025</td>
+                    <td>Areia média</td>
+                    <td>m³</td>
+                    <td>R$8.000,00</td>
+                    <td>R$9.200,00</td>
+                    <td>Kauê Guedes Duarte</td>
+                    <td class="actions">
+                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
+                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>000014</td>
+                    <td>02/08/2025</td>
+                    <td>Brita nº 1</td>
+                    <td>m³</td>
+                    <td>R$12.000,00</td>
+                    <td>R$13.500,00</td>
+                    <td>Kauê Guedes Duarte</td>
+                    <td class="actions">
+                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
+                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<!-- MODAL CRIAR/VISUALIZAR NOVO INSUMO -->
+<div id="createModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Nova Cotação</h2>
+            <button class="modal-close" onclick="closeCreateModal()">&times;</button>
+        </div>
+        <div class="paste-button-container">
+            <button type="button" class="btn-paste" onclick="pasteFromClipboard()">📋 Colar dados da planilha</button>
+        </div>
+        <form class="modal-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ID Original da Cotação*</label>
+                    <input type="text" placeholder="Ex: 00001" required />
+                </div>
+                <div class="form-group">
+                    <label>Item*</label>
+                    <input type="text" placeholder="Descrição do item" required />
+                </div>
+                <div class="form-group">
+                    <label>Unidade*</label>
+                    <input type="text" placeholder="Ex: Un., m², Kg" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Adotada - Preço de Forn. (corrigido)*</label>
+                    <input type="number" placeholder="0,00" step="0.01" required />
+                </div>
+                <div class="form-group">
+                    <label>Preço de montagem / instalação*</label>
+                    <input type="number" placeholder="0,00" step="0.01" required />
+                </div>
+                <div class="form-group">
+                    <label>Preço adotado*</label>
+                    <input type="number" placeholder="0,00" step="0.01" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Média adotada</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Média Saneada</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Menor Valor</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Média Aritmética</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Mediana</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+
+            <h3 class="section-title">Preços das Empresas</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Empresa 1</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 2</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 3</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Empresa 4</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 5</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 6</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Justificativa do preço adotado</label>
+                    <textarea placeholder="Digite a justificativa..." rows="4"></textarea>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tempo passado entre os períodos (dias)</label>
+                    <input type="number" placeholder="0" />
+                </div>
+                <div class="form-group">
+                    <label>Mês anterior ao inicial</label>
+                    <input type="text" placeholder="Ex: Janeiro" />
+                </div>
+                <div class="form-group">
+                    <label>Índice do mês anterior ao inicial</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Índice atual</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeCreateModal()">Cancelar</button>
+                <button type="submit" class="btn-submit">Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EDITAR INSUMO -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Cotação</h2>
+            <button class="modal-close" onclick="closeEditModal()">&times;</button>
+        </div>
+        <form class="modal-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>ID Original da Cotação*</label>
+                    <input type="text" placeholder="Ex: 00001" value="00001" required />
+                </div>
+                <div class="form-group">
+                    <label>Item*</label>
+                    <input type="text" placeholder="Descrição do item" value="Tubo PVC 100mm" required />
+                </div>
+                <div class="form-group">
+                    <label>Unidade*</label>
+                    <input type="text" placeholder="Ex: Un., m², Kg" value="m" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Adotada - Preço de Forn. (corrigido)*</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="25000" required />
+                </div>
+                <div class="form-group">
+                    <label>Preço de montagem / instalação*</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="3000" required />
+                </div>
+                <div class="form-group">
+                    <label>Preço adotado*</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="28000" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Média adotada</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="28000" />
+                </div>
+                <div class="form-group">
+                    <label>Média Saneada</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Menor Valor</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="25000" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Média Aritmética</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="26500" />
+                </div>
+                <div class="form-group">
+                    <label>Mediana</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="28000" />
+                </div>
+            </div>
+
+            <h3 class="section-title">Preços das Empresas</h3>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Empresa 1</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="25000" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 2</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="28000" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 3</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="26500" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Empresa 4</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 5</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+                <div class="form-group">
+                    <label>Empresa 6</label>
+                    <input type="number" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Justificativa do preço adotado</label>
+                    <textarea placeholder="Digite a justificativa..." rows="4">Preço adotado conforme análise de mercado</textarea>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Tempo passado entre os períodos (dias)</label>
+                    <input type="number" placeholder="0" value="30" />
+                </div>
+                <div class="form-group">
+                    <label>Mês anterior ao inicial</label>
+                    <input type="text" placeholder="Ex: Janeiro" value="Agosto" />
+                </div>
+                <div class="form-group">
+                    <label>Índice do mês anterior ao inicial</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="105.5" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Índice atual</label>
+                    <input type="number" placeholder="0,00" step="0.01" value="108.3" />
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+                <button type="submit" class="btn-submit">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL VISUALIZAR INSUMO -->
+<div id="viewModal" class="modal">
+    <div class="modal-content modal-view">
+        <div class="modal-header">
+            <h2>Detalhes da Cotação</h2>
+            <button class="modal-close" onclick="closeViewModal()">&times;</button>
+        </div>
+        <div class="modal-view-content">
+            <div class="view-section">
+                <h3>Informações Básicas</h3>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">ID Original:</span>
+                        <span class="view-value">00001</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Item:</span>
+                        <span class="view-value">Tubo PVC 100mm</span>
+                    </div>
+                </div>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Unidade:</span>
+                        <span class="view-value">m</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Responsável:</span>
+                        <span class="view-value">Rafael Pequino Freire</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <h3>Preços</h3>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Adotada - Preço de Forn. (corrigido):</span>
+                        <span class="view-value">R$ 25.000,00</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Preço de montagem / instalação:</span>
+                        <span class="view-value">R$ 3.000,00</span>
+                    </div>
+                </div>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Preço adotado:</span>
+                        <span class="view-value">R$ 28.000,00</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Média adotada:</span>
+                        <span class="view-value">R$ 28.000,00</span>
+                    </div>
+                </div>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Média Saneada:</span>
+                        <span class="view-value">R$ 27.500,00</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Menor Valor:</span>
+                        <span class="view-value">R$ 25.000,00</span>
+                    </div>
+                </div>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Média Aritmética:</span>
+                        <span class="view-value">R$ 26.500,00</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Mediana:</span>
+                        <span class="view-value">R$ 28.000,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <h3>Preços das Empresas</h3>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Empresa 1:</span>
+                        <span class="view-value">R$ 25.000,00</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Empresa 2:</span>
+                        <span class="view-value">R$ 28.000,00</span>
+                    </div>
+                </div>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Empresa 3:</span>
+                        <span class="view-value">R$ 26.500,00</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Empresa 4:</span>
+                        <span class="view-value">-</span>
+                    </div>
+                </div>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Empresa 5:</span>
+                        <span class="view-value">-</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Empresa 6:</span>
+                        <span class="view-value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <h3>Justificativa</h3>
+                <div class="view-full">
+                    <span class="view-label">Justificativa do preço adotado:</span>
+                    <p class="view-text">Preço adotado conforme análise de mercado considerando as cotações recebidas das principais empresas fornecedoras e os históricos de preços anteriores.</p>
+                </div>
+            </div>
+
+            <div class="view-section">
+                <h3>Índices e Períodos</h3>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Tempo passado entre períodos:</span>
+                        <span class="view-value">30 dias</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Mês anterior ao inicial:</span>
+                        <span class="view-value">Agosto</span>
+                    </div>
+                </div>
+                <div class="view-row">
+                    <div class="view-item">
+                        <span class="view-label">Índice do mês anterior:</span>
+                        <span class="view-value">105.50%</span>
+                    </div>
+                    <div class="view-item">
+                        <span class="view-label">Índice atual:</span>
+                        <span class="view-value">108.30%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeViewModal()">Fechar</button>
+                <button type="button" class="btn-submit" onclick="editFromView()">Editar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // MODAL CRIAR
+    const btnNovaCotacao = document.querySelector('.btn-nova-cotacao');
+    const createModal = document.getElementById('createModal');
+    
+    btnNovaCotacao.addEventListener('click', function() {
+        createModal.style.display = 'flex';
+    });
+
+    function closeCreateModal() {
+        createModal.style.display = 'none';
+    }
+
+    // MODAL EDITAR
+    const editModal = document.getElementById('editModal');
+
+    function openEditModal() {
+        editModal.style.display = 'flex';
+    }
+
+    function closeEditModal() {
+        editModal.style.display = 'none';
+    }
+
+    // MODAL VISUALIZAR
+    const viewModal = document.getElementById('viewModal');
+
+    function openViewModal() {
+        viewModal.style.display = 'flex';
+    }
+
+    function closeViewModal() {
+        viewModal.style.display = 'none';
+    }
+
+    function editFromView() {
+        closeViewModal();
+        openEditModal();
+    }
+
+    // Dados dos insumos (mocados para exemplo)
+    const insumosData = {
+        '00001': {
+            idOriginal: '00001',
+            item: 'Tubo PVC 100mm',
+            unidade: 'm',
+            adopriceCorrigido: '25000.00',
+            precoMontagem: '3000.00',
+            precoAdotado: '28000.00',
+            mediaAdotada: '28000.00',
+            mediaSaneada: '27500.00',
+            menorValor: '25000.00',
+            mediaAritmetica: '26500.00',
+            mediana: '28000.00',
+            empresa1: '25000.00',
+            empresa2: '28000.00',
+            empresa3: '26500.00',
+            empresa4: '-',
+            empresa5: '-',
+            empresa6: '-',
+            justificativa: 'Preço adotado conforme análise de mercado',
+            tempoPassado: '30',
+            mesAnterior: 'Agosto',
+            indiceAnterior: '105.50',
+            indiceAtual: '108.30'
+        }
+    };
+
+    // Função para copiar dados
+    function copyServiceData(serviceId) {
+        const service = insumosData['00001']; // Para este exemplo, sempre copia 00001
+        
+        // Dados na ordem exata das colunas da planilha
+        // COLUNAS 6, 8, 14 E 22 DEVEM FICAR VAZIAS
+        const values = [
+            service.idOriginal,                    // 1. I0 original da cotação
+            service.item,                          // 2. ITEM
+            service.unidade,                       // 3. Unidade
+            service.adopriceCorrigido,             // 4. Adotada - Preço de Forn. (corrigido)
+            service.precoMontagem,                 // 5. Preço de montagem / instalação
+            '',                                    // 6. COLUNA VAZIA
+            service.precoAdotado,                  // 7. Preço adotado
+            '',                                    // 8. COLUNA VAZIA
+            service.mediaAdotada,                  // 9. Média adotada
+            service.mediaSaneada,                  // 10. Média Saneada
+            service.menorValor,                    // 11. Menor Valor
+            service.mediaAritmetica,               // 12. Média Aritmética
+            service.mediana,                       // 13. Mediana
+            '',                                    // 14. COLUNA VAZIA
+            (service.empresa1 || '-'),             // 15. EMPRESA 1
+            (service.empresa2 || '-'),             // 16. EMPRESA 2
+            (service.empresa3 || '-'),             // 17. EMPRESA 3
+            (service.empresa4 || '-'),             // 18. EMPRESA 4
+            (service.empresa5 || '-'),             // 19. EMPRESA 5
+            (service.empresa6 || '-'),             // 20. EMPRESA 6
+            service.justificativa,                 // 21. Justificativa do preço adotado
+            '',                                    // 22. COLUNA VAZIA
+            service.tempoPassado,                  // 23. Tempo passado entre os períodos
+            service.mesAnterior,                   // 24. Mês anterior ao inicial
+            service.indiceAnterior,                // 25. Índice do mês anterior ao inicial
+            service.indiceAtual                    // 26. Índice atual
+        ].join('\t');
+
+        navigator.clipboard.writeText(values).then(() => {
+            // Mostrar notificação de sucesso
+            showCopyNotification();
+        }).catch(() => {
+            alert('Erro ao copiar dados. Tente novamente.');
+        });
+    }
+
+    // Função para mostrar notificação de cópia
+    function showCopyNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'copy-notification';
+        notification.textContent = '✓ Dados copiados para a área de transferência';
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 2000);
+    }
+
+    // Função para colar dados da planilha
+    function pasteFromClipboard() {
+        navigator.clipboard.readText().then((text) => {
+            try {
+                // Split by tab para pegar cada coluna
+                const values = text.trim().split('\t');
+                
+                // Verificar se tem dados suficientes
+                if (values.length < 26) {
+                    alert('Formato de dados inválido. Certifique-se de copiar os dados completos.');
+                    return;
+                }
+
+                // Mapear os valores para os inputs (seguindo a ordem exata)
+                const inputs = createModal.querySelectorAll('input, textarea');
+                
+                // Encontrar cada input pelo tipo e preenchê-lo
+                const idOriginalInput = createModal.querySelector('input[placeholder="Ex: 00001"]');
+                const itemInput = createModal.querySelector('input[placeholder="Descrição do item"]');
+                const unidadeInput = createModal.querySelector('input[placeholder="Ex: Un., m², Kg"]');
+                
+                // Inputs de preços
+                const precoInputs = createModal.querySelectorAll('input[type="number"]');
+                
+                // Preencher valores (índice baseado na posição correta)
+                if (idOriginalInput) idOriginalInput.value = values[0] || '';
+                if (itemInput) itemInput.value = values[1] || '';
+                if (unidadeInput) unidadeInput.value = values[2] || '';
+                
+                // Preços na ordem
+                let inputIndex = 0;
+                precoInputs[inputIndex++].value = values[3] || ''; // Adotada - Preço Forn.
+                precoInputs[inputIndex++].value = values[4] || ''; // Preço montagem
+                // Coluna 6 vazia - pula
+                precoInputs[inputIndex++].value = values[6] || ''; // Preço adotado
+                // Coluna 8 vazia - pula
+                precoInputs[inputIndex++].value = values[8] || ''; // Média adotada
+                precoInputs[inputIndex++].value = values[9] || ''; // Média Saneada
+                precoInputs[inputIndex++].value = values[10] || ''; // Menor Valor
+                precoInputs[inputIndex++].value = values[11] || ''; // Média Aritmética
+                precoInputs[inputIndex++].value = values[12] || ''; // Mediana
+                // Coluna 14 vazia - pula
+                precoInputs[inputIndex++].value = values[14] || ''; // Empresa 1
+                precoInputs[inputIndex++].value = values[15] || ''; // Empresa 2
+                precoInputs[inputIndex++].value = values[16] || ''; // Empresa 3
+                precoInputs[inputIndex++].value = values[17] || ''; // Empresa 4
+                precoInputs[inputIndex++].value = values[18] || ''; // Empresa 5
+                precoInputs[inputIndex++].value = values[19] || ''; // Empresa 6
+                precoInputs[inputIndex++].value = values[23] || ''; // Tempo passado
+                precoInputs[inputIndex++].value = values[24] || ''; // Índice anterior
+                precoInputs[inputIndex++].value = values[25] || ''; // Índice atual
+                
+                // Preencher textarea
+                const justificativaInput = createModal.querySelector('textarea');
+                if (justificativaInput) justificativaInput.value = values[20] || '';
+                
+                // Preencher campos de texto
+                const textInputs = createModal.querySelectorAll('input[type="text"]');
+                let textIndex = 0;
+                if (textInputs[textIndex]) textInputs[textIndex++].value = values[0] || ''; // ID Original
+                if (textInputs[textIndex]) textInputs[textIndex++].value = values[1] || ''; // Item
+                if (textInputs[textIndex]) textInputs[textIndex++].value = values[2] || ''; // Unidade
+                if (textInputs[textIndex]) textInputs[textIndex++].value = values[22] || ''; // Mês anterior
+
+                showPasteNotification();
+            } catch (error) {
+                alert('Erro ao processar dados da planilha: ' + error.message);
+            }
+        }).catch(() => {
+            alert('Não foi possível acessar a área de transferência. Verifique as permissões do navegador.');
+        });
+    }
+
+    // Função para mostrar notificação de cola
+    function showPasteNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'paste-notification';
+        notification.textContent = '✓ Dados colados com sucesso';
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            notification.classList.remove('show');
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 300);
+        }, 2000);
+    }
+
+    // Adicionar funcionalidade de cópia aos botões
+    document.querySelectorAll('.btn-copiar').forEach((btn, index) => {
+        btn.addEventListener('click', function() {
+            copyServiceData('00001');
+        });
+    });
+
+    // Fechar modal ao clicar fora
+    window.addEventListener('click', function(event) {
+        if (event.target === createModal) {
+            closeCreateModal();
+        }
+        if (event.target === editModal) {
+            closeEditModal();
+        }
+        if (event.target === viewModal) {
+            closeViewModal();
+        }
+    });
+
+    // Fechar modais com a tecla ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            if (createModal.style.display === 'flex') {
+                closeCreateModal();
+            }
+            if (editModal.style.display === 'flex') {
+                closeEditModal();
+            }
+            if (viewModal.style.display === 'flex') {
+                closeViewModal();
+            }
+        }
+    });
+</script>
+

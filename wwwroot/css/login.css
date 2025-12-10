@@ -1,0 +1,128 @@
+﻿:root, html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: #ffffff;
+    color: #1d1d1f;
+    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Wrapper */
+.login-landing {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+}
+
+/* Cartão */
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+/* Logo */
+.brand {
+    margin-bottom: 2px;
+}
+
+.logo {
+    width: 180px;
+    height: auto;
+    display: block;
+}
+
+/* Título */
+.title {
+    margin: 0 0 2px 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #2b2b2b;
+}
+
+/* Formulário */
+.form-login {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Campos */
+.field {
+    width: 100%;
+}
+
+.input {
+    width: 100%;
+    height: 48px;
+    padding: 0 14px;
+    border-radius: 12px;
+    border: 1px solid #d7dce1;
+    outline: none;
+    background: #fff;
+    font-size: 15px;
+}
+
+    .input::placeholder {
+        color: #8b98a5;
+    }
+
+    .input:focus {
+        border-color: #1bd6ff;
+        box-shadow: 0 0 0 3px rgba(27, 214, 255, .15);
+    }
+
+/* Botão */
+.btn-primary {
+    width: 100%;
+    height: 48px;
+    margin-top: 10px;
+    border: 0;
+    border-radius: 12px;
+    background: #19d6ff;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform .02s ease, filter .15s ease;
+}
+
+    .btn-primary:hover {
+        filter: brightness(0.97);
+    }
+
+    .btn-primary:active {
+        transform: translateY(1px);
+    }
+
+/* Responsivo */
+@media (max-width: 799px) {
+    .login-card {
+        min-width: 100%;
+        max-width: none;
+    }
+}
+
+
+@media (max-width: 480px) {
+    .logo {
+        width: 150px;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+}

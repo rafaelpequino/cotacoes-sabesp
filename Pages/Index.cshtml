@@ -1,0 +1,33 @@
+﻿@page
+@model IndexModel
+@{
+    Layout = null;
+      <!-- remove header e footer -->
+    ViewData["Title"] = "Cotações";
+}
+
+<link rel="stylesheet" href="~/css/login.css" />
+
+<div class="login-landing">
+    <div class="login-card" role="form" aria-label="Formulário de login">
+        <div class="brand">
+            <img class="logo" src="~/images/sabesp.svg" alt="sabesp" />
+        </div>
+
+        <h2 class="title">Sistema de Cotações Sabesp - EPC</h2>
+
+        <form method="post" novalidate class="form-login">
+            @Html.AntiForgeryToken()
+
+            <div class="field">
+                <input name="Email" type="email" class="input" placeholder="E-mail" aria-label="E-mail" />
+            </div>
+
+            <div class="field">
+                <input name="Senha" type="password" class="input" placeholder="Senha" aria-label="Senha" />
+            </div>
+
+            <button type="submit" class="btn-primary">Entrar</button>
+        </form>
+    </div>
+</div>

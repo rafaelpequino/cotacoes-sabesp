@@ -1,0 +1,351 @@
+@page
+@model CotacoesEPC.Pages.planilhasModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Planilhas";
+}
+
+<link rel="stylesheet" href="~/css/dashboard.css" />
+
+<header class="dashboard-header">
+    <div class="logo-area">
+        <img src="~/images/sabesp.svg" alt="sabesp" class="logo" />
+    </div>
+
+    <nav class="menu">
+        <a class="menu-item" href="/dashboard">Dashboard</a>
+        <a class="menu-item" href="/servicos">Serviços</a>
+        <a class="menu-item" href="/insumos">Insumos</a>
+        <a class="menu-item active" href="/planilhas">Planilhas</a>
+    </nav>
+
+    <div class="user-area">
+        <div class="user">
+            <div class="user-icon">R</div>
+            <span class="user-name">Rafael</span>
+        </div>
+    </div>
+</header>
+
+<main class="dashboard-container">
+    <div class="servicos-header">
+        <h2 class="title">Planilhas</h2>
+        <button class="btn-nova-cotacao" onclick="openUploadModal()">+ Nova Planilha</button>
+    </div>
+
+    <section class="servicos-filters">
+        <input type="text" class="search-input" placeholder="Pesquisar por nome" />
+        
+        <div class="filter-group">
+            <label class="filter-label">Filtrar por:</label>
+            <select class="filter-select">
+                <option>Minhas Planilhas</option>
+                <option>Todas as Planilhas</option>
+                <option>Planilhas Compartilhadas</option>
+            </select>
+        </div>
+
+        <button class="btn-limpar">Limpar Filtros</button>
+    </section>
+
+    <section class="servicos-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Descrição</th>
+                    <th>Data</th>
+                    <th>Setor</th>
+                    <th>Responsável</th>
+                    <th>Tamanho</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>📊 Planilha Padrão Elétrica</td>
+                    <td>25/09/2025</td>
+                    <td>Elétrica</td>
+                    <td>Kauê Guedes Duarte</td>
+                    <td>2.4 MB</td>
+                    <td class="actions">
+                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
+                        <button class="action-btn btn-editar" title="Editar" onclick="openEditPlanilhaModal()">✏️</button>
+                        <button class="action-btn btn-excluir" title="Excluir">🗑</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>📊 Planilha Padrão Civil</td>
+                    <td>20/09/2025</td>
+                    <td>Civil</td>
+                    <td>Adailton Santos Cardoso</td>
+                    <td>3.1 MB</td>
+                    <td class="actions">
+                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
+                        <button class="action-btn btn-editar" title="Editar" onclick="openEditPlanilhaModal()">✏️</button>
+                        <button class="action-btn btn-excluir" title="Excluir">🗑</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>📊 Planilha Padrão Hidráulica</td>
+                    <td>18/09/2025</td>
+                    <td>Hidráulica</td>
+                    <td>Rafael Pequino Freire</td>
+                    <td>1.8 MB</td>
+                    <td class="actions">
+                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>📊 Planilha de Custos 2025</td>
+                    <td>15/09/2025</td>
+                    <td>Financeiro</td>
+                    <td>Kauê Guedes Duarte</td>
+                    <td>5.2 MB</td>
+                    <td class="actions">
+                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+
+<!-- MODAL UPLOAD PLANILHA -->
+<div id="uploadModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Nova Planilha</h2>
+            <button class="modal-close" onclick="closeUploadModal()">&times;</button>
+        </div>
+        <form class="modal-form" id="uploadForm">
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Descrição da Planilha*</label>
+                    <input type="text" placeholder="Ex: Planilha Padrão Elétrica" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Setor*</label>
+                    <select required>
+                        <option value="">Selecione um setor</option>
+                        <option value="Elétrica">Elétrica</option>
+                        <option value="Civil">Civil</option>
+                        <option value="Hidráulica">Hidráulica</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label>Arquivo Excel*</label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" required style="display: none;" />
+                        <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <p class="upload-text">Clique ou arraste um arquivo Excel aqui</p>
+                        <p class="upload-hint">Formatos suportados: .xlsx, .xls, .csv</p>
+                        <span class="file-name" id="fileName"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Descrição (opcional)</label>
+                    <textarea placeholder="Adicione uma descrição sobre esta planilha..." rows="3"></textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeUploadModal()">Cancelar</button>
+                <button type="submit" class="btn-submit">Enviar Planilha</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- MODAL EDITAR PLANILHA -->
+<div id="editPlanilhaModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Editar Planilha</h2>
+            <button class="modal-close" onclick="closeEditPlanilhaModal()">&times;</button>
+        </div>
+        <form class="modal-form">
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Descrição da Planilha*</label>
+                    <input type="text" value="Planilha Padrão Civil" required />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Setor*</label>
+                    <select required>
+                        <option value="Elétrica">Elétrica</option>
+                        <option value="Civil" selected>Civil</option>
+                        <option value="Hidráulica">Hidráulica</option>
+                        <option value="Financeiro">Financeiro</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="form-group full-width">
+                    <label>Arquivo Atual</label>
+                    <div class="current-file-info">
+                        <span>📄 Planilha_Padrão_Civil.xlsx</span>
+                        <span class="file-size">3.1 MB</span>
+                    </div>
+                    <p style="font-size: 12px; color: #999; margin-top: 8px;">Para alterar o arquivo, clique abaixo:</p>
+                    <div class="file-upload-area" id="fileUploadAreaEdit">
+                        <input type="file" id="fileInputEdit" accept=".xlsx,.xls,.csv" style="display: none;" />
+                        <p style="margin: 8px 0; font-size: 13px;">Clique para selecionar novo arquivo</p>
+                        <span class="file-name" id="fileNameEdit"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Descrição (opcional)</label>
+                    <textarea rows="3">Planilha padrão para projetos de engenharia civil</textarea>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeEditPlanilhaModal()">Cancelar</button>
+                <button type="submit" class="btn-submit">Atualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // MODAL UPLOAD
+    const uploadModal = document.getElementById('uploadModal');
+    const fileUploadArea = document.getElementById('fileUploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const fileName = document.getElementById('fileName');
+
+    function openUploadModal() {
+        uploadModal.style.display = 'flex';
+    }
+
+    function closeUploadModal() {
+        uploadModal.style.display = 'none';
+    }
+
+    // Drag and drop
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.add('dragover');
+    });
+
+    fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.classList.remove('dragover');
+    });
+
+    fileUploadArea.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadArea.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInput.files = files;
+            updateFileName(files[0].name);
+        }
+    });
+
+    fileUploadArea.addEventListener('click', () => {
+        fileInput.click();
+    });
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            updateFileName(e.target.files[0].name);
+        }
+    });
+
+    function updateFileName(name) {
+        fileName.textContent = '✓ ' + name;
+        fileName.style.color = '#19d6ff';
+        fileName.style.fontWeight = '500';
+    }
+
+
+    // MODAL EDITAR
+    const editPlanilhaModal = document.getElementById('editPlanilhaModal');
+    const fileUploadAreaEdit = document.getElementById('fileUploadAreaEdit');
+    const fileInputEdit = document.getElementById('fileInputEdit');
+    const fileNameEdit = document.getElementById('fileNameEdit');
+
+    function openEditPlanilhaModal() {
+        editPlanilhaModal.style.display = 'flex';
+    }
+
+    function closeEditPlanilhaModal() {
+        editPlanilhaModal.style.display = 'none';
+    }
+
+    fileUploadAreaEdit.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadAreaEdit.classList.add('dragover');
+    });
+
+    fileUploadAreaEdit.addEventListener('dragleave', () => {
+        fileUploadAreaEdit.classList.remove('dragover');
+    });
+
+    fileUploadAreaEdit.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileUploadAreaEdit.classList.remove('dragover');
+        const files = e.dataTransfer.files;
+        if (files.length > 0) {
+            fileInputEdit.files = files;
+            updateFileNameEdit(files[0].name);
+        }
+    });
+
+    fileUploadAreaEdit.addEventListener('click', () => {
+        fileInputEdit.click();
+    });
+
+    fileInputEdit.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            updateFileNameEdit(e.target.files[0].name);
+        }
+    });
+
+    function updateFileNameEdit(name) {
+        fileNameEdit.textContent = '✓ ' + name;
+        fileNameEdit.style.color = '#19d6ff';
+        fileNameEdit.style.fontWeight = '500';
+    }
+
+
+    // Fechar modais
+    window.addEventListener('click', function(event) {
+        if (event.target === uploadModal) {
+            closeUploadModal();
+        }
+        if (event.target === editPlanilhaModal) {
+            closeEditPlanilhaModal();
+        }
+    });
+
+    // Fechar com ESC
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            if (uploadModal.style.display === 'flex') {
+                closeUploadModal();
+            }
+            if (editPlanilhaModal.style.display === 'flex') {
+                closeEditPlanilhaModal();
+            }
+        }
+    });
+</script>
+
