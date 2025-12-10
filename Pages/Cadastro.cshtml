@@ -11,13 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro - CotacoesEPC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         @@keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #13d0ff;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -28,7 +29,7 @@
 
         .register-container {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             padding: 40px;
             max-width: 450px;
@@ -36,8 +37,10 @@
         }
 
         .logo {
-            text-align: center;
-            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
         }
 
         .logo img {
@@ -66,8 +69,8 @@
         }
 
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #13d0ff;
+            box-shadow: 0 0 0 0.2rem rgba(19, 208, 255, 0.25);
             outline: none;
         }
 
@@ -94,7 +97,7 @@
         }
 
         .btn-register {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #13d0ff;
             color: white;
             border: none;
             padding: 12px;
@@ -102,13 +105,13 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, background-color 0.2s;
             margin-top: 10px;
         }
 
         .btn-register:hover:not(:disabled) {
+            background: #00bfff;
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
         .btn-register:disabled {
@@ -122,7 +125,7 @@
         }
 
         .login-link a {
-            color: #667eea;
+            color: #13d0ff;
             text-decoration: none;
             font-weight: 600;
         }
@@ -150,18 +153,12 @@
             color: #2e7d32;
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 28px;
-        }
-
         .subtitle {
             text-align: center;
             color: #666;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 30px;
+            font-weight: 500;
         }
 
         .password-toggle {
@@ -193,7 +190,7 @@
 
         .spinner {
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #667eea;
+            border-top: 3px solid #13d0ff;
             border-radius: 50%;
             width: 20px;
             height: 20px;
@@ -208,8 +205,7 @@
             <img src="~/images/sabesp.svg" alt="SABESP" />
         </div>
 
-        <h2>CotacoesEPC</h2>
-        <p class="subtitle">Criar nova conta</p>
+        <p class="subtitle">Sistema de Compartilhamento de Cotações</p>
 
         @if (!string.IsNullOrEmpty(Model?.ErrorMessage))
         {
@@ -229,8 +225,7 @@
             <div class="form-group">
                 <label for="registration" class="form-label">Número de Registro *</label>
                 <input type="text" class="form-control" id="registration" name="registration" required 
-                       placeholder="Digite seu número de registro" onblur="verifyRegistration()" />
-                <div class="form-text" id="registrationStatus"></div>
+                       placeholder="Digite seu número de registro" />
             </div>
 
             <div class="form-group">
@@ -274,54 +269,13 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/api.js"></script>
     <script>
-        let registrationVerified = false;
-
         function togglePasswordVisibility(fieldId) {
             const field = document.getElementById(fieldId);
             field.type = field.type === 'password' ? 'text' : 'password';
         }
 
-        async function verifyRegistration() {
-            const registration = document.getElementById('registration').value.trim();
-            const statusDiv = document.getElementById('registrationStatus');
-            const submitBtn = document.getElementById('submitBtn');
-
-            if (!registration) {
-                statusDiv.textContent = '';
-                registrationVerified = false;
-                submitBtn.disabled = true;
-                return;
-            }
-
-            try {
-                const response = await api.request('/auth/verify-registration', 'POST', { registration });
-                
-                if (response.isAllowed) {
-                    statusDiv.textContent = '✓ Registro válido!';
-                    statusDiv.className = 'form-text success';
-                    registrationVerified = true;
-                    submitBtn.disabled = false;
-                } else {
-                    statusDiv.textContent = '✗ Registro inválido ou já utilizado';
-                    statusDiv.className = 'form-text error';
-                    registrationVerified = false;
-                    submitBtn.disabled = true;
-                }
-            } catch (error) {
-                statusDiv.textContent = '✗ Erro ao verificar registro';
-                statusDiv.className = 'form-text error';
-                registrationVerified = false;
-                submitBtn.disabled = true;
-            }
-        }
-
         async function handleSubmit(event) {
             event.preventDefault();
-
-            if (!registrationVerified) {
-                alert('Por favor, verifique seu número de registro');
-                return;
-            }
 
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
@@ -329,19 +283,39 @@
             const confirmPassword = document.getElementById('confirmPassword').value;
             const registration = document.getElementById('registration').value.trim();
 
-            // Validações
-            if (!name || !email || !password || !confirmPassword) {
-                alert('Por favor, preencha todos os campos');
+            // Validação de campos vazios
+            if (!name || !email || !password || !confirmPassword || !registration) {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos Obrigatórios',
+                    text: 'Por favor, preencha todos os campos',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#13d0ff'
+                });
                 return;
             }
 
+            // Validação de senha curta
             if (password.length < 6) {
-                alert('A senha deve ter no mínimo 6 caracteres');
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Senha Fraca',
+                    text: 'A senha deve ter no mínimo 6 caracteres',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#13d0ff'
+                });
                 return;
             }
 
+            // Validação de senhas iguais
             if (password !== confirmPassword) {
-                alert('As senhas não coincidem');
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Senhas Diferentes',
+                    text: 'As senhas não coincidem. Por favor, verifique',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#13d0ff'
+                });
                 return;
             }
 
@@ -352,35 +326,74 @@
             submitBtn.disabled = true;
 
             try {
-                const response = await api.login(email, password);
-                
-                // Na verdade, usar endpoint de registro
-                const result = await api.request('/auth/register', 'POST', {
-                    name,
-                    email,
-                    password,
-                    registration
+                const response = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        name,
+                        email,
+                        password,
+                        registration
+                    })
                 });
 
-                if (result && result.success) {
-                    // Armazenar token
-                    document.cookie = `authToken=${result.token}; path=/; secure; httponly`;
-                    
-                    // Redirecionar para dashboard
-                    window.location.href = '/dashboard';
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Mostrar mensagem de sucesso
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Cadastro Realizado!',
+                        text: 'Bem-vindo ao CotacoesEPC',
+                        confirmButtonText: 'Entrar',
+                        confirmButtonColor: '#13d0ff',
+                        allowOutsideClick: false,
+                        didClose: () => {
+                            // Redirecionar para dashboard
+                            window.location.href = '/dashboard';
+                        }
+                    });
                 } else {
-                    alert(result.message || 'Erro ao criar conta');
+                    let errorMessage = result?.message || 'Erro ao criar conta';
+                    let title = 'Erro ao Cadastrar';
+                    let icon = 'error';
+                    
+                    // Tratamento semântico de erros específicos
+                    if (errorMessage.includes('email')) {
+                        title = 'Email Duplicado';
+                        icon = 'warning';
+                    } else if (errorMessage.includes('registro') || errorMessage.includes('Número de registro')) {
+                        title = 'Número de Registro Inválido';
+                        icon = 'warning';
+                    } else if (errorMessage.includes('já foi utilizado')) {
+                        title = 'Registro Já em Uso';
+                        icon = 'info';
+                    }
+                    
+                    await Swal.fire({
+                        icon: icon,
+                        title: title,
+                        text: errorMessage,
+                        confirmButtonText: 'Tentar Novamente',
+                        confirmButtonColor: '#13d0ff'
+                    });
                 }
             } catch (error) {
-                alert(`Erro: ${error.message}`);
+                console.error('Erro na requisição:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Erro na Requisição',
+                    text: 'Ocorreu um erro ao processar seu cadastro. Verifique sua conexão e tente novamente.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#13d0ff'
+                });
             } finally {
                 loading.style.display = 'none';
                 submitBtn.disabled = false;
             }
         }
-
-        // Desabilitar submit button inicialmente
-        document.getElementById('submitBtn').disabled = true;
     </script>
 </body>
 </html>

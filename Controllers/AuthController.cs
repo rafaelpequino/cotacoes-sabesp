@@ -20,19 +20,37 @@ namespace CotacoesEPC.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var (success, message, user, token) = await _authService.RegisterAsync(
-                request.Name, request.Email, request.Password, request.Registration);
-
-            if (!success)
-                return BadRequest(new { message });
-
-            return Ok(new
+            try
             {
-                success = true,
-                message,
-                user = new { user!.Id, user.Name, user.Email },
-                token
-            });
+                var (success, message, user, token) = await _authService.RegisterAsync(
+                    request.Name, request.Email, request.Password, request.Registration);
+
+                if (!success)
+                    return BadRequest(new { message });
+
+                // Salvar token em cookie seguro
+                Response.Cookies.Append("authToken", token, new Microsoft.AspNetCore.Http.CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddDays(7)
+                });
+
+                return Ok(new
+                {
+                    success = true,
+                    message,
+                    user = new { user!.Id, user.Name, user.Email },
+                    token
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro no Register: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                return BadRequest(new { message = "Erro ao processar o registro" });
+            }
         }
 
         [HttpPost("verify-registration")]
@@ -53,6 +71,15 @@ namespace CotacoesEPC.Controllers
 
             if (!success)
                 return Unauthorized(new { message });
+
+            // Salvar token em cookie seguro
+            Response.Cookies.Append("authToken", token, new Microsoft.AspNetCore.Http.CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
+            });
 
             return Ok(new
             {

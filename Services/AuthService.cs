@@ -34,7 +34,7 @@ namespace CotacoesEPC.Services
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
                 if (existingUser != null)
                 {
-                    return (false, "Email já registrado", null, null);
+                    return (false, "Este email já está registrado no sistema", null, null);
                 }
 
                 // Verificar se o registration é permitido
@@ -43,7 +43,7 @@ namespace CotacoesEPC.Services
 
                 if (allowedReg == null)
                 {
-                    return (false, "Número de registro não encontrado", null, null);
+                    return (false, "Número de registro inválido", null, null);
                 }
 
                 if (allowedReg.IsUsed)
@@ -64,23 +64,31 @@ namespace CotacoesEPC.Services
                 };
 
                 _context.Users.Add(user);
-                
-                // Marcar registration como usado
+                await _context.SaveChangesAsync(); // Salvar usuário primeiro
+
+                // Agora marcar registration como usado
                 allowedReg.IsUsed = true;
                 allowedReg.UsedByUserId = user.Id;
                 allowedReg.UsedAt = DateTime.UtcNow;
                 _context.AllowedRegistrations.Update(allowedReg);
-
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(); // Salvar atualização
 
                 // Gerar token
                 var token = _jwtService.GenerateToken(user.Id, user.Email, user.Name);
 
                 return (true, "Usuário registrado com sucesso", user, token);
             }
+            catch (DbUpdateException ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Erro ao salvar dados: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Inner Exception: {ex.InnerException?.Message}");
+                return (false, "Erro ao salvar os dados. Verifique se os dados estão corretos", null, null);
+            }
             catch (Exception ex)
             {
-                return (false, $"Erro ao registrar: {ex.Message}", null, null);
+                System.Diagnostics.Debug.WriteLine($"Erro ao registrar: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                return (false, "Erro ao criar a conta. Tente novamente mais tarde", null, null);
             }
         }
 
@@ -99,17 +107,17 @@ namespace CotacoesEPC.Services
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
                 if (user == null)
                 {
-                    return (false, "Usuário não encontrado", null, null);
+                    return (false, "Email ou senha incorretos", null, null);
                 }
 
                 if (!VerifyPassword(password, user.PasswordHash))
                 {
-                    return (false, "Senha incorreta", null, null);
+                    return (false, "Email ou senha incorretos", null, null);
                 }
 
                 if (!user.IsActive)
                 {
-                    return (false, "Usuário inativo", null, null);
+                    return (false, "Sua conta foi desativada", null, null);
                 }
 
                 var token = _jwtService.GenerateToken(user.Id, user.Email, user.Name);
@@ -118,7 +126,8 @@ namespace CotacoesEPC.Services
             }
             catch (Exception ex)
             {
-                return (false, $"Erro ao fazer login: {ex.Message}", null, null);
+                System.Diagnostics.Debug.WriteLine($"Erro ao fazer login: {ex.Message}");
+                return (false, "Erro ao fazer login. Tente novamente mais tarde", null, null);
             }
         }
 

@@ -12,10 +12,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - CotacoesEPC</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="~/css/login.css" />
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #13d0ff;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -25,7 +26,7 @@
 
         .login-container {
             background: white;
-            border-radius: 12px;
+            border-radius: 16px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             padding: 40px;
             max-width: 400px;
@@ -33,8 +34,10 @@
         }
 
         .logo {
-            text-align: center;
-            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
         }
 
         .logo img {
@@ -46,6 +49,14 @@
             margin-bottom: 20px;
         }
 
+        .form-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+            font-size: 14px;
+        }
+
         .form-control {
             padding: 12px 15px;
             border: 1px solid #ddd;
@@ -54,12 +65,13 @@
         }
 
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            border-color: #13d0ff;
+            box-shadow: 0 0 0 0.2rem rgba(19, 208, 255, 0.25);
+            outline: none;
         }
 
         .btn-login {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #13d0ff;
             color: white;
             border: none;
             padding: 12px;
@@ -67,12 +79,12 @@
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s, background-color 0.2s;
         }
 
         .btn-login:hover {
+            background: #00bfff;
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
         }
 
         .divider {
@@ -88,7 +100,7 @@
         }
 
         .signup-link a {
-            color: #667eea;
+            color: #13d0ff;
             text-decoration: none;
             font-weight: 600;
         }
@@ -102,17 +114,12 @@
             border-radius: 6px;
         }
 
-        h2 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 10px;
-        }
-
         .subtitle {
             text-align: center;
             color: #666;
-            font-size: 14px;
+            font-size: 16px;
             margin-bottom: 30px;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -122,7 +129,6 @@
             <img src="~/images/sabesp.svg" alt="SABESP" />
         </div>
 
-        <h2>CotacoesEPC</h2>
         <p class="subtitle">Sistema de Compartilhamento de Cotações</p>
 
         @if (!string.IsNullOrEmpty(Model?.ErrorMessage))
@@ -149,7 +155,7 @@
         <div class="divider">ou</div>
 
         <div class="signup-link">
-            Não tem conta? <a href="/register">Cadastre-se aqui</a>
+            Não tem conta? <a href="/cadastro">Cadastre-se aqui</a>
         </div>
     </div>
 
@@ -159,23 +165,66 @@
         async function handleLogin(event) {
             event.preventDefault();
 
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
 
-            try {
-                const response = await api.request('/auth/login', 'POST', { email, password });
+            // Validação de campos vazios
+            if (!email || !password) {
+                await Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos Obrigatórios',
+                    text: 'Por favor, preencha email e senha',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#13d0ff'
+                });
+                return;
+            }
 
-                if (response && response.success) {
-                    // Armazenar token em cookie
-                    document.cookie = `authToken=${response.token}; path=/; secure; httponly`;
-                    
-                    // Redirecionar para dashboard
-                    window.location.href = '/dashboard';
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.success) {
+                    // Mostrar mensagem de sucesso
+                    await Swal.fire({
+                        icon: 'success',
+                        title: 'Bem-vindo!',
+                        text: `Olá, ${result.user.name}`,
+                        confirmButtonText: 'Entrar',
+                        confirmButtonColor: '#13d0ff',
+                        allowOutsideClick: false,
+                        didClose: () => {
+                            // Redirecionar para dashboard
+                            window.location.href = '/dashboard';
+                        }
+                    });
                 } else {
-                    alert(response?.message || 'Erro ao fazer login');
+                    const errorMessage = result?.message || 'Email ou senha incorretos';
+                    
+                    await Swal.fire({
+                        icon: 'warning',
+                        title: 'Login Inválido',
+                        text: errorMessage,
+                        confirmButtonText: 'Tentar Novamente',
+                        confirmButtonColor: '#13d0ff'
+                    });
                 }
             } catch (error) {
-                alert(`Erro: ${error.message}`);
+                console.error('Erro na requisição:', error);
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Erro de Conexão',
+                    text: 'Ocorreu um erro ao conectar ao servidor. Verifique sua conexão e tente novamente.',
+                    confirmButtonText: 'OK',
+                    confirmButtonColor: '#13d0ff'
+                });
             }
         }
     </script>

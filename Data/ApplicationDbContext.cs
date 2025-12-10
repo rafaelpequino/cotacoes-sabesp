@@ -27,6 +27,7 @@ namespace CotacoesEPC.Data
                 entity.HasIndex(e => e.Email).IsUnique();
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.PasswordHash).IsRequired();
+                entity.Property(e => e.Registration).HasMaxLength(50);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
             });
 
