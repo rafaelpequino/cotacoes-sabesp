@@ -24,6 +24,10 @@ namespace CotacoesEPC.Models
         public string? InitialLetter { get; set; }
 
         [Required]
+        [StringLength(50)]
+        public string Registration { get; set; } = string.Empty;
+
+        [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         [Required]

@@ -22,6 +22,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // Add services
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDataSeederService, DataSeederService>();
 
 // Add JWT authentication
 var jwtKey = builder.Configuration["Jwt:Key"];
@@ -87,5 +88,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapRazorPages();
+
+// Seed initial data
+using (var scope = app.Services.CreateScope())
+{
+    var seederService = scope.ServiceProvider.GetRequiredService<IDataSeederService>();
+    await seederService.SeedAllowedRegistrationsAsync();
+}
 
 app.Run();

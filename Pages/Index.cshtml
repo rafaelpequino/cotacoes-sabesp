@@ -2,32 +2,182 @@
 @model IndexModel
 @{
     Layout = null;
-      <!-- remove header e footer -->
     ViewData["Title"] = "Cotações";
 }
 
-<link rel="stylesheet" href="~/css/login.css" />
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CotacoesEPC</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/login.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-<div class="login-landing">
-    <div class="login-card" role="form" aria-label="Formulário de login">
-        <div class="brand">
-            <img class="logo" src="~/images/sabesp.svg" alt="sabesp" />
+        .login-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+
+        .btn-login {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .signup-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-link a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+            border-radius: 6px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="~/images/sabesp.svg" alt="SABESP" />
         </div>
 
-        <h2 class="title">Sistema de Cotações Sabesp - EPC</h2>
+        <h2>CotacoesEPC</h2>
+        <p class="subtitle">Sistema de Compartilhamento de Cotações</p>
 
-        <form method="post" novalidate class="form-login">
-            @Html.AntiForgeryToken()
+        @if (!string.IsNullOrEmpty(Model?.ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @Model.ErrorMessage
+            </div>
+        }
 
-            <div class="field">
-                <input name="Email" type="email" class="input" placeholder="E-mail" aria-label="E-mail" />
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" required placeholder="seu@email.com" />
             </div>
 
-            <div class="field">
-                <input name="Senha" type="password" class="input" placeholder="Senha" aria-label="Senha" />
+            <div class="form-group">
+                <label for="password" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="password" name="password" required placeholder="Sua senha" />
             </div>
 
-            <button type="submit" class="btn-primary">Entrar</button>
+            <button type="submit" class="btn-login">Entrar</button>
         </form>
+
+        <div class="divider">ou</div>
+
+        <div class="signup-link">
+            Não tem conta? <a href="/register">Cadastre-se aqui</a>
+        </div>
     </div>
-</div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/api.js"></script>
+    <script>
+        async function handleLogin(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await api.request('/auth/login', 'POST', { email, password });
+
+                if (response && response.success) {
+                    // Armazenar token em cookie
+                    document.cookie = `authToken=${response.token}; path=/; secure; httponly`;
+                    
+                    // Redirecionar para dashboard
+                    window.location.href = '/dashboard';
+                } else {
+                    alert(response?.message || 'Erro ao fazer login');
+                }
+            } catch (error) {
+                alert(`Erro: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>

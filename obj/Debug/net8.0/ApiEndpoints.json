@@ -32,6 +32,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "CotacoesEPC.Controllers.AuthController",
+    "Method": "VerifyRegistration",
+    "RelativePath": "api/Auth/verify-registration",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CotacoesEPC.Controllers.VerifyRegistrationRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "CotacoesEPC.Controllers.DashboardController",
     "Method": "GetStatistics",
     "RelativePath": "api/Dashboard/statistics",

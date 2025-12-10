@@ -8,10 +8,11 @@ namespace CotacoesEPC.Services
 {
     public interface IAuthService
     {
-        Task<(bool success, string message, User? user, string? token)> RegisterAsync(string name, string email, string password);
+        Task<(bool success, string message, User? user, string? token)> RegisterAsync(string name, string email, string password, string registration);
         Task<(bool success, string message, User? user, string? token)> LoginAsync(string email, string password);
         Task<User?> GetUserByIdAsync(int userId);
         Task<User?> GetUserByEmailAsync(string email);
+        Task<bool> IsRegistrationAllowedAsync(string registration);
     }
 
     public class AuthService : IAuthService
@@ -25,7 +26,7 @@ namespace CotacoesEPC.Services
             _jwtService = jwtService;
         }
 
-        public async Task<(bool success, string message, User? user, string? token)> RegisterAsync(string name, string email, string password)
+        public async Task<(bool success, string message, User? user, string? token)> RegisterAsync(string name, string email, string password, string registration)
         {
             try
             {
@@ -36,6 +37,20 @@ namespace CotacoesEPC.Services
                     return (false, "Email já registrado", null, null);
                 }
 
+                // Verificar se o registration é permitido
+                var allowedReg = await _context.AllowedRegistrations
+                    .FirstOrDefaultAsync(ar => ar.RegistrationNumber == registration);
+
+                if (allowedReg == null)
+                {
+                    return (false, "Número de registro não encontrado", null, null);
+                }
+
+                if (allowedReg.IsUsed)
+                {
+                    return (false, "Este número de registro já foi utilizado", null, null);
+                }
+
                 // Criar novo usuário
                 var user = new User
                 {
@@ -43,11 +58,19 @@ namespace CotacoesEPC.Services
                     Email = email,
                     PasswordHash = HashPassword(password),
                     InitialLetter = name[0].ToString().ToUpper(),
+                    Registration = registration,
                     CreatedAt = DateTime.UtcNow,
                     IsActive = true
                 };
 
                 _context.Users.Add(user);
+                
+                // Marcar registration como usado
+                allowedReg.IsUsed = true;
+                allowedReg.UsedByUserId = user.Id;
+                allowedReg.UsedAt = DateTime.UtcNow;
+                _context.AllowedRegistrations.Update(allowedReg);
+
                 await _context.SaveChangesAsync();
 
                 // Gerar token
@@ -59,6 +82,14 @@ namespace CotacoesEPC.Services
             {
                 return (false, $"Erro ao registrar: {ex.Message}", null, null);
             }
+        }
+
+        public async Task<bool> IsRegistrationAllowedAsync(string registration)
+        {
+            var allowedReg = await _context.AllowedRegistrations
+                .FirstOrDefaultAsync(ar => ar.RegistrationNumber == registration && !ar.IsUsed);
+            
+            return allowedReg != null;
         }
 
         public async Task<(bool success, string message, User? user, string? token)> LoginAsync(string email, string password)

@@ -21,7 +21,7 @@ namespace CotacoesEPC.Controllers
                 return BadRequest(ModelState);
 
             var (success, message, user, token) = await _authService.RegisterAsync(
-                request.Name, request.Email, request.Password);
+                request.Name, request.Email, request.Password, request.Registration);
 
             if (!success)
                 return BadRequest(new { message });
@@ -33,6 +33,13 @@ namespace CotacoesEPC.Controllers
                 user = new { user!.Id, user.Name, user.Email },
                 token
             });
+        }
+
+        [HttpPost("verify-registration")]
+        public async Task<IActionResult> VerifyRegistration([FromBody] VerifyRegistrationRequest request)
+        {
+            var isAllowed = await _authService.IsRegistrationAllowedAsync(request.Registration);
+            return Ok(new { isAllowed });
         }
 
         [HttpPost("login")]
@@ -62,12 +69,18 @@ namespace CotacoesEPC.Controllers
         public string Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+        public string Registration { get; set; } = string.Empty;
     }
 
     public class LoginRequest
     {
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
+    }
+
+    public class VerifyRegistrationRequest
+    {
+        public string Registration { get; set; } = string.Empty;
     }
 }
 
