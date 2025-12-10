@@ -277,17 +277,26 @@ class ApiClient {
 const api = new ApiClient();
 
 // Função de logout
-function logout(event) {
+async function logout(event) {
     if (event) event.preventDefault();
 
-    if (confirm('Tem certeza que deseja sair?')) {
-        // Limpar cookies e session storage
-        document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    try {
+        // Chamar endpoint de logout para limpar o cookie no servidor
+        await fetch('/api/auth/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao fazer logout:', error);
+    } finally {
+        // Limpar localStorage e sessionStorage localmente
         sessionStorage.clear();
         localStorage.clear();
 
-        // Redirecionar para login
-        window.location.href = '/login';
+        // Redirecionar para a página inicial (login)
+        window.location.href = '/';
     }
 }
 

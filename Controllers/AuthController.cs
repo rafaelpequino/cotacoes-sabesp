@@ -60,6 +60,15 @@ namespace CotacoesEPC.Controllers
             return Ok(new { isAllowed });
         }
 
+        [HttpPost("logout")]
+        public IActionResult Logout()
+        {
+            // Limpar o cookie do token
+            Response.Cookies.Delete("authToken");
+            
+            return Ok(new { success = true, message = "Logout realizado com sucesso" });
+        }
+
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
