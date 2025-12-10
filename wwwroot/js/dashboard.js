@@ -25,67 +25,72 @@ async function loadDashboardData() {
 }
 
 function updateCardNumbers(summary) {
-    // Atualizar o primeiro card (Serviços)
-    const firstCard = document.querySelector('.cards .card:nth-child(1) .numbers h3');
-    if (firstCard) {
-        firstCard.innerHTML = `${summary.servicesCount} <span>/${summary.servicesCount * 3}</span>`;
+    // Atualizar contadores de Serviços
+    const servicesCount = document.getElementById('servicesCount');
+    const servicesTotalCount = document.getElementById('servicesTotalCount');
+    if (servicesCount && servicesTotalCount) {
+        servicesCount.textContent = summary.servicesCount || 0;
+        servicesTotalCount.textContent = (summary.servicesCount || 0) * 3;
     }
 
-    // Atualizar o segundo card (Insumos)
-    const secondCard = document.querySelector('.cards .card:nth-child(2) .numbers h3');
-    if (secondCard) {
-        secondCard.innerHTML = `${summary.inputsCount} <span>/${summary.inputsCount * 3}</span>`;
+    // Atualizar contadores de Insumos
+    const inputsCount = document.getElementById('inputsCount');
+    const inputsTotalCount = document.getElementById('inputsTotalCount');
+    if (inputsCount && inputsTotalCount) {
+        inputsCount.textContent = summary.inputsCount || 0;
+        inputsTotalCount.textContent = (summary.inputsCount || 0) * 3;
     }
 
-    // Atualizar o terceiro card (Planilhas)
-    const thirdCard = document.querySelector('.cards .card:nth-child(3) .numbers h3');
-    if (thirdCard) {
-        thirdCard.innerHTML = `${summary.spreadsheetsCount} <span>/${summary.spreadsheetsCount * 2}</span>`;
+    // Atualizar contadores de Planilhas
+    const spreadsheetsCount = document.getElementById('spreadsheetsCount');
+    const spreadsheetsTotalCount = document.getElementById('spreadsheetsTotalCount');
+    if (spreadsheetsCount && spreadsheetsTotalCount) {
+        spreadsheetsCount.textContent = summary.spreadsheetsCount || 0;
+        spreadsheetsTotalCount.textContent = (summary.spreadsheetsCount || 0) * 2;
     }
 }
 
 function updateRecentServices(services) {
-    const tbody = document.querySelector('.servicos-table table tbody');
+    const tbody = document.querySelector('#servicesTable tbody');
     if (!tbody) return;
 
     tbody.innerHTML = '';
 
-    services.forEach(service => {
+    if (services && services.length > 0) {
+        services.forEach(service => {
+            const row = document.createElement('tr');
+            const date = new Date(service.createdAt).toLocaleDateString('pt-BR');
+            row.innerHTML = `
+                <td>${date}</td>
+                <td>${service.item || 'N/A'}</td>
+                <td>${service.responsibleName || 'Desconhecido'}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    } else {
         const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${service.originalId}</td>
-            <td>${new Date(service.createdAt).toLocaleDateString('pt-BR')}</td>
-            <td>${service.item}</td>
-            <td>${service.responsibleName}</td>
-            <td>⬇</td>
-        `;
-        tbody.appendChild(row);
-    });
-
-    if (services.length === 0) {
-        const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="5" style="text-align: center; color: #999;">Nenhuma cotação de serviço ainda</td>';
+        row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">Nenhuma cotação ainda</td>';
         tbody.appendChild(row);
     }
 }
 
 function updateRecentSpreadsheets(spreadsheets) {
-    const tbody = document.querySelectorAll('.servicos-table table tbody')[1];
+    const tbody = document.querySelector('#spreadsheetsTable tbody');
     if (!tbody) return;
 
     tbody.innerHTML = '';
 
-    spreadsheets.forEach(spreadsheet => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${spreadsheet.name}</td>
-            <td>${spreadsheet.responsibleName}</td>
-            <td>⬇</td>
-        `;
-        tbody.appendChild(row);
-    });
-
-    if (spreadsheets.length === 0) {
+    if (spreadsheets && spreadsheets.length > 0) {
+        spreadsheets.forEach(spreadsheet => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${spreadsheet.name || 'Sem nome'}</td>
+                <td>${spreadsheet.responsibleName || 'Desconhecido'}</td>
+                <td>⬇</td>
+            `;
+            tbody.appendChild(row);
+        });
+    } else {
         const row = document.createElement('tr');
         row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">Nenhuma planilha ainda</td>';
         tbody.appendChild(row);

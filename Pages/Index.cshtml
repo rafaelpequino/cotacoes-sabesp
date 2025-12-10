@@ -192,19 +192,8 @@
                 const result = await response.json();
 
                 if (response.ok && result.success) {
-                    // Mostrar mensagem de sucesso
-                    await Swal.fire({
-                        icon: 'success',
-                        title: 'Bem-vindo!',
-                        text: `Olá, ${result.user.name}`,
-                        confirmButtonText: 'Entrar',
-                        confirmButtonColor: '#13d0ff',
-                        allowOutsideClick: false,
-                        didClose: () => {
-                            // Redirecionar para dashboard
-                            window.location.href = '/dashboard';
-                        }
-                    });
+                    // Redirecionar direto para dashboard
+                    window.location.href = '/dashboard';
                 } else {
                     const errorMessage = result?.message || 'Email ou senha incorretos';
                     

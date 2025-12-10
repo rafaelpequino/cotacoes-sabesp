@@ -68,6 +68,38 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "CotacoesEPC.Controllers.FilesController",
+    "Method": "Download",
+    "RelativePath": "api/Files/download/{fileKey}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fileKey",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CotacoesEPC.Controllers.FilesController",
+    "Method": "Upload",
+    "RelativePath": "api/Files/upload",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "CotacoesEPC.Controllers.InputsController",
     "Method": "GetAll",
     "RelativePath": "api/Inputs",
@@ -293,6 +325,22 @@
     "Method": "Delete",
     "RelativePath": "api/Spreadsheets/{id}",
     "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CotacoesEPC.Controllers.SpreadsheetsController",
+    "Method": "Download",
+    "RelativePath": "api/Spreadsheets/{id}/download",
+    "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [

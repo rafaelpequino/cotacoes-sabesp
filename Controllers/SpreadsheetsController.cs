@@ -3,6 +3,7 @@ using CotacoesEPC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 
 namespace CotacoesEPC.Controllers
@@ -57,7 +58,14 @@ namespace CotacoesEPC.Controllers
         public async Task<IActionResult> Create([FromBody] CreateSpreadsheetRequest request)
         {
             if (!ModelState.IsValid)
-                return BadRequest(ModelState);
+            {
+                var errors = ModelState.Values.SelectMany(v => v.Errors);
+                var errorMessages = errors.Select(e => e.ErrorMessage).ToList();
+                return BadRequest(new { 
+                    message = "Erro de validação",
+                    errors = errorMessages
+                });
+            }
 
             var userId = GetUserId();
 
@@ -110,6 +118,31 @@ namespace CotacoesEPC.Controllers
             return Ok(spreadsheet);
         }
 
+        // GET: api/spreadsheets/{id}/download
+        [HttpGet("{id}/download")]
+        public async Task<IActionResult> Download(int id)
+        {
+            var userId = GetUserId();
+            var spreadsheet = await _context.Spreadsheets
+                .FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
+
+            if (spreadsheet == null)
+                return NotFound(new { message = "Planilha não encontrada" });
+
+            if (string.IsNullOrEmpty(spreadsheet.FilePath))
+                return BadRequest(new { message = "Arquivo não disponível para download" });
+
+            // Criar um arquivo de resposta com os dados salvos
+            // Por enquanto, retornando metadados para download
+            return Ok(new { 
+                fileName = spreadsheet.FilePath,
+                name = spreadsheet.Name,
+                fileSize = spreadsheet.FileSize,
+                fileType = spreadsheet.FileType,
+                message = "Para fazer download, use o nome do arquivo acima"
+            });
+        }
+
         // DELETE: api/spreadsheets/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -130,11 +163,21 @@ namespace CotacoesEPC.Controllers
 
     public class CreateSpreadsheetRequest
     {
+        [Required(ErrorMessage = "Nome da planilha é obrigatório")]
+        [StringLength(255, ErrorMessage = "Nome não pode exceder 255 caracteres")]
         public string Name { get; set; } = string.Empty;
+
+        [StringLength(1000, ErrorMessage = "Descrição não pode exceder 1000 caracteres")]
         public string? Description { get; set; }
+
+        [StringLength(500, ErrorMessage = "Caminho do arquivo não pode exceder 500 caracteres")]
         public string? FilePath { get; set; }
+
+        [StringLength(255, ErrorMessage = "Tipo de arquivo não pode exceder 255 caracteres")]
         public string? FileType { get; set; }
+
         public long? FileSize { get; set; }
+
         public bool IsShared { get; set; } = false;
     }
 

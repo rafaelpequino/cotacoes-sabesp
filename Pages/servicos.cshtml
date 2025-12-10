@@ -68,7 +68,10 @@
     </section>
 
     <section class="servicos-table">
-        <table>
+        <div id="emptyMessage" style="display: none; text-align: center; color: #999; padding: 60px 20px; font-size: 18px;">
+            Nenhum serviço cadastrado. Crie um novo!
+        </div>
+        <table id="servicosTableElement">
             <thead>
                 <tr>
                     <th>ID original</th>
@@ -82,60 +85,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>00001</td>
-                    <td>25/09/2025</td>
-                    <td>Assentamento de tubo não sei o que la la la...</td>
-                    <td>Un.</td>
-                    <td>R$50.000,00</td>
-                    <td>R$55.000,00</td>
-                    <td>Rafael Pequino Freire</td>
-                    <td class="actions">
-                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
-                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
-                        <button class="action-btn btn-editar" title="Editar" onclick="openEditModal()">✏️</button>
-                        <button class="action-btn btn-excluir" title="Excluir">🗑</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>00002</td>
-                    <td>22/09/2025</td>
-                    <td>Assentamento de tubo não sei o que la la la...</td>
-                    <td>Un.</td>
-                    <td>R$50.000,00</td>
-                    <td>R$55.000,00</td>
-                    <td>Kauê Guedes Duarte</td>
-                    <td class="actions">
-                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
-                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>00003</td>
-                    <td>10/08/2025</td>
-                    <td>Assentamento de tubo não sei o que la la la...</td>
-                    <td>Un.</td>
-                    <td>R$50.000,00</td>
-                    <td>R$55.000,00</td>
-                    <td>Kauê Guedes Duarte</td>
-                    <td class="actions">
-                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
-                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>000014</td>
-                    <td>02/08/2025</td>
-                    <td>Assentamento de tubo não sei o que la la la...</td>
-                    <td>Un.</td>
-                    <td>R$50.000,00</td>
-                    <td>R$55.000,00</td>
-                    <td>Kauê Guedes Duarte</td>
-                    <td class="actions">
-                        <button class="action-btn btn-visualizar" title="Visualizar" onclick="openViewModal()">👁</button>
-                        <button class="action-btn btn-copiar" title="Copiar">📋</button>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </section>
@@ -816,6 +765,7 @@
     });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js"></script>
 <script src="~/js/api.js"></script>

@@ -46,7 +46,7 @@
                 <img src="~/images/icons/services.svg" alt="Serviços" />
             </div>
             <div class="numbers">
-                <h3>121 <span>/324</span></h3>
+                <h3><span id="servicesCount">0</span> <span>/<span id="servicesTotalCount">0</span></span></h3>
                 <p>Suas cotações de serviços</p>
             </div>
         </div>
@@ -56,7 +56,7 @@
                 <img src="~/images/icons/quotes.svg" alt="Insumos" />
             </div>
             <div class="numbers">
-                <h3>255 <span>/428</span></h3>
+                <h3><span id="inputsCount">0</span> <span>/<span id="inputsTotalCount">0</span></span></h3>
                 <p>Suas cotações de insumos</p>
             </div>
         </div>
@@ -66,7 +66,7 @@
                 <img src="~/images/icons/spreadsheets.svg" alt="Planilhas" />
             </div>
             <div class="numbers">
-                <h3>0 <span>/12</span></h3>
+                <h3><span id="spreadsheetsCount">0</span> <span>/<span id="spreadsheetsTotalCount">0</span></span></h3>
                 <p>Suas planilhas</p>
             </div>
         </div>
@@ -75,32 +75,26 @@
     <section class="tables">
         <div class="table-card">
             <h3>Últimas Cotações</h3>
-            <table>
+            <table id="servicesTable">
                 <thead>
                     <tr><th>Data</th><th>Item</th><th>Responsável</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>25/09/2025</td><td>Assentamento de tubo não sei o que la la la...</td><td>Rafael Pequino Freire</td></tr>
-                    <tr><td>25/09/2025</td><td>Assentamento de tubo não sei o que la la la...</td><td>Kauê Guedes Duarte</td></tr>
-                    <tr><td>25/09/2025</td><td>Assentamento de tubo não sei o que la la la...</td><td>Rafael Pequino Freire</td></tr>
                 </tbody>
             </table>
-            <a href="#" class="link">Ver cotações</a>
+            <a href="/servicos" class="link">Ver cotações</a>
         </div>
 
         <div class="table-card">
             <h3>Últimas Planilhas</h3>
-            <table>
+            <table id="spreadsheetsTable">
                 <thead>
                     <tr><th>Descrição</th><th>Responsável</th><th></th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Planilha Padrão Elétrica</td><td>Rafael Pequino Freire</td><td>⬇</td></tr>
-                    <tr><td>Planilha Padrão Elétrica</td><td>Kauê Guedes Duarte</td><td>⬇</td></tr>
-                    <tr><td>Planilha Padrão Elétrica</td><td>Kauê Guedes Duarte</td><td>⬇</td></tr>
                 </tbody>
             </table>
-            <a href="#" class="link">Ver planilhas</a>
+            <a href="/planilhas" class="link">Ver planilhas</a>
         </div>
     </section>
 </main>

@@ -1,35 +1,74 @@
 // Página de Serviços - CRUD funcional
 
 let servicosCrud = new CrudManager('services');
-let servicosData = [];
+let servicosPageData = [];
+
+// Função para humanizar erros
+function humanizeError(errorMessage) {
+    const errorMap = {
+        'Ocorreu um erro ao processar sua requisição': 'Houve um problema ao processar sua solicitação. Tente novamente.',
+        'não encontrado': 'O item não foi encontrado.',
+        'já existe': 'Este item já existe no sistema.',
+        'campo obrigatório': 'Verifique se todos os campos obrigatórios foram preenchidos.',
+        'inválido': 'Os dados fornecidos são inválidos.',
+        'Erro 400': 'Verifique os dados fornecidos.',
+        'Erro 401': 'Sua sessão expirou. Por favor, faça login novamente.',
+        'Erro 403': 'Você não tem permissão para realizar esta ação.',
+        'Erro 404': 'O recurso solicitado não foi encontrado.',
+        'Erro 500': 'Erro no servidor. Tente novamente mais tarde.'
+    };
+
+    for (const [pattern, translation] of Object.entries(errorMap)) {
+        if (errorMessage.toLowerCase().includes(pattern.toLowerCase())) {
+            return translation;
+        }
+    }
+
+    return errorMessage || 'Ocorreu um erro desconhecido. Por favor, tente novamente.';
+}
 
 // Carregar dados ao iniciar página
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOMContentLoaded - Carregando serviços...');
     await loadServicos();
     setupEventListeners();
 });
 
 async function loadServicos() {
     try {
-        servicosData = await servicosCrud.loadAll();
-        renderServicosTable(servicosData);
+        console.log('Carregando serviços da API...');
+        servicosPageData = await api.getServices();
+        console.log('Serviços carregados:', servicosPageData);
+        renderServicosTable(servicosPageData);
     } catch (error) {
         console.error('Erro ao carregar serviços:', error);
+        servicosPageData = [];
+        renderServicosTable([]);
     }
 }
 
 function renderServicosTable(servicos) {
-    const tbody = document.querySelector('.servicos-table table tbody');
-    if (!tbody) return;
+    const table = document.getElementById('servicosTableElement');
+    const emptyMessage = document.getElementById('emptyMessage');
+    const tbody = table ? table.querySelector('tbody') : null;
+    
+    if (!table || !emptyMessage || !tbody) {
+        console.error('Elementos não encontrados:', { table, emptyMessage, tbody });
+        return;
+    }
 
     tbody.innerHTML = '';
 
-    if (servicos.length === 0) {
-        const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="8" style="text-align: center; color: #999; padding: 20px;">Nenhum serviço cadastrado. Crie um novo!</td>';
-        tbody.appendChild(row);
+    if (!servicos || servicos.length === 0) {
+        console.log('Serviços vazio, mostrando mensagem');
+        table.style.display = 'none';
+        emptyMessage.style.display = 'block';
         return;
     }
+
+    console.log('Serviços encontrados:', servicos.length);
+    table.style.display = 'table';
+    emptyMessage.style.display = 'none';
 
     servicos.forEach(servico => {
         const row = document.createElement('tr');
@@ -88,45 +127,77 @@ function closeCreateModal() {
 
 async function saveServico() {
     const modal = document.getElementById('createModal');
-    const inputs = modal.querySelectorAll('input[type="text"], input[type="number"], textarea');
-
+    const form = modal.querySelector('form');
+    
+    // Obter valores de forma mais precisa baseado na estrutura do HTML
+    const originalId = form.querySelector('input[placeholder="Ex: 00001"]')?.value || '';
+    const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
+    const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
+    
+    // Validação básica
+    if (!originalId || !item || !unit) {
+        alert('Por favor, preencha os campos obrigatórios (ID, Item, Unidade)');
+        return;
+    }
+    
+    // Obter todos os inputs de número
+    const numberInputs = form.querySelectorAll('input[type="number"]');
+    
+    // Helper para converter valor numérico
+    const toNumber = (value, defaultValue = null) => {
+        if (!value || value === '') return defaultValue;
+        const num = parseFloat(value);
+        return isNaN(num) ? defaultValue : num;
+    };
+    
     const data = {
-        originalId: inputs[0]?.value,
-        item: inputs[1]?.value,
-        unit: inputs[2]?.value,
-        priceFornecedor: parseFloat(inputs[3]?.value || 0),
-        precoMontagem: parseFloat(inputs[4]?.value || 0),
-        precoAdotado: parseFloat(inputs[5]?.value || 0),
-        mediaAdotada: parseFloat(inputs[6]?.value || null),
-        mediaSaneada: parseFloat(inputs[7]?.value || null),
-        menorValor: parseFloat(inputs[8]?.value || null),
-        mediaAritmetica: parseFloat(inputs[9]?.value || null),
-        mediana: parseFloat(inputs[10]?.value || null),
-        empresa1: parseFloat(inputs[11]?.value || null),
-        empresa2: parseFloat(inputs[12]?.value || null),
-        empresa3: parseFloat(inputs[13]?.value || null),
-        empresa4: parseFloat(inputs[14]?.value || null),
-        empresa5: parseFloat(inputs[15]?.value || null),
-        empresa6: parseFloat(inputs[16]?.value || null),
-        justificativa: inputs[17]?.value,
-        tempoPassado: parseInt(inputs[18]?.value || 0),
-        mesAnterior: inputs[19]?.value,
-        indiceAnterior: parseFloat(inputs[20]?.value || null),
-        indiceAtual: parseFloat(inputs[21]?.value || null)
+        originalId: originalId,
+        item: item,
+        unit: unit,
+        priceFornecedor: toNumber(numberInputs[0]?.value, 0),
+        precoMontagem: toNumber(numberInputs[1]?.value, 0),
+        precoAdotado: toNumber(numberInputs[2]?.value, 0),
+        mediaAdotada: toNumber(numberInputs[3]?.value),
+        mediaSaneada: toNumber(numberInputs[4]?.value),
+        menorValor: toNumber(numberInputs[5]?.value),
+        mediaAritmetica: toNumber(numberInputs[6]?.value),
+        mediana: toNumber(numberInputs[7]?.value),
+        empresa1: toNumber(numberInputs[8]?.value),
+        empresa2: toNumber(numberInputs[9]?.value),
+        empresa3: toNumber(numberInputs[10]?.value),
+        empresa4: toNumber(numberInputs[11]?.value),
+        empresa5: toNumber(numberInputs[12]?.value),
+        empresa6: toNumber(numberInputs[13]?.value),
+        justificativa: form.querySelector('textarea')?.value || '',
+        tempoPassado: toNumber(numberInputs[14]?.value),
+        mesAnterior: form.querySelectorAll('input[type="text"]')[3]?.value || '',
+        indiceAnterior: toNumber(numberInputs[15]?.value),
+        indiceAtual: toNumber(numberInputs[16]?.value)
     };
 
+    console.log('Dados a enviar:', data);
+
     try {
-        await servicosCrud.create(data);
-        closeCreateModal();
-        await loadServicos();
-        modal.querySelector('form').reset();
+        const result = await api.createService(data);
+        console.log('Serviço criado com sucesso:', result);
+        Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Serviço criado com sucesso!',
+            confirmButtonColor: '#13d0ff'
+        }).then(() => {
+            closeCreateModal();
+            loadServicos();
+            form.reset();
+        });
     } catch (error) {
-        console.error('Erro ao salvar:', error);
+        console.error('Erro ao salvar serviço:', error);
+        // Erro já é tratado pelo CrudManager.create()
     }
 }
 
 function editServico(id) {
-    const servico = servicosData.find(s => s.id === id);
+    const servico = servicosPageData.find(s => s.id === id);
     if (!servico) return;
 
     const modal = document.getElementById('editModal');
@@ -163,57 +234,184 @@ function editServico(id) {
 async function updateServico() {
     const modal = document.getElementById('editModal');
     const servicoId = modal.dataset.servicoId;
-    const inputs = modal.querySelectorAll('input[type="text"], input[type="number"], textarea');
-
+    const form = modal.querySelector('form');
+    
+    if (!servicoId) {
+        alert('ID do serviço não encontrado');
+        return;
+    }
+    
+    // Obter valores de forma mais precisa baseado na estrutura do HTML
+    const originalId = form.querySelector('input[placeholder="Ex: 00001"]')?.value || '';
+    const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
+    const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
+    
+    // Validação básica
+    if (!originalId || !item || !unit) {
+        alert('Por favor, preencha os campos obrigatórios (ID, Item, Unidade)');
+        return;
+    }
+    
+    // Obter todos os inputs de número
+    const numberInputs = form.querySelectorAll('input[type="number"]');
+    
+    // Helper para converter valor numérico
+    const toNumber = (value, defaultValue = null) => {
+        if (!value || value === '') return defaultValue;
+        const num = parseFloat(value);
+        return isNaN(num) ? defaultValue : num;
+    };
+    
     const data = {
-        originalId: inputs[0]?.value,
-        item: inputs[1]?.value,
-        unit: inputs[2]?.value,
-        priceFornecedor: parseFloat(inputs[3]?.value || 0),
-        precoMontagem: parseFloat(inputs[4]?.value || 0),
-        precoAdotado: parseFloat(inputs[5]?.value || 0),
-        mediaAdotada: parseFloat(inputs[6]?.value || null),
-        mediaSaneada: parseFloat(inputs[7]?.value || null),
-        menorValor: parseFloat(inputs[8]?.value || null),
-        mediaAritmetica: parseFloat(inputs[9]?.value || null),
-        mediana: parseFloat(inputs[10]?.value || null),
-        empresa1: parseFloat(inputs[11]?.value || null),
-        empresa2: parseFloat(inputs[12]?.value || null),
-        empresa3: parseFloat(inputs[13]?.value || null),
-        empresa4: parseFloat(inputs[14]?.value || null),
-        empresa5: parseFloat(inputs[15]?.value || null),
-        empresa6: parseFloat(inputs[16]?.value || null),
-        justificativa: inputs[17]?.value,
-        tempoPassado: parseInt(inputs[18]?.value || 0),
-        mesAnterior: inputs[19]?.value,
-        indiceAnterior: parseFloat(inputs[20]?.value || null),
-        indiceAtual: parseFloat(inputs[21]?.value || null)
+        originalId: originalId,
+        item: item,
+        unit: unit,
+        priceFornecedor: toNumber(numberInputs[0]?.value, 0),
+        precoMontagem: toNumber(numberInputs[1]?.value, 0),
+        precoAdotado: toNumber(numberInputs[2]?.value, 0),
+        mediaAdotada: toNumber(numberInputs[3]?.value),
+        mediaSaneada: toNumber(numberInputs[4]?.value),
+        menorValor: toNumber(numberInputs[5]?.value),
+        mediaAritmetica: toNumber(numberInputs[6]?.value),
+        mediana: toNumber(numberInputs[7]?.value),
+        empresa1: toNumber(numberInputs[8]?.value),
+        empresa2: toNumber(numberInputs[9]?.value),
+        empresa3: toNumber(numberInputs[10]?.value),
+        empresa4: toNumber(numberInputs[11]?.value),
+        empresa5: toNumber(numberInputs[12]?.value),
+        empresa6: toNumber(numberInputs[13]?.value),
+        justificativa: form.querySelector('textarea')?.value || '',
+        tempoPassado: toNumber(numberInputs[14]?.value),
+        mesAnterior: form.querySelectorAll('input[type="text"]')[3]?.value || '',
+        indiceAnterior: toNumber(numberInputs[15]?.value),
+        indiceAtual: toNumber(numberInputs[16]?.value)
     };
 
+    console.log('Dados a atualizar:', { id: servicoId, ...data });
+
     try {
-        await servicosCrud.update(servicoId, data);
-        closeEditModal();
-        await loadServicos();
+        const result = await api.updateService(servicoId, data);
+        console.log('Serviço atualizado com sucesso:', result);
+        Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Serviço atualizado com sucesso!',
+            confirmButtonColor: '#13d0ff'
+        }).then(() => {
+            closeEditModal();
+            loadServicos();
+        });
     } catch (error) {
-        console.error('Erro ao atualizar:', error);
+        console.error('Erro ao atualizar serviço:', error);
+        // Erro já é tratado pelo CrudManager.update()
     }
 }
 
 async function deleteServico(id) {
-    const deleted = await servicosCrud.delete(id);
-    if (deleted) {
-        await loadServicos();
+    console.log('Deletando serviço com ID:', id);
+    try {
+        const deleted = await servicosCrud.delete(id);
+        if (deleted) {
+            console.log('Serviço deletado, recarregando lista...');
+            await loadServicos();
+        }
+    } catch (error) {
+        console.error('Erro ao deletar serviço:', error);
     }
 }
 
 function viewServico(id) {
-    const servico = servicosData.find(s => s.id === id);
-    if (!servico) return;
+    const servico = servicosPageData.find(s => s.id === id);
+    if (!servico) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Serviço não encontrado'
+        });
+        return;
+    }
 
-    // Preencher modal de visualização
+    console.log('Abrindo visualização do serviço:', servico);
+
+    // Preencher modal de visualização com os dados do serviço
     const modal = document.getElementById('viewModal');
-    // ... (implementar preenchimento do modal de visualização)
+    
+    if (!modal) {
+        console.error('Modal de visualização não encontrado!');
+        return;
+    }
+    
+    // Função auxiliar para formatar moeda
+    const formatCurrency = (value) => {
+        if (!value && value !== 0) return '-';
+        return 'R$ ' + parseFloat(value).toLocaleString('pt-BR', { 
+            minimumFractionDigits: 2, 
+            maximumFractionDigits: 2 
+        });
+    };
+
+    // Obter todos os elementos .view-value
+    const viewValues = modal.querySelectorAll('.view-value');
+    console.log('Elementos .view-value encontrados:', viewValues.length);
+
+    // Mapear valores aos elementos
+    if (viewValues.length > 0) {
+        let index = 0;
+        
+        // Informações Básicas
+        if (viewValues[index]) viewValues[index++].textContent = servico.originalId || '-';
+        if (viewValues[index]) viewValues[index++].textContent = servico.item || '-';
+        if (viewValues[index]) viewValues[index++].textContent = servico.unit || '-';
+        if (viewValues[index]) viewValues[index++].textContent = 'Você'; // Responsável
+        
+        // Preços
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.priceFornecedor);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.precoMontagem);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.precoAdotado);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaAdotada);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaSaneada);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.menorValor);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaAritmetica);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediana);
+        
+        // Preços das Empresas
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa1);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa2);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa3);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa4);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa5);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa6);
+        
+        // Justificativa e Índices
+        if (viewValues[index]) viewValues[index++].textContent = servico.justificativa || '-';
+        if (viewValues[index]) viewValues[index++].textContent = (servico.tempoPassado || '0') + ' dias';
+        if (viewValues[index]) viewValues[index++].textContent = servico.mesAnterior || '-';
+        if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAnterior || '0') + '%';
+        if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAtual || '0') + '%';
+        
+        console.log('Preenchidos', index, 'campos');
+    }
+
+    // Armazenar o ID do serviço para ações futuras
+    modal.dataset.servicoId = id;
     modal.style.display = 'flex';
+    console.log('Modal aberto com sucesso');
+}
+
+function editFromView() {
+    const viewModal = document.getElementById('viewModal');
+    const servicoId = viewModal.dataset.servicoId;
+    
+    if (!servicoId) {
+        alert('ID do serviço não encontrado');
+        return;
+    }
+    
+    // Fechar modal de visualização
+    closeViewModal();
+    
+    // Abrir modal de edição com os dados do serviço
+    editServico(parseInt(servicoId));
 }
 
 function closeEditModal() {

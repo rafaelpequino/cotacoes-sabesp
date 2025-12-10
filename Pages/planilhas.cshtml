@@ -58,7 +58,10 @@
     </section>
 
     <section class="servicos-table">
-        <table>
+        <div id="emptyMessage" style="display: none; text-align: center; color: #999; padding: 60px 20px; font-size: 18px;">
+            Nenhuma planilha cadastrada. Crie uma nova!
+        </div>
+        <table id="planilhasTableElement">
             <thead>
                 <tr>
                     <th>Descrição</th>
@@ -70,50 +73,6 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>📊 Planilha Padrão Elétrica</td>
-                    <td>25/09/2025</td>
-                    <td>Elétrica</td>
-                    <td>Kauê Guedes Duarte</td>
-                    <td>2.4 MB</td>
-                    <td class="actions">
-                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
-                        <button class="action-btn btn-editar" title="Editar" onclick="openEditPlanilhaModal()">✏️</button>
-                        <button class="action-btn btn-excluir" title="Excluir">🗑</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>📊 Planilha Padrão Civil</td>
-                    <td>20/09/2025</td>
-                    <td>Civil</td>
-                    <td>Adailton Santos Cardoso</td>
-                    <td>3.1 MB</td>
-                    <td class="actions">
-                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
-                        <button class="action-btn btn-editar" title="Editar" onclick="openEditPlanilhaModal()">✏️</button>
-                        <button class="action-btn btn-excluir" title="Excluir">🗑</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>📊 Planilha Padrão Hidráulica</td>
-                    <td>18/09/2025</td>
-                    <td>Hidráulica</td>
-                    <td>Rafael Pequino Freire</td>
-                    <td>1.8 MB</td>
-                    <td class="actions">
-                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>📊 Planilha de Custos 2025</td>
-                    <td>15/09/2025</td>
-                    <td>Financeiro</td>
-                    <td>Kauê Guedes Duarte</td>
-                    <td>5.2 MB</td>
-                    <td class="actions">
-                        <button class="action-btn btn-download" title="Baixar">⬇️</button>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </section>
@@ -129,7 +88,7 @@
         <form class="modal-form" id="uploadForm">
             <div class="form-row">
                 <div class="form-group full-width">
-                    <label>Descrição da Planilha*</label>
+                    <label>Nome da Planilha*</label>
                     <input type="text" placeholder="Ex: Planilha Padrão Elétrica" required />
                 </div>
             </div>
@@ -358,6 +317,7 @@
     });
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js"></script>
 <script src="~/js/api.js"></script>
