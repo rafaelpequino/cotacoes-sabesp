@@ -37,6 +37,30 @@
       "PackagePath": "staticwebassets\\images\\sabesp.svg"
     },
     {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\api.js",
+      "PackagePath": "staticwebassets\\js\\api.js"
+    },
+    {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\crud.js",
+      "PackagePath": "staticwebassets\\js\\crud.js"
+    },
+    {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\dashboard.js",
+      "PackagePath": "staticwebassets\\js\\dashboard.js"
+    },
+    {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\insumos-page.js",
+      "PackagePath": "staticwebassets\\js\\insumos-page.js"
+    },
+    {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\planilhas-page.js",
+      "PackagePath": "staticwebassets\\js\\planilhas-page.js"
+    },
+    {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\servicos-page.js",
+      "PackagePath": "staticwebassets\\js\\servicos-page.js"
+    },
+    {
       "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

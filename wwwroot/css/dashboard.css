@@ -44,6 +44,7 @@
     }
 
 .user-area {
+    position: relative;
     display: flex;
     align-items: center;
 }
@@ -88,12 +89,6 @@
 }
 
 /* Dropdown Menu Styles */
-.user-area {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
 .user-area .dropdown-menu {
     min-width: 200px;
     border: 1px solid #ddd;
