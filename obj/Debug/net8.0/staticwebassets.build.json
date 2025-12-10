@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "p54xx/p9VQPReEGa6Xh+/Eo3zBQvWY9xM7qVnVJqFts=",
+  "Hash": "8w2lAoMqt2Wn6t85Fd/yxPJGDSD8VD+rxHbsS/HLUdM=",
   "Source": "CotacoesEPC",
   "BasePath": "_content/CotacoesEPC",
   "Mode": "Default",
@@ -224,6 +224,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\api.js"
+    },
+    {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\clipboard-parser.js",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "js/clipboard-parser.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\clipboard-parser.js"
     },
     {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\crud.js",

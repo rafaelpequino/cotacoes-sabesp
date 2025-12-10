@@ -41,6 +41,10 @@
       "PackagePath": "staticwebassets\\js\\api.js"
     },
     {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\clipboard-parser.js",
+      "PackagePath": "staticwebassets\\js\\clipboard-parser.js"
+    },
+    {
       "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\crud.js",
       "PackagePath": "staticwebassets\\js\\crud.js"
     },

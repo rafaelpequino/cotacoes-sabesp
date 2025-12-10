@@ -641,69 +641,16 @@
     function pasteFromClipboard() {
         navigator.clipboard.readText().then((text) => {
             try {
-                // Split by tab para pegar cada coluna
-                const values = text.trim().split('\t');
+                // Usar o parser para processar os dados
+                const parsedData = parseClipboardData(text);
                 
-                // Verificar se tem dados suficientes
-                if (values.length < 26) {
-                    alert('Formato de dados inválido. Certifique-se de copiar os dados completos.');
-                    return;
-                }
-
-                // Mapear os valores para os inputs (seguindo a ordem exata)
-                const inputs = createModal.querySelectorAll('input, textarea');
+                // Preencher o formulário com os dados parseados
+                fillFormWithParsedData(createModal, parsedData);
                 
-                // Encontrar cada input pelo tipo e preenchê-lo
-                const idOriginalInput = createModal.querySelector('input[placeholder="Ex: 00001"]');
-                const itemInput = createModal.querySelector('input[placeholder="Descrição do item"]');
-                const unidadeInput = createModal.querySelector('input[placeholder="Ex: Un., m², Kg"]');
-                
-                // Inputs de preços
-                const precoInputs = createModal.querySelectorAll('input[type="number"]');
-                
-                // Preencher valores (índice baseado na posição correta)
-                if (idOriginalInput) idOriginalInput.value = values[0] || '';
-                if (itemInput) itemInput.value = values[1] || '';
-                if (unidadeInput) unidadeInput.value = values[2] || '';
-                
-                // Preços na ordem
-                let inputIndex = 0;
-                precoInputs[inputIndex++].value = values[3] || ''; // Adotada - Preço Forn.
-                precoInputs[inputIndex++].value = values[4] || ''; // Preço montagem
-                // Coluna 6 vazia - pula
-                precoInputs[inputIndex++].value = values[6] || ''; // Preço adotado
-                // Coluna 8 vazia - pula
-                precoInputs[inputIndex++].value = values[8] || ''; // Média adotada
-                precoInputs[inputIndex++].value = values[9] || ''; // Média Saneada
-                precoInputs[inputIndex++].value = values[10] || ''; // Menor Valor
-                precoInputs[inputIndex++].value = values[11] || ''; // Média Aritmética
-                precoInputs[inputIndex++].value = values[12] || ''; // Mediana
-                // Coluna 14 vazia - pula
-                precoInputs[inputIndex++].value = values[14] || ''; // Empresa 1
-                precoInputs[inputIndex++].value = values[15] || ''; // Empresa 2
-                precoInputs[inputIndex++].value = values[16] || ''; // Empresa 3
-                precoInputs[inputIndex++].value = values[17] || ''; // Empresa 4
-                precoInputs[inputIndex++].value = values[18] || ''; // Empresa 5
-                precoInputs[inputIndex++].value = values[19] || ''; // Empresa 6
-                precoInputs[inputIndex++].value = values[23] || ''; // Tempo passado
-                precoInputs[inputIndex++].value = values[24] || ''; // Índice anterior
-                precoInputs[inputIndex++].value = values[25] || ''; // Índice atual
-                
-                // Preencher textarea
-                const justificativaInput = createModal.querySelector('textarea');
-                if (justificativaInput) justificativaInput.value = values[20] || '';
-                
-                // Preencher campos de texto
-                const textInputs = createModal.querySelectorAll('input[type="text"]');
-                let textIndex = 0;
-                if (textInputs[textIndex]) textInputs[textIndex++].value = values[0] || ''; // ID Original
-                if (textInputs[textIndex]) textInputs[textIndex++].value = values[1] || ''; // Item
-                if (textInputs[textIndex]) textInputs[textIndex++].value = values[2] || ''; // Unidade
-                if (textInputs[textIndex]) textInputs[textIndex++].value = values[22] || ''; // Mês anterior
-
                 showPasteNotification();
             } catch (error) {
                 alert('Erro ao processar dados da planilha: ' + error.message);
+                console.error('Erro completo:', error);
             }
         }).catch(() => {
             alert('Não foi possível acessar a área de transferência. Verifique as permissões do navegador.');
@@ -767,6 +714,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/clipboard-parser.js"></script>
 <script src="~/js/site.js"></script>
 <script src="~/js/api.js"></script>
 <script src="~/js/crud.js"></script>
