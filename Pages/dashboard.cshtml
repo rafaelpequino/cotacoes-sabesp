@@ -46,8 +46,8 @@
                 <img src="~/images/icons/services.svg" alt="Serviços" />
             </div>
             <div class="numbers">
-                <h3><span id="servicesCount">0</span> <span>/<span id="servicesTotalCount">0</span></span></h3>
-                <p>Suas cotações de serviços</p>
+                <h3><span id="servicesCount">0</span></h3>
+                <p>Cotações de Serviços</p>
             </div>
         </div>
 
@@ -56,8 +56,8 @@
                 <img src="~/images/icons/quotes.svg" alt="Insumos" />
             </div>
             <div class="numbers">
-                <h3><span id="inputsCount">0</span> <span>/<span id="inputsTotalCount">0</span></span></h3>
-                <p>Suas cotações de insumos</p>
+                <h3><span id="inputsCount">0</span></h3>
+                <p>Cotações de Insumos</p>
             </div>
         </div>
 
@@ -66,15 +66,15 @@
                 <img src="~/images/icons/spreadsheets.svg" alt="Planilhas" />
             </div>
             <div class="numbers">
-                <h3><span id="spreadsheetsCount">0</span> <span>/<span id="spreadsheetsTotalCount">0</span></span></h3>
-                <p>Suas planilhas</p>
+                <h3><span id="spreadsheetsCount">0</span></h3>
+                <p>Planilhas</p>
             </div>
         </div>
     </section>
 
     <section class="tables">
         <div class="table-card">
-            <h3>Últimas Cotações</h3>
+            <h3>Últimas Cotações de Serviços</h3>
             <table id="servicesTable">
                 <thead>
                     <tr><th>Data</th><th>Item</th><th>Responsável</th></tr>
@@ -86,10 +86,22 @@
         </div>
 
         <div class="table-card">
+            <h3>Últimas Cotações de Insumos</h3>
+            <table id="inputsTable">
+                <thead>
+                    <tr><th>Data</th><th>Item</th><th>Responsável</th></tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <a href="/insumos" class="link">Ver cotações</a>
+        </div>
+
+        <div class="table-card">
             <h3>Últimas Planilhas</h3>
             <table id="spreadsheetsTable">
                 <thead>
-                    <tr><th>Descrição</th><th>Responsável</th><th></th></tr>
+                    <tr><th>Descrição</th><th>Responsável</th><th>Ação</th></tr>
                 </thead>
                 <tbody>
                 </tbody>

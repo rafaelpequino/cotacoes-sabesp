@@ -293,6 +293,10 @@
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx",
+      "PackagePath": "staticwebassets\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.CotacoesEPC.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

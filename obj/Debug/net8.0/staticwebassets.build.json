@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "pw9uvkrje/co8a+iALgWpu2ljhT5LIjuh+UU7IIznKE=",
+  "Hash": "p54xx/p9VQPReEGa6Xh+/Eo3zBQvWY9xM7qVnVJqFts=",
   "Source": "CotacoesEPC",
   "BasePath": "_content/CotacoesEPC",
   "Mode": "Default",
@@ -1421,6 +1421,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "uploads/5/d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx"
     }
   ]
 }

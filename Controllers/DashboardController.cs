@@ -45,7 +45,7 @@ namespace CotacoesEPC.Controllers
             var recentServices = await _context.Services
                 .Where(s => s.UserId == userId)
                 .OrderByDescending(s => s.CreatedAt)
-                .Take(5)
+                .Take(3)
                 .Select(s => new
                 {
                     s.Id,
@@ -57,14 +57,29 @@ namespace CotacoesEPC.Controllers
                 })
                 .ToListAsync();
 
+            var recentInputs = await _context.Inputs
+                .Where(i => i.UserId == userId)
+                .OrderByDescending(i => i.CreatedAt)
+                .Take(3)
+                .Select(i => new
+                {
+                    i.Id,
+                    i.Item,
+                    i.PrecoAdotado,
+                    i.CreatedAt,
+                    ResponsibleName = i.User!.Name
+                })
+                .ToListAsync();
+
             var recentSpreadsheets = await _context.Spreadsheets
                 .Where(s => s.UserId == userId)
                 .OrderByDescending(s => s.CreatedAt)
-                .Take(5)
+                .Take(3)
                 .Select(s => new
                 {
                     s.Id,
                     s.Name,
+                    s.FilePath,
                     s.CreatedAt,
                     ResponsibleName = s.User!.Name
                 })
@@ -76,6 +91,7 @@ namespace CotacoesEPC.Controllers
                 inputsCount,
                 spreadsheetsCount,
                 recentServices,
+                recentInputs,
                 recentSpreadsheets
             });
         }
