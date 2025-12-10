@@ -26,6 +26,17 @@
                             <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
                         </li>
                     </ul>
+                    <div class="user-menu-dropdown">
+                        <button class="user-menu-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="userMenuBtn">
+                            <img src="https://via.placeholder.com/40" alt="Foto do usuário" class="user-avatar">
+                            <span class="user-name d-none d-sm-inline">João Silva</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
+                            <li><h6 class="dropdown-header d-sm-none">João Silva</h6></li>
+                            <li><hr class="dropdown-divider d-sm-none"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout(event)">Sair</a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

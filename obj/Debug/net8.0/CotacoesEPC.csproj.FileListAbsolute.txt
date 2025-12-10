@@ -28,3 +28,4 @@ C:\Users\rafae\OneDrive\Documentos\Sabesp\CotacoesEPC\obj\Debug\net8.0\refint\Co
 C:\Users\rafae\OneDrive\Documentos\Sabesp\CotacoesEPC\obj\Debug\net8.0\CotacoesEPC.pdb
 C:\Users\rafae\OneDrive\Documentos\Sabesp\CotacoesEPC\obj\Debug\net8.0\CotacoesEPC.genruntimeconfig.cache
 C:\Users\rafae\OneDrive\Documentos\Sabesp\CotacoesEPC\obj\Debug\net8.0\ref\CotacoesEPC.dll
+C:\Users\rafae\OneDrive\Documentos\Sabesp\CotacoesEPC\obj\Debug\net8.0\CotacoesEPC.sourcelink.json

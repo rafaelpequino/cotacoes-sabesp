@@ -5,6 +5,10 @@
     ViewData["Title"] = "Dashboard";
 }
 
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>@ViewData["Title"] - CotacoesEPC</title>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <link rel="stylesheet" href="~/css/dashboard.css" />
 
 <header class="dashboard-header">
@@ -20,10 +24,15 @@
     </nav>
 
     <div class="user-area">
-        <div class="user">
+        <button class="user" type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="user-icon">R</div>
             <span class="user-name">Rafael</span>
-        </div>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
+            <li><h6 class="dropdown-header d-md-none">Rafael</h6></li>
+            <li><hr class="dropdown-divider d-md-none"></li>
+            <li><a class="dropdown-item" href="#" onclick="logout(event)">Sair</a></li>
+        </ul>
     </div>
 </header>
 
@@ -94,3 +103,6 @@
         </div>
     </section>
 </main>
+
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js"></script>
