@@ -28,13 +28,36 @@ namespace CotacoesEPC.Controllers
 
         // GET: api/spreadsheets
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
             var userId = GetUserId();
-            var spreadsheets = await _context.Spreadsheets
-                .Where(s => s.UserId == userId)
-                .OrderByDescending(s => s.CreatedAt)
-                .ToListAsync();
+            var query = _context.Spreadsheets.Where(s => s.UserId == userId);
+
+            // Aplicar filtro de texto
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                query = query.Where(s => 
+                    s.Name.ToLower().Contains(searchLower) ||
+                    s.Description.ToLower().Contains(searchLower)
+                );
+            }
+
+            // Aplicar ordenação
+            query = sort switch
+            {
+                "recentes" => query.OrderByDescending(s => s.CreatedAt),
+                "antigos" => query.OrderBy(s => s.CreatedAt),
+                _ => query.OrderByDescending(s => s.CreatedAt) // Relevância/padrão
+            };
+
+            // Aplicar filtro de categoria (Minhas Planilhas / Compartilhadas)
+            if (filter == "compartilhadas")
+            {
+                query = query.Where(s => s.IsShared);
+            }
+
+            var spreadsheets = await query.ToListAsync();
 
             return Ok(spreadsheets);
         }

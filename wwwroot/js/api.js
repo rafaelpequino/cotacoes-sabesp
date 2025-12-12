@@ -105,8 +105,19 @@ class ApiClient {
     }
 
     // Services endpoints
-    async getServices() {
-        return this.request('/services');
+    async getServices(search = null, sort = null, filter = null) {
+        let endpoint = '/services';
+        const params = new URLSearchParams();
+        
+        if (search) params.append('search', search);
+        if (sort) params.append('sort', sort);
+        if (filter) params.append('filter', filter);
+        
+        if (params.toString()) {
+            endpoint += '?' + params.toString();
+        }
+        
+        return this.request(endpoint);
     }
 
     async getService(id) {
@@ -126,8 +137,19 @@ class ApiClient {
     }
 
     // Inputs endpoints
-    async getInputs() {
-        return this.request('/inputs');
+    async getInputs(search = null, sort = null, filter = null) {
+        let endpoint = '/inputs';
+        const params = new URLSearchParams();
+        
+        if (search) params.append('search', search);
+        if (sort) params.append('sort', sort);
+        if (filter) params.append('filter', filter);
+        
+        if (params.toString()) {
+            endpoint += '?' + params.toString();
+        }
+        
+        return this.request(endpoint);
     }
 
     async getInput(id) {
@@ -147,8 +169,19 @@ class ApiClient {
     }
 
     // Spreadsheets endpoints
-    async getSpreadsheets() {
-        return this.request('/spreadsheets');
+    async getSpreadsheets(search = null, sort = null, filter = null) {
+        let endpoint = '/spreadsheets';
+        const params = new URLSearchParams();
+        
+        if (search) params.append('search', search);
+        if (sort) params.append('sort', sort);
+        if (filter) params.append('filter', filter);
+        
+        if (params.toString()) {
+            endpoint += '?' + params.toString();
+        }
+        
+        return this.request(endpoint);
     }
 
     async getSpreadsheet(id) {

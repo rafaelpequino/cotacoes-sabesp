@@ -27,13 +27,32 @@ namespace CotacoesEPC.Controllers
 
         // GET: api/services
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
             var userId = GetUserId();
-            var services = await _context.Services
-                .Where(s => s.UserId == userId)
-                .OrderByDescending(s => s.CreatedAt)
-                .ToListAsync();
+            var query = _context.Services.Where(s => s.UserId == userId);
+
+            // Aplicar filtro de texto
+            if (!string.IsNullOrEmpty(search))
+            {
+                var searchLower = search.ToLower();
+                query = query.Where(s => 
+                    s.Item.ToLower().Contains(searchLower) ||
+                    s.OriginalId.ToLower().Contains(searchLower) ||
+                    s.Unit.ToLower().Contains(searchLower)
+                );
+            }
+
+            // Aplicar ordenação
+            query = sort switch
+            {
+                "recentes" => query.OrderByDescending(s => s.CreatedAt),
+                "preço_menor" => query.OrderBy(s => s.PrecoAdotado),
+                "preço_maior" => query.OrderByDescending(s => s.PrecoAdotado),
+                _ => query.OrderByDescending(s => s.CreatedAt) // Relevância/padrão
+            };
+
+            var services = await query.ToListAsync();
 
             return Ok(services);
         }

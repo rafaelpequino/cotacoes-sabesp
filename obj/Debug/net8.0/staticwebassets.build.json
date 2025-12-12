@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "8w2lAoMqt2Wn6t85Fd/yxPJGDSD8VD+rxHbsS/HLUdM=",
+  "Hash": "OPZS+n+S8zqXvo7VWJUrVIE6n3gOyopN25owV6otM+0=",
   "Source": "CotacoesEPC",
   "BasePath": "_content/CotacoesEPC",
   "Mode": "Default",
@@ -1440,6 +1440,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
+    },
+    {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "uploads/5/a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\uploads\\5\\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm"
     },
     {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx",

@@ -114,6 +114,81 @@ function setupEventListeners() {
             await updateInsumo();
         });
     }
+
+    // Configurar filtros
+    setupFilterListeners();
+}
+
+function setupFilterListeners() {
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const filterSelect = document.getElementById('filterSelect');
+    const btnFiltrar = document.getElementById('btnFiltrar');
+    const btnLimpar = document.getElementById('btnLimpar');
+
+    if (btnFiltrar) {
+        btnFiltrar.addEventListener('click', applyFilters);
+    }
+
+    if (btnLimpar) {
+        btnLimpar.addEventListener('click', clearFilters);
+    }
+
+    // Ordenação dispara requisição automaticamente
+    if (sortSelect) {
+        sortSelect.addEventListener('change', applyFilters);
+    }
+
+    // Permitir busca ao digitar (Enter)
+    if (searchInput) {
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                applyFilters();
+            }
+        });
+    }
+}
+
+async function applyFilters() {
+    const search = document.getElementById('searchInput')?.value || '';
+    const sort = document.getElementById('sortSelect')?.value || '';
+    const filter = document.getElementById('filterSelect')?.value || '';
+
+    try {
+        console.log('Aplicando filtros:', { search, sort, filter });
+        insumosPageData = await api.getInputs(search || null, sort || null, filter || null);
+        console.log('Dados filtrados:', insumosPageData);
+        renderInsumosTable(insumosPageData);
+        updateSearchIndicator(search);
+    } catch (error) {
+        console.error('Erro ao aplicar filtros:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao Filtrar',
+            text: humanizeError(error.message),
+            confirmButtonColor: '#d32f2f'
+        });
+    }
+}
+
+function updateSearchIndicator(searchText) {
+    const indicator = document.getElementById('searchIndicator');
+    const searchTextElement = document.getElementById('searchText');
+    
+    if (searchText && searchText.trim()) {
+        searchTextElement.textContent = searchText;
+        indicator.style.display = 'block';
+    } else {
+        indicator.style.display = 'none';
+    }
+}
+
+function clearFilters() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('sortSelect').value = '';
+    document.getElementById('filterSelect').value = '';
+    document.getElementById('searchIndicator').style.display = 'none';
+    loadInsumos();
 }
 
 function openCreateModal() {

@@ -348,15 +348,23 @@
 
 .servicos-filters {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     margin-bottom: 24px;
     flex-wrap: wrap;
     align-items: flex-end;
 }
 
+.search-group {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+    flex: 1;
+    min-width: 300px;
+}
+
 .search-input {
     flex: 1;
-    min-width: 200px;
+    min-width: 150px;
     padding: 10px 16px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -401,6 +409,26 @@
         outline: none;
         border-color: #19d6ff;
         box-shadow: 0 0 0 3px rgba(25, 214, 255, 0.1);
+    }
+
+.btn-filtrar {
+    padding: 10px 16px;
+    background: #19d6ff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+    .btn-filtrar:hover {
+        background: #00bfff;
+    }
+
+    .btn-filtrar:active {
+        transform: scale(0.98);
     }
 
 .btn-limpar {

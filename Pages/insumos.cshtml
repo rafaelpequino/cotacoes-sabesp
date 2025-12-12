@@ -43,29 +43,34 @@
     </div>
 
     <section class="servicos-filters">
-        <input type="text" class="search-input" placeholder="Pesquisar por item" />
+        <div class="search-group">
+            <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar por item" />
+            <button class="btn-filtrar" id="btnFiltrar">🔍 Buscar</button>
+            <button class="btn-limpar" id="btnLimpar">Limpar Busca</button>
+        </div>
         
         <div class="filter-group">
             <label class="filter-label">Ordenar por:</label>
-            <select class="filter-select">
-                <option>Relevância</option>
-                <option>Mais Recentes</option>
-                <option>Preço: Menor</option>
-                <option>Preço: Maior</option>
+            <select class="filter-select" id="sortSelect">
+                <option value="">Relevância</option>
+                <option value="recentes">Mais Recentes</option>
+                <option value="preço_menor">Preço: Menor</option>
+                <option value="preço_maior">Preço: Maior</option>
             </select>
         </div>
 
         <div class="filter-group">
             <label class="filter-label">Filtrar por:</label>
-            <select class="filter-select">
-                <option>Minhas Cotações</option>
-                <option>Todas as Cotações</option>
-                <option>Cotações Aprovadas</option>
+            <select class="filter-select" id="filterSelect">
+                <option value="">Minhas Cotações</option>
+                <option value="todas">Todas as Cotações</option>
             </select>
         </div>
-
-        <button class="btn-limpar">Limpar Filtros</button>
     </section>
+
+    <div id="searchIndicator" style="display: none; padding: 12px 16px; background: #e8f4f8; border-left: 4px solid #19d6ff; margin-bottom: 16px; border-radius: 4px;">
+        <span style="color: #333; font-weight: 500;">Buscando por: <strong id="searchText"></strong></span>
+    </div>
 
     <section class="servicos-table">
         <div id="emptyMessage" style="display: none; text-align: center; color: #999; padding: 60px 20px; font-size: 18px;">

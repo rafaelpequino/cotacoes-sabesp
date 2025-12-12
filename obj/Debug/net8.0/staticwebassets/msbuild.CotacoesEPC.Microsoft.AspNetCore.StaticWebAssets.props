@@ -1184,6 +1184,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\lib\jquery\LICENSE.txt))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx))">
       <SourceType>Package</SourceType>
       <SourceId>CotacoesEPC</SourceId>

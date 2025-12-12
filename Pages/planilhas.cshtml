@@ -43,19 +43,32 @@
     </div>
 
     <section class="servicos-filters">
-        <input type="text" class="search-input" placeholder="Pesquisar por nome" />
+        <div class="search-group">
+            <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar por nome" />
+            <button class="btn-filtrar" id="btnFiltrar">🔍 Buscar</button>
+            <button class="btn-limpar" id="btnLimpar">Limpar Busca</button>
+        </div>
         
         <div class="filter-group">
-            <label class="filter-label">Filtrar por:</label>
-            <select class="filter-select">
-                <option>Minhas Planilhas</option>
-                <option>Todas as Planilhas</option>
-                <option>Planilhas Compartilhadas</option>
+            <label class="filter-label">Ordenar por:</label>
+            <select class="filter-select" id="sortSelect">
+                <option value="">Mais Recentes</option>
+                <option value="antigos">Mais Antigos</option>
             </select>
         </div>
 
-        <button class="btn-limpar">Limpar Filtros</button>
+        <div class="filter-group">
+            <label class="filter-label">Filtrar por:</label>
+            <select class="filter-select" id="filterSelect">
+                <option value="">Minhas Planilhas</option>
+                <option value="compartilhadas">Planilhas Compartilhadas</option>
+            </select>
+        </div>
     </section>
+
+    <div id="searchIndicator" style="display: none; padding: 12px 16px; background: #e8f4f8; border-left: 4px solid #19d6ff; margin-bottom: 16px; border-radius: 4px;">
+        <span style="color: #333; font-weight: 500;">Buscando por: <strong id="searchText"></strong></span>
+    </div>
 
     <section class="servicos-table">
         <div id="emptyMessage" style="display: none; text-align: center; color: #999; padding: 60px 20px; font-size: 18px;">
