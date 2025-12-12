@@ -81,6 +81,7 @@ function renderServicosTable(servicos) {
             <td>R$ ${parseFloat(servico.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>Você</td>
             <td class="actions">
+                <button class="action-btn" title="Copiar dados" onclick="copyServico(${servico.id})">📋</button>
                 <button class="action-btn" title="Visualizar" onclick="viewServico(${servico.id})">👁</button>
                 <button class="action-btn" title="Editar" onclick="editServico(${servico.id})">✏️</button>
                 <button class="action-btn" title="Excluir" onclick="deleteServico(${servico.id})">🗑</button>
@@ -318,6 +319,79 @@ async function deleteServico(id) {
     } catch (error) {
         console.error('Erro ao deletar serviço:', error);
     }
+}
+
+async function copyServico(id) {
+    const servico = servicosPageData.find(s => s.id === id);
+    if (!servico) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Serviço não encontrado'
+        });
+        return;
+    }
+
+    try {
+        // Dados na ordem exata das colunas da planilha
+        // COLUNAS 6, 8, 14 E 22 DEVEM FICAR VAZIAS
+        const values = [
+            servico.originalId,                    // 1. ID original
+            servico.item,                          // 2. ITEM
+            servico.unit,                          // 3. Unidade
+            servico.priceFornecedor || '',         // 4. Preço Fornecedor
+            servico.precoMontagem || '',           // 5. Preço Montagem
+            '',                                    // 6. COLUNA VAZIA
+            servico.precoAdotado || '',            // 7. Preço Adotado
+            '',                                    // 8. COLUNA VAZIA
+            servico.mediaAdotada || '',            // 9. Média Adotada
+            servico.mediaSaneada || '',            // 10. Média Saneada
+            servico.menorValor || '',              // 11. Menor Valor
+            servico.mediaAritmetica || '',         // 12. Média Aritmética
+            servico.mediana || '',                 // 13. Mediana
+            '',                                    // 14. COLUNA VAZIA
+            servico.empresa1 || '',                // 15. EMPRESA 1
+            servico.empresa2 || '',                // 16. EMPRESA 2
+            servico.empresa3 || '',                // 17. EMPRESA 3
+            servico.empresa4 || '',                // 18. EMPRESA 4
+            servico.empresa5 || '',                // 19. EMPRESA 5
+            servico.empresa6 || '',                // 20. EMPRESA 6
+            servico.justificativa || '',           // 21. Justificativa
+            '',                                    // 22. COLUNA VAZIA
+            servico.tempoPassado || '',            // 23. Tempo Passado
+            servico.mesAnterior || '',             // 24. Mês Anterior
+            servico.indiceAnterior || '',          // 25. Índice Anterior
+            servico.indiceAtual || ''              // 26. Índice Atual
+        ].join('\t');
+
+        await navigator.clipboard.writeText(values);
+        showCopyNotification();
+    } catch (error) {
+        console.error('Erro ao copiar dados:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao copiar dados para área de transferência'
+        });
+    }
+}
+
+function showCopyNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'copy-notification';
+    notification.textContent = '✓ Dados copiados para a área de transferência';
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 2000);
 }
 
 function viewServico(id) {

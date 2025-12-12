@@ -159,11 +159,11 @@ async function savePlanilha() {
     
     // Validar extensão do arquivo
     const fileName = file.name.toLowerCase();
-    if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xls') && !fileName.endsWith('.csv')) {
+    if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xlsm') && !fileName.endsWith('.xls') && !fileName.endsWith('.csv')) {
         Swal.fire({
             icon: 'warning',
             title: 'Arquivo inválido',
-            text: 'Por favor, selecione um arquivo Excel (.xlsx, .xls) ou CSV (.csv)',
+            text: 'Por favor, selecione um arquivo Excel (.xlsx, .xlsm, .xls) ou CSV (.csv)',
             confirmButtonColor: '#13d0ff'
         });
         return;

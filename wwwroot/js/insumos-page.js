@@ -81,6 +81,7 @@ function renderInsumosTable(insumos) {
             <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>Você</td>
             <td class="actions">
+                <button class="action-btn" title="Copiar dados" onclick="copyInsumo(${insumo.id})">📋</button>
                 <button class="action-btn" title="Visualizar" onclick="viewInsumo(${insumo.id})">👁</button>
                 <button class="action-btn" title="Editar" onclick="editInsumo(${insumo.id})">✏️</button>
                 <button class="action-btn" title="Excluir" onclick="deleteInsumo(${insumo.id})">🗑</button>
@@ -329,6 +330,79 @@ async function deleteInsumo(id) {
     } catch (error) {
         console.error('Erro ao deletar insumo:', error);
     }
+}
+
+async function copyInsumo(id) {
+    const insumo = insumosPageData.find(i => i.id === id);
+    if (!insumo) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Insumo não encontrado'
+        });
+        return;
+    }
+
+    try {
+        // Dados na ordem exata das colunas da planilha
+        // COLUNAS 6, 8, 14 E 22 DEVEM FICAR VAZIAS
+        const values = [
+            insumo.originalId,                    // 1. ID original
+            insumo.item,                          // 2. ITEM
+            insumo.unit,                          // 3. Unidade
+            insumo.priceFornecedor || '',         // 4. Preço Fornecedor
+            insumo.precoMontagem || '',           // 5. Preço Montagem
+            '',                                   // 6. COLUNA VAZIA
+            insumo.precoAdotado || '',            // 7. Preço Adotado
+            '',                                   // 8. COLUNA VAZIA
+            insumo.mediaAdotada || '',            // 9. Média Adotada
+            insumo.mediaSaneada || '',            // 10. Média Saneada
+            insumo.menorValor || '',              // 11. Menor Valor
+            insumo.mediaAritmetica || '',         // 12. Média Aritmética
+            insumo.mediana || '',                 // 13. Mediana
+            '',                                   // 14. COLUNA VAZIA
+            insumo.empresa1 || '',                // 15. EMPRESA 1
+            insumo.empresa2 || '',                // 16. EMPRESA 2
+            insumo.empresa3 || '',                // 17. EMPRESA 3
+            insumo.empresa4 || '',                // 18. EMPRESA 4
+            insumo.empresa5 || '',                // 19. EMPRESA 5
+            insumo.empresa6 || '',                // 20. EMPRESA 6
+            insumo.justificativa || '',           // 21. Justificativa
+            '',                                   // 22. COLUNA VAZIA
+            insumo.tempoPassado || '',            // 23. Tempo Passado
+            insumo.mesAnterior || '',             // 24. Mês Anterior
+            insumo.indiceAnterior || '',          // 25. Índice Anterior
+            insumo.indiceAtual || ''              // 26. Índice Atual
+        ].join('\t');
+
+        await navigator.clipboard.writeText(values);
+        showCopyNotification();
+    } catch (error) {
+        console.error('Erro ao copiar dados:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao copiar dados para área de transferência'
+        });
+    }
+}
+
+function showCopyNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'copy-notification';
+    notification.textContent = '✓ Dados copiados para a área de transferência';
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 10);
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 2000);
 }
 
 function viewInsumo(id) {

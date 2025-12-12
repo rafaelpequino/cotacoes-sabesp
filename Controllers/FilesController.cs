@@ -32,11 +32,11 @@ namespace CotacoesEPC.Controllers
                     return BadRequest(new { message = "Arquivo não fornecido ou está vazio" });
 
                 // Validar tipo de arquivo
-                var allowedExtensions = new[] { ".xlsx", ".xls", ".csv" };
+                var allowedExtensions = new[] { ".xlsx", ".xlsm", ".xls", ".csv" };
                 var fileExtension = Path.GetExtension(file.FileName).ToLower();
                 
                 if (!allowedExtensions.Contains(fileExtension))
-                    return BadRequest(new { message = "Tipo de arquivo não permitido. Use .xlsx, .xls ou .csv" });
+                    return BadRequest(new { message = "Tipo de arquivo não permitido. Use .xlsx, .xlsm, .xls ou .csv" });
 
                 // Validar tamanho (máximo 10MB)
                 if (file.Length > 10 * 1024 * 1024)
@@ -107,6 +107,7 @@ namespace CotacoesEPC.Controllers
         private string GetContentType(string fileName)
         {
             return fileName.EndsWith(".xlsx") ? "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" :
+                   fileName.EndsWith(".xlsm") ? "application/vnd.ms-excel.sheet.macroEnabled.12" :
                    fileName.EndsWith(".xls") ? "application/vnd.ms-excel" :
                    fileName.EndsWith(".csv") ? "text/csv" :
                    "application/octet-stream";
