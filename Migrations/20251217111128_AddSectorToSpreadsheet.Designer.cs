@@ -4,6 +4,7 @@ using CotacoesEPC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CotacoesEPC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251217111128_AddSectorToSpreadsheet")]
+    partial class AddSectorToSpreadsheet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,36 +178,6 @@ namespace CotacoesEPC.Migrations
                     b.ToTable("Inputs");
                 });
 
-            modelBuilder.Entity("CotacoesEPC.Models.Sector", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sectors");
-                });
-
             modelBuilder.Entity("CotacoesEPC.Models.Service", b =>
                 {
                     b.Property<int>("Id")
@@ -357,8 +330,9 @@ namespace CotacoesEPC.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("SectorId")
-                        .HasColumnType("int");
+                    b.Property<string>("Sector")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<DateTime?>("SharedAt")
                         .HasColumnType("datetime2");
@@ -370,8 +344,6 @@ namespace CotacoesEPC.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SectorId");
 
                     b.HasIndex("UserId");
 
@@ -459,25 +431,13 @@ namespace CotacoesEPC.Migrations
 
             modelBuilder.Entity("CotacoesEPC.Models.Spreadsheet", b =>
                 {
-                    b.HasOne("CotacoesEPC.Models.Sector", "Sector")
-                        .WithMany("Spreadsheets")
-                        .HasForeignKey("SectorId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
                     b.HasOne("CotacoesEPC.Models.User", "User")
                         .WithMany("Spreadsheets")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Sector");
-
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CotacoesEPC.Models.Sector", b =>
-                {
-                    b.Navigation("Spreadsheets");
                 });
 
             modelBuilder.Entity("CotacoesEPC.Models.User", b =>

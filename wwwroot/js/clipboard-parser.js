@@ -19,9 +19,6 @@ function parseClipboardData(text) {
         const lastLine = lines[lines.length - 1];
         const values = lastLine.split('\t');
         
-        console.log('Dados parseados:', values);
-        console.log('Total de colunas:', values.length);
-
         // Função para limpar e converter valores monetários
         function parseMoneyValue(str) {
             if (!str || str.trim() === '') return '';
@@ -81,7 +78,6 @@ function parseClipboardData(text) {
             indiceAtual: getValue(25, true)               // 25. Índice atual
         };
     } catch (error) {
-        console.error('Erro ao fazer parse dos dados:', error);
         throw error;
     }
 }
@@ -145,7 +141,6 @@ function fillFormWithParsedData(modal, parsedData) {
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.indiceAtual;                // Índice atual
         
     } catch (error) {
-        console.error('Erro ao preencher formulário:', error);
         throw error;
     }
 }

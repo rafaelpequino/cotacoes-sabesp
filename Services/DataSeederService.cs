@@ -7,6 +7,7 @@ namespace CotacoesEPC.Services
     public interface IDataSeederService
     {
         Task SeedAllowedRegistrationsAsync();
+        Task SeedSectorsAsync();
     }
 
     public class DataSeederService : IDataSeederService
@@ -50,6 +51,35 @@ namespace CotacoesEPC.Services
             {
                 // Log error
                 Console.WriteLine($"Erro ao seed registrations: {ex.Message}");
+            }
+        }
+
+        public async Task SeedSectorsAsync()
+        {
+            try
+            {
+                // Verificar se já existem setores
+                if (await _context.Sectors.AnyAsync())
+                {
+                    return;
+                }
+
+                // Criar setores padrão
+                var sectors = new List<Sector>
+                {
+                    new Sector { Name = "Elétrica", Description = "Trabalhos e materiais relacionados a instalações elétricas", IsActive = true },
+                    new Sector { Name = "Civil", Description = "Trabalhos e materiais relacionados a construção civil", IsActive = true },
+                    new Sector { Name = "Hidráulica", Description = "Trabalhos e materiais relacionados a instalações hidráulicas", IsActive = true },
+                    new Sector { Name = "Outro", Description = "Outros setores não classificados", IsActive = true }
+                };
+
+                _context.Sectors.AddRange(sectors);
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                Console.WriteLine($"Erro ao seed sectors: {ex.Message}");
             }
         }
     }

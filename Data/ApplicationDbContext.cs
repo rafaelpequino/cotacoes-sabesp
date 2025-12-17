@@ -13,6 +13,7 @@ namespace CotacoesEPC.Data
         public DbSet<Service> Services { get; set; }
         public DbSet<Input> Inputs { get; set; }
         public DbSet<Spreadsheet> Spreadsheets { get; set; }
+        public DbSet<Sector> Sectors { get; set; }
         public DbSet<AllowedRegistration> AllowedRegistrations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -101,6 +102,18 @@ namespace CotacoesEPC.Data
                     .WithMany(u => u.Spreadsheets)
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Sector)
+                    .WithMany(s => s.Spreadsheets)
+                    .HasForeignKey(e => e.SectorId)
+                    .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // Sector configuration
+            modelBuilder.Entity<Sector>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
             });
 
             // AllowedRegistration configuration

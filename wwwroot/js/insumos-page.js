@@ -29,19 +29,15 @@ function humanizeError(errorMessage) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOMContentLoaded - Carregando insumos...');
     await loadInsumos();
     setupEventListeners();
 });
 
 async function loadInsumos() {
     try {
-        console.log('Carregando insumos da API...');
         insumosPageData = await api.getInputs();
-        console.log('Insumos carregados:', insumosPageData);
         renderInsumosTable(insumosPageData);
     } catch (error) {
-        console.error('Erro ao carregar insumos:', error);
         insumosPageData = [];
         renderInsumosTable([]);
     }
@@ -53,20 +49,17 @@ function renderInsumosTable(insumos) {
     const tbody = table ? table.querySelector('tbody') : null;
     
     if (!table || !emptyMessage || !tbody) {
-        console.error('Elementos não encontrados:', { table, emptyMessage, tbody });
         return;
     }
 
     tbody.innerHTML = '';
 
     if (!insumos || insumos.length === 0) {
-        console.log('Insumos vazio, mostrando mensagem');
         table.style.display = 'none';
         emptyMessage.style.display = 'block';
         return;
     }
 
-    console.log('Insumos encontrados:', insumos.length);
     table.style.display = 'table';
     emptyMessage.style.display = 'none';
 
@@ -155,13 +148,10 @@ async function applyFilters() {
     const filter = document.getElementById('filterSelect')?.value || '';
 
     try {
-        console.log('Aplicando filtros:', { search, sort, filter });
         insumosPageData = await api.getInputs(search || null, sort || null, filter || null);
-        console.log('Dados filtrados:', insumosPageData);
         renderInsumosTable(insumosPageData);
         updateSearchIndicator(search);
     } catch (error) {
-        console.error('Erro ao aplicar filtros:', error);
         Swal.fire({
             icon: 'error',
             title: 'Erro ao Filtrar',
@@ -251,11 +241,8 @@ async function saveInsumo() {
         indiceAtual: toNumber(numberInputs[16]?.value)
     };
 
-    console.log('Dados a enviar:', data);
-
     try {
         const result = await api.createInput(data);
-        console.log('Insumo criado com sucesso:', result);
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -267,8 +254,6 @@ async function saveInsumo() {
             form.reset();
         });
     } catch (error) {
-        console.error('Erro ao salvar insumo:', error);
-        // Erro já é tratado pelo CrudManager.create()
     }
 }
 
@@ -374,11 +359,8 @@ async function updateInsumo() {
         indiceAtual: toNumber(numberInputs[16]?.value)
     };
 
-    console.log('Dados a atualizar:', { id: insumoId, ...data });
-
     try {
         const result = await api.updateInput(insumoId, data);
-        console.log('Insumo atualizado com sucesso:', result);
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -389,21 +371,16 @@ async function updateInsumo() {
             loadInsumos();
         });
     } catch (error) {
-        console.error('Erro ao atualizar insumo:', error);
-        // Erro já é tratado pelo CrudManager.update()
     }
 }
 
 async function deleteInsumo(id) {
-    console.log('Deletando insumo com ID:', id);
     try {
         const deleted = await insumosCrud.delete(id);
         if (deleted) {
-            console.log('Insumo deletado, recarregando lista...');
             await loadInsumos();
         }
     } catch (error) {
-        console.error('Erro ao deletar insumo:', error);
     }
 }
 
@@ -453,7 +430,6 @@ async function copyInsumo(id) {
         await navigator.clipboard.writeText(values);
         showCopyNotification();
     } catch (error) {
-        console.error('Erro ao copiar dados:', error);
         Swal.fire({
             icon: 'error',
             title: 'Erro',
@@ -491,13 +467,10 @@ function viewInsumo(id) {
         return;
     }
 
-    console.log('Abrindo visualização do insumo:', insumo);
-
     // Preencher modal de visualização com os dados do insumo
     const modal = document.getElementById('viewModal');
     
     if (!modal) {
-        console.error('Modal de visualização não encontrado!');
         return;
     }
     
@@ -512,7 +485,6 @@ function viewInsumo(id) {
 
     // Obter todos os elementos .view-value
     const viewValues = modal.querySelectorAll('.view-value');
-    console.log('Elementos .view-value encontrados:', viewValues.length);
 
     // Mapear valores aos elementos
     if (viewValues.length > 0) {
@@ -548,14 +520,11 @@ function viewInsumo(id) {
         if (viewValues[index]) viewValues[index++].textContent = insumo.mesAnterior || '-';
         if (viewValues[index]) viewValues[index++].textContent = (insumo.indiceAnterior || '0') + '%';
         if (viewValues[index]) viewValues[index++].textContent = (insumo.indiceAtual || '0') + '%';
-        
-        console.log('Preenchidos', index, 'campos');
     }
 
     // Armazenar o ID do insumo para ações futuras
     modal.dataset.insumoId = id;
     modal.style.display = 'flex';
-    console.log('Modal aberto com sucesso');
 }
 
 function editFromView() {

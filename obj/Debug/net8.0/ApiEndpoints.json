@@ -409,5 +409,15 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "CotacoesEPC.Controllers.SpreadsheetsController",
+    "Method": "GetSectors",
+    "RelativePath": "api/Spreadsheets/sectors",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
   }
 ]

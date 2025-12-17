@@ -2,6 +2,7 @@
 
 let planilhasCrud = new CrudManager('spreadsheets');
 let planilhasPageData = [];
+let sectorsData = [];
 
 // Função para humanizar erros (cópia do método em crud.js)
 function humanizeError(errorMessage) {
@@ -32,20 +33,47 @@ function humanizeError(errorMessage) {
     return errorMessage || 'Ocorreu um erro desconhecido. Por favor, tente novamente.';
 }
 
+async function loadSectors() {
+    try {
+        sectorsData = await api.getSectors();
+        
+        // Popular o select de setor no formulário de upload
+        const sectorSelect = document.getElementById('sectorSelect');
+        if (sectorSelect && sectorsData && sectorsData.length > 0) {
+            sectorsData.forEach(sector => {
+                const option = document.createElement('option');
+                option.value = sector.id;
+                option.textContent = sector.name;
+                sectorSelect.appendChild(option);
+            });
+        }
+
+        // Popular o select de filtro
+        const filterSelect = document.getElementById('filterSelect');
+        if (filterSelect && sectorsData && sectorsData.length > 0) {
+            sectorsData.forEach(sector => {
+                const option = document.createElement('option');
+                option.value = sector.id;
+                option.textContent = sector.name;
+                filterSelect.appendChild(option);
+            });
+        }
+    } catch (error) {
+        sectorsData = [];
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOMContentLoaded - Carregando planilhas...');
     await loadPlanilhas();
+    await loadSectors();
     setupEventListeners();
 });
 
 async function loadPlanilhas() {
     try {
-        console.log('Carregando planilhas da API...');
         planilhasPageData = await api.getSpreadsheets();
-        console.log('Planilhas carregadas:', planilhasPageData);
         renderPlanilhasTable(planilhasPageData);
     } catch (error) {
-        console.error('Erro ao carregar planilhas:', error);
         planilhasPageData = [];
         renderPlanilhasTable([]);
     }
@@ -57,29 +85,31 @@ function renderPlanilhasTable(planilhas) {
     const tbody = table ? table.querySelector('tbody') : null;
     
     if (!table || !emptyMessage || !tbody) {
-        console.error('Elementos não encontrados:', { table, emptyMessage, tbody });
         return;
     }
 
     tbody.innerHTML = '';
 
     if (!planilhas || planilhas.length === 0) {
-        console.log('Planilhas vazio, mostrando mensagem');
         table.style.display = 'none';
         emptyMessage.style.display = 'block';
         return;
     }
 
-    console.log('Planilhas encontradas:', planilhas.length);
     table.style.display = 'table';
     emptyMessage.style.display = 'none';
 
     planilhas.forEach(planilha => {
         const row = document.createElement('tr');
+        
+        // Procurar o nome do setor
+        const sector = sectorsData.find(s => s.id === planilha.sectorId);
+        const sectorName = sector ? sector.name : '-';
+        
         row.innerHTML = `
             <td>${planilha.name || '-'}</td>
             <td>${new Date(planilha.createdAt).toLocaleDateString('pt-BR')}</td>
-            <td>${planilha.description || '-'}</td>
+            <td>${sectorName}</td>
             <td>Você</td>
             <td>${planilha.fileSize ? (planilha.fileSize / 1024).toFixed(2) + ' KB' : '-'}</td>
             <td class="actions">
@@ -130,6 +160,11 @@ function setupFilterListeners() {
         sortSelect.addEventListener('change', applyFilters);
     }
 
+    // Filtro por setor dispara requisição automaticamente
+    if (filterSelect) {
+        filterSelect.addEventListener('change', applyFilters);
+    }
+
     // Permitir busca ao digitar (Enter)
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -146,13 +181,10 @@ async function applyFilters() {
     const filter = document.getElementById('filterSelect')?.value || '';
 
     try {
-        console.log('Aplicando filtros:', { search, sort, filter });
         planilhasPageData = await api.getSpreadsheets(search || null, sort || null, filter || null);
-        console.log('Dados filtrados:', planilhasPageData);
         renderPlanilhasTable(planilhasPageData);
         updateSearchIndicator(search);
     } catch (error) {
-        console.error('Erro ao aplicar filtros:', error);
         Swal.fire({
             icon: 'error',
             title: 'Erro ao Filtrar',
@@ -205,18 +237,25 @@ async function savePlanilha() {
     // Buscar input pelo placeholder ou label
     const nameInput = form.querySelector('input[type="text"]');
     const name = nameInput?.value?.trim() || '';
+    const sectorSelect = document.getElementById('sectorSelect');
+    const sector = sectorSelect?.value || '';
     const description = form.querySelector('textarea')?.value || '';
     const fileInput = form.querySelector('input[type="file"]');
-    
-    console.log('Nome da planilha:', name);
-    console.log('Descrição:', description);
-    console.log('Arquivo:', fileInput?.files?.[0]?.name);
     
     if (!name) {
         Swal.fire({
             icon: 'warning',
             title: 'Campo obrigatório',
             text: 'Por favor, preencha o nome da planilha'
+        });
+        return;
+    }
+
+    if (!sector) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, selecione um setor'
         });
         return;
     }
@@ -258,9 +297,7 @@ async function savePlanilha() {
 
     try {
         // Fazer upload do arquivo
-        console.log('Fazendo upload do arquivo:', file.name);
         const uploadResult = await api.uploadFile(file);
-        console.log('Upload bem-sucedido:', uploadResult);
 
         // Extrair a extensão do arquivo
         const fileExtension = fileName.split('.').pop() || 'unknown';
@@ -268,6 +305,7 @@ async function savePlanilha() {
         // Criar a planilha no banco com o fileKey
         const data = {
             name: name,
+            sectorId: parseInt(sector),
             description: description || null,
             filePath: uploadResult.fileKey,  // Usar a chave gerada pelo servidor
             fileType: fileExtension,
@@ -275,9 +313,7 @@ async function savePlanilha() {
             isShared: false
         };
 
-        console.log('Dados da planilha:', data);
         const result = await api.createSpreadsheet(data);
-        console.log('Planilha criada com sucesso:', result);
 
         Swal.fire({
             icon: 'success',
@@ -290,7 +326,6 @@ async function savePlanilha() {
             form.reset();
         });
     } catch (error) {
-        console.error('Erro ao salvar planilha:', error);
         const mensagem = humanizeError(error.message);
         Swal.fire({
             icon: 'error',
@@ -322,19 +357,6 @@ async function downloadPlanilha(id) {
     }
 
     try {
-        console.log('Baixando planilha:', planilha.name);
-        
-        // Mostrar loading
-        Swal.fire({
-            title: 'Baixando arquivo...',
-            icon: 'info',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
-
         // Fazer download do arquivo
         const blob = await api.downloadFile(planilha.filePath);
         
@@ -358,7 +380,6 @@ async function downloadPlanilha(id) {
             confirmButtonColor: '#13d0ff'
         });
     } catch (error) {
-        console.error('Erro ao fazer download:', error);
         const mensagem = humanizeError(error.message);
         Swal.fire({
             icon: 'error',
@@ -369,15 +390,12 @@ async function downloadPlanilha(id) {
 }
 
 async function deletePlanilha(id) {
-    console.log('Deletando planilha com ID:', id);
     try {
         const deleted = await planilhasCrud.delete(id);
         if (deleted) {
-            console.log('Planilha deletada, recarregando lista...');
             await loadPlanilhas();
         }
     } catch (error) {
-        console.error('Erro ao deletar planilha:', error);
     }
 }
 

@@ -1184,6 +1184,86 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\lib\jquery\LICENSE.txt))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\4deaf537-7f8f-4591-952b-c62b212fcea8_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/4deaf537-7f8f-4591-952b-c62b212fcea8_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\4deaf537-7f8f-4591-952b-c62b212fcea8_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\6d13e12e-adc8-4e54-a17f-4a5fae425f10_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/6d13e12e-adc8-4e54-a17f-4a5fae425f10_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\6d13e12e-adc8-4e54-a17f-4a5fae425f10_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\70966357-f645-4386-9c48-b610ba85431d_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/70966357-f645-4386-9c48-b610ba85431d_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\70966357-f645-4386-9c48-b610ba85431d_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\8418dc67-6c82-49fb-93ff-c190a9aae74b_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/8418dc67-6c82-49fb-93ff-c190a9aae74b_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\8418dc67-6c82-49fb-93ff-c190a9aae74b_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\880bbe2d-dea1-42da-abf3-63d61bded651_AA-PPPP-Padrão_Fornecedores_R00.9 - I0_Jul25.xlsx))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/880bbe2d-dea1-42da-abf3-63d61bded651_AA-PPPP-Padrão_Fornecedores_R00.9 - I0_Jul25.xlsx</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\880bbe2d-dea1-42da-abf3-63d61bded651_AA-PPPP-Padrão_Fornecedores_R00.9 - I0_Jul25.xlsx))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))">
       <SourceType>Package</SourceType>
       <SourceId>CotacoesEPC</SourceId>
@@ -1215,6 +1295,38 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\d953e2a6-fe37-43a4-8572-603671d8a529_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/d953e2a6-fe37-43a4-8572-603671d8a529_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\d953e2a6-fe37-43a4-8572-603671d8a529_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\ea81130e-0226-47e3-b08b-02b39e55f107_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))">
+      <SourceType>Package</SourceType>
+      <SourceId>CotacoesEPC</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/CotacoesEPC</BasePath>
+      <RelativePath>uploads/5/ea81130e-0226-47e3-b08b-02b39e55f107_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\uploads\5\ea81130e-0226-47e3-b08b-02b39e55f107_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>

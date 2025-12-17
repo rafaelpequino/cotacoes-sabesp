@@ -131,6 +131,7 @@ using (var scope = app.Services.CreateScope())
 {
     var seederService = scope.ServiceProvider.GetRequiredService<IDataSeederService>();
     await seederService.SeedAllowedRegistrationsAsync();
+    await seederService.SeedSectorsAsync();
 }
 
 app.Run();

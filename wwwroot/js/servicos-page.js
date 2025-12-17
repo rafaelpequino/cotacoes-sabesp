@@ -29,19 +29,15 @@ function humanizeError(errorMessage) {
 
 // Carregar dados ao iniciar página
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('DOMContentLoaded - Carregando serviços...');
     await loadServicos();
     setupEventListeners();
 });
 
 async function loadServicos() {
     try {
-        console.log('Carregando serviços da API...');
         servicosPageData = await api.getServices();
-        console.log('Serviços carregados:', servicosPageData);
         renderServicosTable(servicosPageData);
     } catch (error) {
-        console.error('Erro ao carregar serviços:', error);
         servicosPageData = [];
         renderServicosTable([]);
     }
@@ -53,20 +49,17 @@ function renderServicosTable(servicos) {
     const tbody = table ? table.querySelector('tbody') : null;
     
     if (!table || !emptyMessage || !tbody) {
-        console.error('Elementos não encontrados:', { table, emptyMessage, tbody });
         return;
     }
 
     tbody.innerHTML = '';
 
     if (!servicos || servicos.length === 0) {
-        console.log('Serviços vazio, mostrando mensagem');
         table.style.display = 'none';
         emptyMessage.style.display = 'block';
         return;
     }
 
-    console.log('Serviços encontrados:', servicos.length);
     table.style.display = 'table';
     emptyMessage.style.display = 'none';
 
@@ -155,13 +148,10 @@ async function applyFilters() {
     const filter = document.getElementById('filterSelect')?.value || '';
 
     try {
-        console.log('Aplicando filtros:', { search, sort, filter });
         servicosPageData = await api.getServices(search || null, sort || null, filter || null);
-        console.log('Dados filtrados:', servicosPageData);
         renderServicosTable(servicosPageData);
         updateSearchIndicator(search);
     } catch (error) {
-        console.error('Erro ao aplicar filtros:', error);
         Swal.fire({
             icon: 'error',
             title: 'Erro ao Filtrar',
@@ -251,11 +241,8 @@ async function saveServico() {
         indiceAtual: toNumber(numberInputs[16]?.value)
     };
 
-    console.log('Dados a enviar:', data);
-
     try {
         const result = await api.createService(data);
-        console.log('Serviço criado com sucesso:', result);
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -267,8 +254,6 @@ async function saveServico() {
             form.reset();
         });
     } catch (error) {
-        console.error('Erro ao salvar serviço:', error);
-        // Erro já é tratado pelo CrudManager.create()
     }
 }
 
@@ -363,11 +348,8 @@ async function updateServico() {
         indiceAtual: toNumber(numberInputs[16]?.value)
     };
 
-    console.log('Dados a atualizar:', { id: servicoId, ...data });
-
     try {
         const result = await api.updateService(servicoId, data);
-        console.log('Serviço atualizado com sucesso:', result);
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -378,21 +360,16 @@ async function updateServico() {
             loadServicos();
         });
     } catch (error) {
-        console.error('Erro ao atualizar serviço:', error);
-        // Erro já é tratado pelo CrudManager.update()
     }
 }
 
 async function deleteServico(id) {
-    console.log('Deletando serviço com ID:', id);
     try {
         const deleted = await servicosCrud.delete(id);
         if (deleted) {
-            console.log('Serviço deletado, recarregando lista...');
             await loadServicos();
         }
     } catch (error) {
-        console.error('Erro ao deletar serviço:', error);
     }
 }
 
@@ -442,7 +419,6 @@ async function copyServico(id) {
         await navigator.clipboard.writeText(values);
         showCopyNotification();
     } catch (error) {
-        console.error('Erro ao copiar dados:', error);
         Swal.fire({
             icon: 'error',
             title: 'Erro',
@@ -480,13 +456,10 @@ function viewServico(id) {
         return;
     }
 
-    console.log('Abrindo visualização do serviço:', servico);
-
     // Preencher modal de visualização com os dados do serviço
     const modal = document.getElementById('viewModal');
     
     if (!modal) {
-        console.error('Modal de visualização não encontrado!');
         return;
     }
     
@@ -501,7 +474,6 @@ function viewServico(id) {
 
     // Obter todos os elementos .view-value
     const viewValues = modal.querySelectorAll('.view-value');
-    console.log('Elementos .view-value encontrados:', viewValues.length);
 
     // Mapear valores aos elementos
     if (viewValues.length > 0) {
@@ -537,14 +509,11 @@ function viewServico(id) {
         if (viewValues[index]) viewValues[index++].textContent = servico.mesAnterior || '-';
         if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAnterior || '0') + '%';
         if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAtual || '0') + '%';
-        
-        console.log('Preenchidos', index, 'campos');
     }
 
     // Armazenar o ID do serviço para ações futuras
     modal.dataset.servicoId = id;
     modal.style.display = 'flex';
-    console.log('Modal aberto com sucesso');
 }
 
 function editFromView() {

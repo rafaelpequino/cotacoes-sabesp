@@ -16,11 +16,8 @@ async function loadDashboardData() {
 
         if (stats) {
             // Atualizar estatísticas se necessário
-            console.log('Estatísticas:', stats);
         }
     } catch (error) {
-        console.error('Erro ao carregar dados:', error);
-        // Mostrar mensagem de erro ao usuário
         showError('Erro ao carregar dados do dashboard');
     }
 }
@@ -146,7 +143,6 @@ async function downloadSpreadsheet(spreadsheetId, event) {
             showError('Arquivo não encontrado para esta planilha');
         }
     } catch (error) {
-        console.error('Erro ao baixar planilha:', error);
         showError('Erro ao baixar planilha: ' + error.message);
     }
 }

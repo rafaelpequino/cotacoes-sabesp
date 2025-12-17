@@ -30,7 +30,6 @@ class ApiClient {
         }
 
         try {
-            console.log(`${method} ${this.baseUrl}${endpoint}`, body);
             const response = await fetch(`${this.baseUrl}${endpoint}`, options);
 
             if (response.status === 401) {
@@ -40,7 +39,6 @@ class ApiClient {
             }
 
             const responseText = await response.text();
-            console.log(`Response ${response.status}:`, responseText);
 
             if (!response.ok) {
                 let errorMessage = `Erro ${response.status}`;
@@ -71,7 +69,6 @@ class ApiClient {
                         }
                     }
                 } catch (parseError) {
-                    console.error('Erro ao fazer parse da resposta de erro:', parseError);
                 }
                 
                 throw new Error(errorMessage);
@@ -85,12 +82,10 @@ class ApiClient {
             try {
                 return JSON.parse(responseText);
             } catch (parseError) {
-                console.error('Erro ao fazer parse do JSON:', responseText);
                 // Retorna sucesso se conseguiu fazer a requisição mas não há JSON válido
                 return { success: true, message: 'Operação realizada com sucesso' };
             }
         } catch (error) {
-            console.error('API Error:', error);
             throw error;
         }
     }
@@ -184,6 +179,10 @@ class ApiClient {
         return this.request(endpoint);
     }
 
+    async getSectors() {
+        return this.request('/spreadsheets/sectors');
+    }
+
     async getSpreadsheet(id) {
         return this.request(`/spreadsheets/${id}`);
     }
@@ -221,7 +220,6 @@ class ApiClient {
         }
 
         try {
-            console.log('Fazendo upload do arquivo:', file.name);
             const response = await fetch(`${this.baseUrl}/files/upload`, {
                 method: 'POST',
                 headers,
@@ -229,7 +227,6 @@ class ApiClient {
             });
 
             const responseText = await response.text();
-            console.log(`Response ${response.status}:`, responseText);
 
             if (!response.ok) {
                 let errorMessage = `Erro ${response.status}`;
@@ -239,7 +236,6 @@ class ApiClient {
                         errorMessage = error.message || errorMessage;
                     }
                 } catch (e) {
-                    console.error('Erro ao fazer parse:', e);
                 }
                 throw new Error(errorMessage);
             }
@@ -250,7 +246,6 @@ class ApiClient {
 
             return JSON.parse(responseText);
         } catch (error) {
-            console.error('Erro ao fazer upload:', error);
             throw error;
         }
     }
@@ -274,7 +269,6 @@ class ApiClient {
 
             return response.blob();
         } catch (error) {
-            console.error('Erro ao fazer download:', error);
             throw error;
         }
     }
@@ -322,7 +316,6 @@ async function logout(event) {
             }
         });
     } catch (error) {
-        console.error('Erro ao fazer logout:', error);
     } finally {
         // Limpar localStorage e sessionStorage localmente
         sessionStorage.clear();

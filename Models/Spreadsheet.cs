@@ -19,6 +19,9 @@ namespace CotacoesEPC.Models
         [StringLength(1000)]
         public string? Description { get; set; }
 
+        [ForeignKey(nameof(Sector))]
+        public int? SectorId { get; set; }
+
         [StringLength(500)]
         public string? FilePath { get; set; }
 
@@ -40,6 +43,9 @@ namespace CotacoesEPC.Models
         // Navigation properties
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
+
+        [ForeignKey(nameof(SectorId))]
+        public Sector? Sector { get; set; }
     }
 }
 

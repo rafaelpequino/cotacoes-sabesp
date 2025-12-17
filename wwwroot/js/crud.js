@@ -11,19 +11,16 @@ class CrudManager {
             const data = await api.request(this.endpoint);
             return data || [];
         } catch (error) {
-            console.error(`Erro ao carregar ${this.entityType}:`, error);
             return [];
         }
     }
 
     async create(data) {
         try {
-            console.log(`Criando novo ${this.entityType}...`, data);
             const result = await api.request(this.endpoint, 'POST', data);
             this.showNotification('✓ Criado com sucesso!', 'success');
             return result;
         } catch (error) {
-            console.error(`Erro ao criar ${this.entityType}:`, error);
             const mensagem = this.humanizeError(error.message);
             Swal.fire({
                 icon: 'error',
@@ -41,7 +38,6 @@ class CrudManager {
             this.showNotification('✓ Atualizado com sucesso!', 'success');
             return result;
         } catch (error) {
-            console.error(`Erro ao atualizar ${this.entityType}:`, error);
             const mensagem = this.humanizeError(error.message);
             Swal.fire({
                 icon: 'error',
@@ -68,13 +64,10 @@ class CrudManager {
 
         if (result.isConfirmed) {
             try {
-                console.log(`Deletando ${this.entityType} com ID:`, id);
                 const result = await api.request(`${this.endpoint}/${id}`, 'DELETE');
-                console.log(`${this.entityType} deletado:`, result);
                 this.showNotification('✓ Deletado com sucesso!', 'success');
                 return true;
             } catch (error) {
-                console.error(`Erro ao deletar ${this.entityType}:`, error);
                 const mensagem = this.humanizeError(error.message);
                 Swal.fire({
                     icon: 'error',

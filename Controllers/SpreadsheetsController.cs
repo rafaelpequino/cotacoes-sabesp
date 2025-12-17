@@ -26,6 +26,18 @@ namespace CotacoesEPC.Controllers
             return int.Parse(userId ?? "0");
         }
 
+        // GET: api/spreadsheets/sectors
+        [HttpGet("sectors")]
+        public async Task<IActionResult> GetSectors()
+        {
+            var sectors = await _context.Sectors
+                .Where(s => s.IsActive)
+                .OrderBy(s => s.Name)
+                .ToListAsync();
+
+            return Ok(sectors);
+        }
+
         // GET: api/spreadsheets
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
@@ -51,10 +63,13 @@ namespace CotacoesEPC.Controllers
                 _ => query.OrderByDescending(s => s.CreatedAt) // Relevância/padrão
             };
 
-            // Aplicar filtro de categoria (Minhas Planilhas / Compartilhadas)
-            if (filter == "compartilhadas")
+            // Aplicar filtro por setor (apenas se um setor específico foi selecionado)
+            if (!string.IsNullOrEmpty(filter))
             {
-                query = query.Where(s => s.IsShared);
+                if (int.TryParse(filter, out int sectorId))
+                {
+                    query = query.Where(s => s.SectorId == sectorId);
+                }
             }
 
             var spreadsheets = await query.ToListAsync();
@@ -97,6 +112,7 @@ namespace CotacoesEPC.Controllers
                 UserId = userId,
                 Name = request.Name,
                 Description = request.Description,
+                SectorId = request.SectorId,
                 FilePath = request.FilePath,
                 FileType = request.FileType,
                 FileSize = request.FileSize,
@@ -126,6 +142,7 @@ namespace CotacoesEPC.Controllers
 
             spreadsheet.Name = request.Name;
             spreadsheet.Description = request.Description;
+            spreadsheet.SectorId = request.SectorId;
             spreadsheet.FilePath = request.FilePath;
             spreadsheet.FileType = request.FileType;
             spreadsheet.FileSize = request.FileSize;
@@ -192,6 +209,8 @@ namespace CotacoesEPC.Controllers
 
         [StringLength(1000, ErrorMessage = "Descrição não pode exceder 1000 caracteres")]
         public string? Description { get; set; }
+
+        public int? SectorId { get; set; }
 
         [StringLength(500, ErrorMessage = "Caminho do arquivo não pode exceder 500 caracteres")]
         public string? FilePath { get; set; }
