@@ -64,8 +64,8 @@ async function loadSectors() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadPlanilhas();
     await loadSectors();
+    await loadPlanilhas();
     setupEventListeners();
 });
 
