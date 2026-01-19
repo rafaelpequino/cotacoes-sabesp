@@ -3,6 +3,7 @@
 
 let insumosCrud = new CrudManager('inputs');
 let insumosPageData = [];
+let sectorsData = [];
 
 // Função para humanizar erros
 function humanizeError(errorMessage) {
@@ -29,9 +30,19 @@ function humanizeError(errorMessage) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    await loadSectors();
     await loadInsumos();
     setupEventListeners();
 });
+
+async function loadSectors() {
+    try {
+        sectorsData = await api.getSectors();
+    } catch (error) {
+        sectorsData = [];
+        console.error('Erro ao carregar setores:', error);
+    }
+}
 
 async function loadInsumos() {
     try {
@@ -64,10 +75,11 @@ function renderInsumosTable(insumos) {
     emptyMessage.style.display = 'none';
 
     insumos.forEach(insumo => {
+        const sectorName = sectorsData.find(s => s.id === insumo.sectorId)?.name || 'N/A';
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${insumo.originalId}</td>
-            <td>${new Date(insumo.createdAt).toLocaleDateString('pt-BR')}</td>
+            <td>${sectorName}</td>
             <td>${insumo.item}</td>
             <td>${insumo.unit}</td>
             <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -183,7 +195,28 @@ function clearFilters() {
 
 function openCreateModal() {
     const modal = document.getElementById('createModal');
-    if (modal) modal.style.display = 'flex';
+    if (modal) {
+        populateSectorSelect(modal);
+        modal.style.display = 'flex';
+    }
+}
+
+function populateSectorSelect(modal) {
+    const selects = modal.querySelectorAll('select[name="sectorId"]');
+    selects.forEach(select => {
+        // Limpar opções existentes (exceto a primeira)
+        while (select.options.length > 1) {
+            select.remove(1);
+        }
+        
+        // Adicionar setores
+        sectorsData.forEach(sector => {
+            const option = document.createElement('option');
+            option.value = sector.id;
+            option.textContent = sector.name;
+            select.appendChild(option);
+        });
+    });
 }
 
 function closeCreateModal() {
@@ -195,14 +228,18 @@ async function saveInsumo() {
     const modal = document.getElementById('createModal');
     const form = modal.querySelector('form');
     
+    // Obter sectorId
+    const sectorSelect = form.querySelector('select[name="sectorId"]');
+    const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
+    
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: 00001"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
     const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica
-    if (!originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (ID, Item, Unidade)');
+    if (!sectorId || !originalId || !item || !unit) {
+        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
         return;
     }
     
@@ -217,6 +254,7 @@ async function saveInsumo() {
     };
     
     const data = {
+        sectorId: sectorId,
         originalId: originalId,
         item: item,
         unit: unit,
@@ -234,11 +272,7 @@ async function saveInsumo() {
         empresa4: toNumber(numberInputs[11]?.value),
         empresa5: toNumber(numberInputs[12]?.value),
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || '',
-        tempoPassado: toNumber(numberInputs[14]?.value),
-        mesAnterior: form.querySelectorAll('input[type="text"]')[3]?.value || '',
-        indiceAnterior: toNumber(numberInputs[15]?.value),
-        indiceAtual: toNumber(numberInputs[16]?.value)
+        justificativa: form.querySelector('textarea')?.value || ''
     };
 
     try {
@@ -267,12 +301,18 @@ async function editInsumo(id) {
     const modal = document.getElementById('editModal');
     const form = modal.querySelector('form');
     
+    // Popular dropdown de setores
+    populateSectorSelect(modal);
+    
+    // Selecionar o setor correto
+    const sectorSelect = form.querySelector('select[name="sectorId"]');
+    if (sectorSelect) sectorSelect.value = insumo.sectorId;
+    
     // Preencher campos de texto
     const textInputs = form.querySelectorAll('input[type="text"]');
     textInputs[0].value = insumo.originalId;
     textInputs[1].value = insumo.item;
     textInputs[2].value = insumo.unit;
-    if (textInputs[3]) textInputs[3].value = insumo.mesAnterior || '';
     
     // Preencher campos de número
     const numberInputs = form.querySelectorAll('input[type="number"]');
@@ -290,9 +330,6 @@ async function editInsumo(id) {
     numberInputs[11].value = insumo.empresa4 || '';
     numberInputs[12].value = insumo.empresa5 || '';
     numberInputs[13].value = insumo.empresa6 || '';
-    numberInputs[14].value = insumo.tempoPassado || '';
-    numberInputs[15].value = insumo.indiceAnterior || '';
-    numberInputs[16].value = insumo.indiceAtual || '';
     
     // Preencher textarea
     const textarea = form.querySelector('textarea');
@@ -313,14 +350,18 @@ async function updateInsumo() {
         return;
     }
     
+    // Obter sectorId
+    const sectorSelect = form.querySelector('select[name="sectorId"]');
+    const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
+    
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: 00001"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
     const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica
-    if (!originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (ID, Item, Unidade)');
+    if (!sectorId || !originalId || !item || !unit) {
+        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
         return;
     }
     
@@ -335,6 +376,7 @@ async function updateInsumo() {
     };
     
     const data = {
+        sectorId: sectorId,
         originalId: originalId,
         item: item,
         unit: unit,
@@ -352,11 +394,7 @@ async function updateInsumo() {
         empresa4: toNumber(numberInputs[11]?.value),
         empresa5: toNumber(numberInputs[12]?.value),
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || '',
-        tempoPassado: toNumber(numberInputs[14]?.value),
-        mesAnterior: form.querySelectorAll('input[type="text"]')[3]?.value || '',
-        indiceAnterior: toNumber(numberInputs[15]?.value),
-        indiceAtual: toNumber(numberInputs[16]?.value)
+        justificativa: form.querySelector('textarea')?.value || ''
     };
 
     try {
@@ -397,9 +435,9 @@ async function copyInsumo(id) {
 
     try {
         // Dados na ordem exata das colunas da planilha
-        // COLUNAS 6, 8, 14 E 22 DEVEM FICAR VAZIAS
+        // COLUNAS 6, 8, 14 DEVEM FICAR VAZIAS
         const values = [
-            insumo.originalId,                    // 1. ID original
+            insumo.originalId,                    // 1. I0 Original (jan/00)
             insumo.item,                          // 2. ITEM
             insumo.unit,                          // 3. Unidade
             insumo.priceFornecedor || '',         // 4. Preço Fornecedor
@@ -419,12 +457,7 @@ async function copyInsumo(id) {
             insumo.empresa4 || '',                // 18. EMPRESA 4
             insumo.empresa5 || '',                // 19. EMPRESA 5
             insumo.empresa6 || '',                // 20. EMPRESA 6
-            insumo.justificativa || '',           // 21. Justificativa
-            '',                                   // 22. COLUNA VAZIA
-            insumo.tempoPassado || '',            // 23. Tempo Passado
-            insumo.mesAnterior || '',             // 24. Mês Anterior
-            insumo.indiceAnterior || '',          // 25. Índice Anterior
-            insumo.indiceAtual || ''              // 26. Índice Atual
+            insumo.justificativa || ''            // 21. Justificativa
         ].join('\t');
 
         await navigator.clipboard.writeText(values);

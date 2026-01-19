@@ -163,6 +163,15 @@ class ApiClient {
         return this.request(`/inputs/${id}`, 'DELETE');
     }
 
+    // Sectors endpoints
+    async getSectors() {
+        return this.request('/sectors');
+    }
+
+    async getSector(id) {
+        return this.request(`/sectors/${id}`);
+    }
+
     // Spreadsheets endpoints
     async getSpreadsheets(search = null, sort = null, filter = null) {
         let endpoint = '/spreadsheets';
@@ -179,7 +188,7 @@ class ApiClient {
         return this.request(endpoint);
     }
 
-    async getSectors() {
+    async getSpreadsheetSectors() {
         return this.request('/spreadsheets/sectors');
     }
 

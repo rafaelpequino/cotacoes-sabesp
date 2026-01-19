@@ -79,8 +79,8 @@
         <table id="insumosTableElement">
             <thead>
                 <tr>
-                    <th>ID original</th>
-                    <th>Data</th>
+                    <th>I0 original</th>
+                    <th>Setor</th>
                     <th>Item</th>
                     <th>Unidade</th>
                     <th>Preço instalação</th>
@@ -102,14 +102,24 @@
             <h2>Nova Cotação</h2>
             <button class="modal-close" onclick="closeCreateModal()">&times;</button>
         </div>
+        <form class="modal-form">
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Setor*</label>
+                    <select name="sectorId" required>
+                        <option value="">Selecione um setor</option>
+                    </select>
+                </div>
+            </div>
+        </form>
         <div class="paste-button-container">
             <button type="button" class="btn-paste" onclick="pasteFromClipboard()">📋 Colar dados da planilha</button>
         </div>
         <form class="modal-form">
             <div class="form-row">
                 <div class="form-group">
-                    <label>ID Original da Cotação*</label>
-                    <input type="text" placeholder="Ex: 00001" required />
+                    <label>I0 Original da Cotação*</label>
+                    <input type="text" placeholder="Ex: jan/00" required />
                 </div>
                 <div class="form-group">
                     <label>Item*</label>
@@ -200,28 +210,6 @@
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Tempo passado entre os períodos (dias)</label>
-                    <input type="number" placeholder="0" />
-                </div>
-                <div class="form-group">
-                    <label>Mês anterior ao inicial</label>
-                    <input type="text" placeholder="Ex: Janeiro" />
-                </div>
-                <div class="form-group">
-                    <label>Índice do mês anterior ao inicial</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Índice atual</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
-                </div>
-            </div>
-
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeCreateModal()">Cancelar</button>
                 <button type="submit" class="btn-submit">Salvar</button>
@@ -239,9 +227,17 @@
         </div>
         <form class="modal-form">
             <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Setor*</label>
+                    <select name="sectorId" required>
+                        <option value="">Selecione um setor</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
                 <div class="form-group">
-                    <label>ID Original da Cotação*</label>
-                    <input type="text" placeholder="Ex: 00001" value="00001" required />
+                    <label>I0 Original da Cotação*</label>
+                    <input type="text" placeholder="Ex: jan/00" value="jan/00" required />
                 </div>
                 <div class="form-group">
                     <label>Item*</label>
@@ -329,28 +325,6 @@
                 <div class="form-group full-width">
                     <label>Justificativa do preço adotado</label>
                     <textarea placeholder="Digite a justificativa..." rows="4">Preço adotado conforme análise de mercado</textarea>
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Tempo passado entre os períodos (dias)</label>
-                    <input type="number" placeholder="0" value="30" />
-                </div>
-                <div class="form-group">
-                    <label>Mês anterior ao inicial</label>
-                    <input type="text" placeholder="Ex: Janeiro" value="Agosto" />
-                </div>
-                <div class="form-group">
-                    <label>Índice do mês anterior ao inicial</label>
-                    <input type="number" placeholder="0,00" step="0.01" value="105.5" />
-                </div>
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Índice atual</label>
-                    <input type="number" placeholder="0,00" step="0.01" value="108.3" />
                 </div>
             </div>
 
@@ -477,30 +451,6 @@
                 <div class="view-full">
                     <span class="view-label">Justificativa do preço adotado:</span>
                     <p class="view-text">Preço adotado conforme análise de mercado considerando as cotações recebidas das principais empresas fornecedoras e os históricos de preços anteriores.</p>
-                </div>
-            </div>
-
-            <div class="view-section">
-                <h3>Índices e Períodos</h3>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Tempo passado entre períodos:</span>
-                        <span class="view-value">30 dias</span>
-                    </div>
-                    <div class="view-item">
-                        <span class="view-label">Mês anterior ao inicial:</span>
-                        <span class="view-value">Agosto</span>
-                    </div>
-                </div>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Índice do mês anterior:</span>
-                        <span class="view-value">105.50%</span>
-                    </div>
-                    <div class="view-item">
-                        <span class="view-label">Índice atual:</span>
-                        <span class="view-value">108.30%</span>
-                    </div>
                 </div>
             </div>
 

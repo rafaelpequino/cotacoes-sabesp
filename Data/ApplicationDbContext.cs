@@ -53,13 +53,15 @@ namespace CotacoesEPC.Data
                 entity.Property(e => e.Empresa4).HasPrecision(18, 2);
                 entity.Property(e => e.Empresa5).HasPrecision(18, 2);
                 entity.Property(e => e.Empresa6).HasPrecision(18, 2);
-                entity.Property(e => e.IndiceAnterior).HasPrecision(18, 2);
-                entity.Property(e => e.IndiceAtual).HasPrecision(18, 2);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 entity.HasOne(e => e.User)
                     .WithMany(u => u.Services)
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Sector)
+                    .WithMany(s => s.Services)
+                    .HasForeignKey(e => e.SectorId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Input configuration
@@ -83,13 +85,15 @@ namespace CotacoesEPC.Data
                 entity.Property(e => e.Empresa4).HasPrecision(18, 2);
                 entity.Property(e => e.Empresa5).HasPrecision(18, 2);
                 entity.Property(e => e.Empresa6).HasPrecision(18, 2);
-                entity.Property(e => e.IndiceAnterior).HasPrecision(18, 2);
-                entity.Property(e => e.IndiceAtual).HasPrecision(18, 2);
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
                 entity.HasOne(e => e.User)
                     .WithMany(u => u.Inputs)
                     .HasForeignKey(e => e.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Sector)
+                    .WithMany(s => s.Inputs)
+                    .HasForeignKey(e => e.SectorId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Spreadsheet configuration
@@ -113,7 +117,6 @@ namespace CotacoesEPC.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
             });
 
             // AllowedRegistration configuration

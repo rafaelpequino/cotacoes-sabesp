@@ -2,6 +2,7 @@
 
 let servicosCrud = new CrudManager('services');
 let servicosPageData = [];
+let sectorsData = [];
 
 // Função para humanizar erros
 function humanizeError(errorMessage) {
@@ -29,9 +30,19 @@ function humanizeError(errorMessage) {
 
 // Carregar dados ao iniciar página
 document.addEventListener('DOMContentLoaded', async () => {
+    await loadSectors();
     await loadServicos();
     setupEventListeners();
 });
+
+async function loadSectors() {
+    try {
+        sectorsData = await api.getSectors();
+    } catch (error) {
+        sectorsData = [];
+        console.error('Erro ao carregar setores:', error);
+    }
+}
 
 async function loadServicos() {
     try {
@@ -64,10 +75,11 @@ function renderServicosTable(servicos) {
     emptyMessage.style.display = 'none';
 
     servicos.forEach(servico => {
+        const sectorName = sectorsData.find(s => s.id === servico.sectorId)?.name || 'N/A';
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${servico.originalId}</td>
-            <td>${new Date(servico.createdAt).toLocaleDateString('pt-BR')}</td>
+            <td>${sectorName}</td>
             <td>${servico.item}</td>
             <td>${servico.unit}</td>
             <td>R$ ${parseFloat(servico.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
@@ -183,7 +195,28 @@ function clearFilters() {
 
 function openCreateModal() {
     const modal = document.getElementById('createModal');
-    if (modal) modal.style.display = 'flex';
+    if (modal) {
+        populateSectorSelect(modal);
+        modal.style.display = 'flex';
+    }
+}
+
+function populateSectorSelect(modal) {
+    const selects = modal.querySelectorAll('select[name="sectorId"]');
+    selects.forEach(select => {
+        // Limpar opções existentes (exceto a primeira)
+        while (select.options.length > 1) {
+            select.remove(1);
+        }
+        
+        // Adicionar setores
+        sectorsData.forEach(sector => {
+            const option = document.createElement('option');
+            option.value = sector.id;
+            option.textContent = sector.name;
+            select.appendChild(option);
+        });
+    });
 }
 
 function closeCreateModal() {
@@ -195,14 +228,18 @@ async function saveServico() {
     const modal = document.getElementById('createModal');
     const form = modal.querySelector('form');
     
+    // Obter sectorId
+    const sectorSelect = form.querySelector('select[name="sectorId"]');
+    const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
+    
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: 00001"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
     const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica
-    if (!originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (ID, Item, Unidade)');
+    if (!sectorId || !originalId || !item || !unit) {
+        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
         return;
     }
     
@@ -217,6 +254,7 @@ async function saveServico() {
     };
     
     const data = {
+        sectorId: sectorId,
         originalId: originalId,
         item: item,
         unit: unit,
@@ -234,11 +272,7 @@ async function saveServico() {
         empresa4: toNumber(numberInputs[11]?.value),
         empresa5: toNumber(numberInputs[12]?.value),
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || '',
-        tempoPassado: toNumber(numberInputs[14]?.value),
-        mesAnterior: form.querySelectorAll('input[type="text"]')[3]?.value || '',
-        indiceAnterior: toNumber(numberInputs[15]?.value),
-        indiceAtual: toNumber(numberInputs[16]?.value)
+        justificativa: form.querySelector('textarea')?.value || ''
     };
 
     try {
@@ -262,30 +296,41 @@ function editServico(id) {
     if (!servico) return;
 
     const modal = document.getElementById('editModal');
-    const inputs = modal.querySelectorAll('input[type="text"], input[type="number"], textarea');
+    const form = modal.querySelector('form');
 
-    inputs[0].value = servico.originalId;
-    inputs[1].value = servico.item;
-    inputs[2].value = servico.unit;
-    inputs[3].value = servico.priceFornecedor;
-    inputs[4].value = servico.precoMontagem;
-    inputs[5].value = servico.precoAdotado;
-    inputs[6].value = servico.mediaAdotada || '';
-    inputs[7].value = servico.mediaSaneada || '';
-    inputs[8].value = servico.menorValor || '';
-    inputs[9].value = servico.mediaAritmetica || '';
-    inputs[10].value = servico.mediana || '';
-    inputs[11].value = servico.empresa1 || '';
-    inputs[12].value = servico.empresa2 || '';
-    inputs[13].value = servico.empresa3 || '';
-    inputs[14].value = servico.empresa4 || '';
-    inputs[15].value = servico.empresa5 || '';
-    inputs[16].value = servico.empresa6 || '';
-    inputs[17].value = servico.justificativa || '';
-    inputs[18].value = servico.tempoPassado || '';
-    inputs[19].value = servico.mesAnterior || '';
-    inputs[20].value = servico.indiceAnterior || '';
-    inputs[21].value = servico.indiceAtual || '';
+    // Popular dropdown de setores
+    populateSectorSelect(modal);
+    
+    // Selecionar o setor correto
+    const sectorSelect = form.querySelector('select[name="sectorId"]');
+    if (sectorSelect) sectorSelect.value = servico.sectorId;
+
+    // Preencher campos de texto
+    const textInputs = form.querySelectorAll('input[type="text"]');
+    textInputs[0].value = servico.originalId;
+    textInputs[1].value = servico.item;
+    textInputs[2].value = servico.unit;
+    
+    // Preencher campos de número
+    const numberInputs = form.querySelectorAll('input[type="number"]');
+    numberInputs[0].value = servico.priceFornecedor;
+    numberInputs[1].value = servico.precoMontagem;
+    numberInputs[2].value = servico.precoAdotado;
+    numberInputs[3].value = servico.mediaAdotada || '';
+    numberInputs[4].value = servico.mediaSaneada || '';
+    numberInputs[5].value = servico.menorValor || '';
+    numberInputs[6].value = servico.mediaAritmetica || '';
+    numberInputs[7].value = servico.mediana || '';
+    numberInputs[8].value = servico.empresa1 || '';
+    numberInputs[9].value = servico.empresa2 || '';
+    numberInputs[10].value = servico.empresa3 || '';
+    numberInputs[11].value = servico.empresa4 || '';
+    numberInputs[12].value = servico.empresa5 || '';
+    numberInputs[13].value = servico.empresa6 || '';
+    
+    // Preencher textarea
+    const textarea = form.querySelector('textarea');
+    if (textarea) textarea.value = servico.justificativa || '';
 
     // Armazenar ID para update
     modal.dataset.servicoId = id;
@@ -302,14 +347,18 @@ async function updateServico() {
         return;
     }
     
+    // Obter sectorId
+    const sectorSelect = form.querySelector('select[name="sectorId"]');
+    const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
+    
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: 00001"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
     const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica
-    if (!originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (ID, Item, Unidade)');
+    if (!sectorId || !originalId || !item || !unit) {
+        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
         return;
     }
     
@@ -324,6 +373,7 @@ async function updateServico() {
     };
     
     const data = {
+        sectorId: sectorId,
         originalId: originalId,
         item: item,
         unit: unit,
@@ -341,11 +391,7 @@ async function updateServico() {
         empresa4: toNumber(numberInputs[11]?.value),
         empresa5: toNumber(numberInputs[12]?.value),
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || '',
-        tempoPassado: toNumber(numberInputs[14]?.value),
-        mesAnterior: form.querySelectorAll('input[type="text"]')[3]?.value || '',
-        indiceAnterior: toNumber(numberInputs[15]?.value),
-        indiceAtual: toNumber(numberInputs[16]?.value)
+        justificativa: form.querySelector('textarea')?.value || ''
     };
 
     try {
@@ -386,9 +432,9 @@ async function copyServico(id) {
 
     try {
         // Dados na ordem exata das colunas da planilha
-        // COLUNAS 6, 8, 14 E 22 DEVEM FICAR VAZIAS
+        // COLUNAS 6, 8, 14 DEVEM FICAR VAZIAS
         const values = [
-            servico.originalId,                    // 1. ID original
+            servico.originalId,                    // 1. I0 Original (jan/00)
             servico.item,                          // 2. ITEM
             servico.unit,                          // 3. Unidade
             servico.priceFornecedor || '',         // 4. Preço Fornecedor
@@ -408,12 +454,7 @@ async function copyServico(id) {
             servico.empresa4 || '',                // 18. EMPRESA 4
             servico.empresa5 || '',                // 19. EMPRESA 5
             servico.empresa6 || '',                // 20. EMPRESA 6
-            servico.justificativa || '',           // 21. Justificativa
-            '',                                    // 22. COLUNA VAZIA
-            servico.tempoPassado || '',            // 23. Tempo Passado
-            servico.mesAnterior || '',             // 24. Mês Anterior
-            servico.indiceAnterior || '',          // 25. Índice Anterior
-            servico.indiceAtual || ''              // 26. Índice Atual
+            servico.justificativa || ''            // 21. Justificativa
         ].join('\t');
 
         await navigator.clipboard.writeText(values);

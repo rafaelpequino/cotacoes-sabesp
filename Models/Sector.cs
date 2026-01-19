@@ -11,17 +11,13 @@ namespace CotacoesEPC.Models
         [StringLength(100)]
         public string Name { get; set; } = string.Empty;
 
-        [StringLength(500)]
-        public string? Description { get; set; }
-
         [Required]
         public bool IsActive { get; set; } = true;
 
-        [Required]
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
         // Navigation properties
         public ICollection<Spreadsheet> Spreadsheets { get; set; } = new List<Spreadsheet>();
+        public ICollection<Input> Inputs { get; set; } = new List<Input>();
+        public ICollection<Service> Services { get; set; } = new List<Service>();
     }
 }
 

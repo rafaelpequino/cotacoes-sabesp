@@ -83,6 +83,7 @@ namespace CotacoesEPC.Controllers
             var input = new Input
             {
                 UserId = userId,
+                SectorId = request.SectorId,
                 OriginalId = request.OriginalId,
                 Item = request.Item,
                 Unit = request.Unit,
@@ -101,10 +102,6 @@ namespace CotacoesEPC.Controllers
                 Empresa5 = request.Empresa5,
                 Empresa6 = request.Empresa6,
                 Justificativa = request.Justificativa,
-                TempoPassado = request.TempoPassado,
-                MesAnterior = request.MesAnterior,
-                IndiceAnterior = request.IndiceAnterior,
-                IndiceAtual = request.IndiceAtual,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -128,6 +125,7 @@ namespace CotacoesEPC.Controllers
             if (input == null)
                 return NotFound(new { message = "Insumo não encontrado" });
 
+            input.SectorId = request.SectorId;
             input.OriginalId = request.OriginalId;
             input.Item = request.Item;
             input.Unit = request.Unit;
@@ -146,10 +144,6 @@ namespace CotacoesEPC.Controllers
             input.Empresa5 = request.Empresa5;
             input.Empresa6 = request.Empresa6;
             input.Justificativa = request.Justificativa;
-            input.TempoPassado = request.TempoPassado;
-            input.MesAnterior = request.MesAnterior;
-            input.IndiceAnterior = request.IndiceAnterior;
-            input.IndiceAtual = request.IndiceAtual;
             input.UpdatedAt = DateTime.UtcNow;
 
             _context.Inputs.Update(input);
@@ -178,6 +172,7 @@ namespace CotacoesEPC.Controllers
 
     public class CreateInputRequest
     {
+        public int SectorId { get; set; }
         public string OriginalId { get; set; } = string.Empty;
         public string Item { get; set; } = string.Empty;
         public string Unit { get; set; } = string.Empty;
@@ -196,10 +191,6 @@ namespace CotacoesEPC.Controllers
         public decimal? Empresa5 { get; set; }
         public decimal? Empresa6 { get; set; }
         public string? Justificativa { get; set; }
-        public int? TempoPassado { get; set; }
-        public string? MesAnterior { get; set; }
-        public decimal? IndiceAnterior { get; set; }
-        public decimal? IndiceAtual { get; set; }
     }
 
     public class UpdateInputRequest : CreateInputRequest

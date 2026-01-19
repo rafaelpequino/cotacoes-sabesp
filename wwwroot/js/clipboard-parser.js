@@ -51,7 +51,7 @@ function parseClipboardData(text) {
 
         return {
             // Campos de texto
-            idOriginal: getValue(0),                      // 0. ID Original
+            idOriginal: getValue(0),                      // 0. I0 Original (formato jan/00)
             item: getValue(1),                            // 1. Item
             unidade: getValue(2),                         // 2. Unidade
             
@@ -71,11 +71,7 @@ function parseClipboardData(text) {
             empresa5: getValue(18, true),                 // 18. Empresa 5
             empresa6: getValue(19, true),                 // 19. Empresa 6
             
-            justificativa: getValue(20),                  // 20. Justificativa
-            tempoPassado: getValue(22),                   // 22. Tempo passado (pula a coluna 21)
-            mesAnterior: getValue(23),                    // 23. Mês anterior
-            indiceAnterior: getValue(24, true),           // 24. Índice anterior
-            indiceAtual: getValue(25, true)               // 25. Índice atual
+            justificativa: getValue(20)                   // 20. Justificativa
         };
     } catch (error) {
         throw error;
@@ -88,16 +84,14 @@ function parseClipboardData(text) {
 function fillFormWithParsedData(modal, parsedData) {
     try {
         // Selecionar inputs por tipo de placeholder (mais específico e confiável)
-        const idOriginalInput = modal.querySelector('input[placeholder="Ex: 00001"]');
+        const idOriginalInput = modal.querySelector('input[placeholder="Ex: jan/00"]');
         const itemInput = modal.querySelector('input[placeholder="Descrição do item"]');
         const unidadeInput = modal.querySelector('input[placeholder="Ex: Un., m², Kg"]');
-        const mesAnteriorInput = modal.querySelector('input[placeholder="Ex: Janeiro"]');
         
         // Preencher inputs de texto
         if (idOriginalInput) idOriginalInput.value = parsedData.idOriginal;
         if (itemInput) itemInput.value = parsedData.item;
         if (unidadeInput) unidadeInput.value = parsedData.unidade;
-        if (mesAnteriorInput) mesAnteriorInput.value = parsedData.mesAnterior;
         
         // Preencher textarea
         const textareaInputs = modal.querySelectorAll('textarea');
@@ -106,8 +100,8 @@ function fillFormWithParsedData(modal, parsedData) {
         // Preencher inputs de número - precisa ser ordenado cuidadosamente
         const numberInputs = modal.querySelectorAll('input[type="number"]');
         
-        if (numberInputs.length < 17) {
-            throw new Error(`Não foram encontrados campos suficientes no formulário. Esperado: 17, encontrado: ${numberInputs.length}`);
+        if (numberInputs.length < 14) {
+            throw new Error(`Não foram encontrados campos suficientes no formulário. Esperado: 14, encontrado: ${numberInputs.length}`);
         }
         
         // Mapear cada campo de preço para o seu input correspondente
@@ -134,11 +128,6 @@ function fillFormWithParsedData(modal, parsedData) {
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa4;                   // Empresa 4
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa5;                   // Empresa 5
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa6;                   // Empresa 6
-        
-        // Última seção de valores
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.tempoPassado;               // Tempo passado
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.indiceAnterior;             // Índice anterior
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.indiceAtual;                // Índice atual
         
     } catch (error) {
         throw error;

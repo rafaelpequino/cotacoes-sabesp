@@ -83,6 +83,7 @@ namespace CotacoesEPC.Controllers
             var service = new Service
             {
                 UserId = userId,
+                SectorId = request.SectorId,
                 OriginalId = request.OriginalId,
                 Item = request.Item,
                 Unit = request.Unit,
@@ -101,10 +102,6 @@ namespace CotacoesEPC.Controllers
                 Empresa5 = request.Empresa5,
                 Empresa6 = request.Empresa6,
                 Justificativa = request.Justificativa,
-                TempoPassado = request.TempoPassado,
-                MesAnterior = request.MesAnterior,
-                IndiceAnterior = request.IndiceAnterior,
-                IndiceAtual = request.IndiceAtual,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -128,6 +125,7 @@ namespace CotacoesEPC.Controllers
             if (service == null)
                 return NotFound(new { message = "Serviço não encontrado" });
 
+            service.SectorId = request.SectorId;
             service.OriginalId = request.OriginalId;
             service.Item = request.Item;
             service.Unit = request.Unit;
@@ -146,10 +144,6 @@ namespace CotacoesEPC.Controllers
             service.Empresa5 = request.Empresa5;
             service.Empresa6 = request.Empresa6;
             service.Justificativa = request.Justificativa;
-            service.TempoPassado = request.TempoPassado;
-            service.MesAnterior = request.MesAnterior;
-            service.IndiceAnterior = request.IndiceAnterior;
-            service.IndiceAtual = request.IndiceAtual;
             service.UpdatedAt = DateTime.UtcNow;
 
             _context.Services.Update(service);
@@ -178,6 +172,7 @@ namespace CotacoesEPC.Controllers
 
     public class CreateServiceRequest
     {
+        public int SectorId { get; set; }
         public string OriginalId { get; set; } = string.Empty;
         public string Item { get; set; } = string.Empty;
         public string Unit { get; set; } = string.Empty;
@@ -196,10 +191,6 @@ namespace CotacoesEPC.Controllers
         public decimal? Empresa5 { get; set; }
         public decimal? Empresa6 { get; set; }
         public string? Justificativa { get; set; }
-        public int? TempoPassado { get; set; }
-        public string? MesAnterior { get; set; }
-        public decimal? IndiceAnterior { get; set; }
-        public decimal? IndiceAtual { get; set; }
     }
 
     public class UpdateServiceRequest : CreateServiceRequest

@@ -67,10 +67,10 @@ namespace CotacoesEPC.Services
                 // Criar setores padrão
                 var sectors = new List<Sector>
                 {
-                    new Sector { Name = "Elétrica", Description = "Trabalhos e materiais relacionados a instalações elétricas", IsActive = true },
-                    new Sector { Name = "Civil", Description = "Trabalhos e materiais relacionados a construção civil", IsActive = true },
-                    new Sector { Name = "Hidráulica", Description = "Trabalhos e materiais relacionados a instalações hidráulicas", IsActive = true },
-                    new Sector { Name = "Outro", Description = "Outros setores não classificados", IsActive = true }
+                    new Sector { Name = "Elétrica", IsActive = true },
+                    new Sector { Name = "Civil", IsActive = true },
+                    new Sector { Name = "Hidráulica", IsActive = true },
+                    new Sector { Name = "Outro", IsActive = true }
                 };
 
                 _context.Sectors.AddRange(sectors);

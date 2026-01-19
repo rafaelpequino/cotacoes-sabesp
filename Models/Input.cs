@@ -13,6 +13,10 @@ namespace CotacoesEPC.Models
         public int UserId { get; set; }
 
         [Required]
+        [ForeignKey(nameof(Sector))]
+        public int SectorId { get; set; }
+
+        [Required]
         [StringLength(50)]
         public string OriginalId { get; set; } = string.Empty;
 
@@ -58,15 +62,6 @@ namespace CotacoesEPC.Models
         [StringLength(1000)]
         public string? Justificativa { get; set; }
 
-        public int? TempoPassado { get; set; }
-
-        [StringLength(50)]
-        public string? MesAnterior { get; set; }
-
-        public decimal? IndiceAnterior { get; set; }
-
-        public decimal? IndiceAtual { get; set; }
-
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
@@ -75,6 +70,9 @@ namespace CotacoesEPC.Models
         // Navigation properties
         [ForeignKey(nameof(UserId))]
         public User? User { get; set; }
+
+        [ForeignKey(nameof(SectorId))]
+        public Sector? Sector { get; set; }
     }
 }
 

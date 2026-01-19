@@ -1,335 +1,335 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\CotacoesEPC.bundle.scp.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\CotacoesEPC.bundle.scp.css",
       "PackagePath": "staticwebassets\\CotacoesEPC.bundle.scp.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\css\\dashboard.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\css\\dashboard.css",
       "PackagePath": "staticwebassets\\css\\dashboard.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\css\\login.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\css\\login.css",
       "PackagePath": "staticwebassets\\css\\login.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\css\\site.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\images\\favicon.ico",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\images\\favicon.ico",
       "PackagePath": "staticwebassets\\images\\favicon.ico"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\images\\icons\\quotes.svg",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\images\\icons\\quotes.svg",
       "PackagePath": "staticwebassets\\images\\icons\\quotes.svg"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\images\\icons\\services.svg",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\images\\icons\\services.svg",
       "PackagePath": "staticwebassets\\images\\icons\\services.svg"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\images\\icons\\spreadsheets.svg",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\images\\icons\\spreadsheets.svg",
       "PackagePath": "staticwebassets\\images\\icons\\spreadsheets.svg"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\images\\sabesp.svg",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\images\\sabesp.svg",
       "PackagePath": "staticwebassets\\images\\sabesp.svg"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\api.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\api.js",
       "PackagePath": "staticwebassets\\js\\api.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\clipboard-parser.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\clipboard-parser.js",
       "PackagePath": "staticwebassets\\js\\clipboard-parser.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\crud.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\crud.js",
       "PackagePath": "staticwebassets\\js\\crud.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\dashboard.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\dashboard.js",
       "PackagePath": "staticwebassets\\js\\dashboard.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\insumos-page.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\insumos-page.js",
       "PackagePath": "staticwebassets\\js\\insumos-page.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\planilhas-page.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\planilhas-page.js",
       "PackagePath": "staticwebassets\\js\\planilhas-page.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\servicos-page.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\servicos-page.js",
       "PackagePath": "staticwebassets\\js\\servicos-page.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\js\\site.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery\\dist\\jquery.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\4deaf537-7f8f-4591-952b-c62b212fcea8_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\4deaf537-7f8f-4591-952b-c62b212fcea8_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm",
       "PackagePath": "staticwebassets\\uploads\\5\\4deaf537-7f8f-4591-952b-c62b212fcea8_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\6d13e12e-adc8-4e54-a17f-4a5fae425f10_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\6d13e12e-adc8-4e54-a17f-4a5fae425f10_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
       "PackagePath": "staticwebassets\\uploads\\5\\6d13e12e-adc8-4e54-a17f-4a5fae425f10_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\70966357-f645-4386-9c48-b610ba85431d_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\70966357-f645-4386-9c48-b610ba85431d_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
       "PackagePath": "staticwebassets\\uploads\\5\\70966357-f645-4386-9c48-b610ba85431d_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\8418dc67-6c82-49fb-93ff-c190a9aae74b_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\8418dc67-6c82-49fb-93ff-c190a9aae74b_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm",
       "PackagePath": "staticwebassets\\uploads\\5\\8418dc67-6c82-49fb-93ff-c190a9aae74b_AA-PPPP-CPU_CV_CONS-N01-R00.19 - I0_Jul25.xlsm"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\880bbe2d-dea1-42da-abf3-63d61bded651_AA-PPPP-Padrão_Fornecedores_R00.9 - I0_Jul25.xlsx",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\880bbe2d-dea1-42da-abf3-63d61bded651_AA-PPPP-Padrão_Fornecedores_R00.9 - I0_Jul25.xlsx",
       "PackagePath": "staticwebassets\\uploads\\5\\880bbe2d-dea1-42da-abf3-63d61bded651_AA-PPPP-Padrão_Fornecedores_R00.9 - I0_Jul25.xlsx"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
       "PackagePath": "staticwebassets\\uploads\\5\\a50b2127-e23d-4c31-97cf-0c076d5e2092_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx",
       "PackagePath": "staticwebassets\\uploads\\5\\d147ed66-d2a3-4230-8f60-73ab6f29babf_Modelo-Crashing_2025_10_22.xlsx"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\d953e2a6-fe37-43a4-8572-603671d8a529_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\d953e2a6-fe37-43a4-8572-603671d8a529_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
       "PackagePath": "staticwebassets\\uploads\\5\\d953e2a6-fe37-43a4-8572-603671d8a529_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm"
     },
     {
-      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\wwwroot\\uploads\\5\\ea81130e-0226-47e3-b08b-02b39e55f107_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\uploads\\5\\ea81130e-0226-47e3-b08b-02b39e55f107_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm",
       "PackagePath": "staticwebassets\\uploads\\5\\ea81130e-0226-47e3-b08b-02b39e55f107_AA-PPPP-CPU_ListaPadrãoElétrica_r43 - I0_Jul25.xlsm"
     },
     {

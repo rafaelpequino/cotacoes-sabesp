@@ -8446,11 +8446,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\CotacoesEPC.csproj",
+      "projectUniqueName": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\CotacoesEPC.csproj",
       "projectName": "CotacoesEPC",
-      "projectPath": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\CotacoesEPC.csproj",
+      "projectPath": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\CotacoesEPC.csproj",
       "packagesPath": "C:\\Users\\rafae\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\CotacoesEPC\\obj\\",
+      "outputPath": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\rafae\\AppData\\Roaming\\NuGet\\NuGet.Config",
