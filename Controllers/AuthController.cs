@@ -29,7 +29,7 @@ namespace CotacoesEPC.Controllers
                     return BadRequest(new { message });
 
                 // Salvar token em cookie seguro
-                Response.Cookies.Append("authToken", token, new Microsoft.AspNetCore.Http.CookieOptions
+                Response.Cookies.Append("authToken", token ?? string.Empty, new Microsoft.AspNetCore.Http.CookieOptions
                 {
                     HttpOnly = true,
                     Secure = true,
@@ -82,7 +82,7 @@ namespace CotacoesEPC.Controllers
                 return Unauthorized(new { message });
 
             // Salvar token em cookie seguro
-            Response.Cookies.Append("authToken", token, new Microsoft.AspNetCore.Http.CookieOptions
+            Response.Cookies.Append("authToken", token ?? string.Empty, new Microsoft.AspNetCore.Http.CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,

@@ -15,6 +15,7 @@ namespace CotacoesEPC.Data
         public DbSet<Spreadsheet> Spreadsheets { get; set; }
         public DbSet<Sector> Sectors { get; set; }
         public DbSet<AllowedRegistration> AllowedRegistrations { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -130,6 +131,23 @@ namespace CotacoesEPC.Data
                     .WithMany()
                     .HasForeignKey(e => e.UsedByUserId)
                     .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // Attachment configuration
+            modelBuilder.Entity<Attachment>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.OriginalFileName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.StoredFileName).IsRequired().HasMaxLength(255);
+                entity.Property(e => e.Description).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.FilePath).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.FileExtension).IsRequired().HasMaxLength(50);
+                entity.Property(e => e.EntityType).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.UploadedAt).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "o2WLfScR+qX8sXZDtGDKNuEzuqqeOaO6KWgEh6kY1Mw=",
+  "Hash": "9IRtmfzhXEzPCmOdZfwwzCjsm4HWh+HGS4L6ixPB2Uk=",
   "Source": "CotacoesEPC",
   "BasePath": "_content/CotacoesEPC",
   "Mode": "Default",
@@ -53,6 +53,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\CotacoesEPC.bundle.scp.css"
+    },
+    {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\attachments\\.gitkeep",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "attachments/.gitkeep",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\attachments\\.gitkeep"
     },
     {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\css\\dashboard.css",
@@ -226,6 +245,25 @@
       "OriginalItemSpec": "wwwroot\\js\\api.js"
     },
     {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\attachments-manager.js",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "js/attachments-manager.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\attachments-manager.js"
+    },
+    {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\clipboard-parser.js",
       "SourceId": "CotacoesEPC",
       "SourceType": "Discovered",
@@ -283,6 +321,25 @@
       "OriginalItemSpec": "wwwroot\\js\\dashboard.js"
     },
     {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\insumos-page-backup.js",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "js/insumos-page-backup.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\insumos-page-backup.js"
+    },
+    {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\insumos-page.js",
       "SourceId": "CotacoesEPC",
       "SourceType": "Discovered",
@@ -319,6 +376,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\planilhas-page.js"
+    },
+    {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\servicos-page-backup.js",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "js/servicos-page-backup.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\servicos-page-backup.js"
     },
     {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\servicos-page.js",

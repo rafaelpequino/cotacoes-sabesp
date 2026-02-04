@@ -51,7 +51,7 @@ namespace CotacoesEPC.Controllers
                 var searchLower = search.ToLower();
                 query = query.Where(s => 
                     s.Name.ToLower().Contains(searchLower) ||
-                    s.Description.ToLower().Contains(searchLower)
+                    (s.Description != null && s.Description.ToLower().Contains(searchLower))
                 );
             }
 
