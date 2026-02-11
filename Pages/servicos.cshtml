@@ -344,113 +344,114 @@
             <button class="modal-close" onclick="closeViewModal()">&times;</button>
         </div>
         <div class="modal-view-content">
-            <div class="view-section">
-                <h3>Informações Básicas</h3>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">ID Original:</span>
-                        <span class="view-value">00001</span>
+            <!-- SEÇÃO 1: Responsável e Setor -->
+            <div class="view-section section-header">
+                <div class="view-row-header">
+                    <div class="view-item-header">
+                        <span class="view-label">👤 Responsável</span>
+                        <span class="view-value-header">Rafael Pequino Freire</span>
                     </div>
-                    <div class="view-item">
-                        <span class="view-label">Item:</span>
-                        <span class="view-value">Assentamento de tubo não sei o que la la la...</span>
-                    </div>
-                </div>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Unidade:</span>
-                        <span class="view-value">Un.</span>
-                    </div>
-                    <div class="view-item">
-                        <span class="view-label">Responsável:</span>
-                        <span class="view-value">Rafael Pequino Freire</span>
+                    <div class="view-item-header">
+                        <span class="view-label">🏢 Setor</span>
+                        <span class="view-value-header">Elétrica</span>
                     </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 2: Informações Principais -->
             <div class="view-section">
-                <h3>Preços</h3>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Adotada - Preço de Forn. (corrigido):</span>
-                        <span class="view-value">R$ 50.000,00</span>
+                <h3>📋 Informações da Cotação</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <span class="info-label">I0 Original</span>
+                        <span class="info-value">fev/2026</span>
                     </div>
-                    <div class="view-item">
-                        <span class="view-label">Preço de montagem / instalação:</span>
-                        <span class="view-value">R$ 5.000,00</span>
+                    <div class="info-card">
+                        <span class="info-label">Item</span>
+                        <span class="info-value">Assentamento de tubo não sei o que la la la...</span>
                     </div>
-                </div>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Preço adotado:</span>
-                        <span class="view-value">R$ 55.000,00</span>
+                    <div class="info-card">
+                        <span class="info-label">Unidade</span>
+                        <span class="info-value">Un.</span>
                     </div>
-                    <div class="view-item">
-                        <span class="view-label">Média adotada:</span>
-                        <span class="view-value">R$ 55.000,00</span>
+                    <div class="info-card">
+                        <span class="info-label">Adotada</span>
+                        <span class="info-value price">R$ 50.000,00</span>
                     </div>
-                </div>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Média Saneada:</span>
-                        <span class="view-value">R$ 54.500,00</span>
+                    <div class="info-card">
+                        <span class="info-label">Preço Montagem</span>
+                        <span class="info-value price">R$ 5.000,00</span>
                     </div>
-                    <div class="view-item">
-                        <span class="view-label">Menor Valor:</span>
-                        <span class="view-value">R$ 50.000,00</span>
-                    </div>
-                </div>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Média Aritmética:</span>
-                        <span class="view-value">R$ 52.500,00</span>
-                    </div>
-                    <div class="view-item">
-                        <span class="view-label">Mediana:</span>
-                        <span class="view-value">R$ 55.000,00</span>
+                    <div class="info-card highlight">
+                        <span class="info-label">Preço Adotado</span>
+                        <span class="info-value price-main">R$ 55.000,00</span>
                     </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 3: Médias e Medianas -->
             <div class="view-section">
-                <h3>Preços das Empresas</h3>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Empresa 1:</span>
-                        <span class="view-value">R$ 50.000,00</span>
+                <h3>📊 Médias e Estatísticas</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Média Adotada</span>
+                        <span class="stat-value">R$ 55.000,00</span>
                     </div>
-                    <div class="view-item">
-                        <span class="view-label">Empresa 2:</span>
-                        <span class="view-value">R$ 55.000,00</span>
+                    <div class="stat-card">
+                        <span class="stat-label">Média Saneada</span>
+                        <span class="stat-value">R$ 54.500,00</span>
                     </div>
-                </div>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Empresa 3:</span>
-                        <span class="view-value">R$ 52.000,00</span>
+                    <div class="stat-card">
+                        <span class="stat-label">Menor Valor</span>
+                        <span class="stat-value">R$ 50.000,00</span>
                     </div>
-                    <div class="view-item">
-                        <span class="view-label">Empresa 4:</span>
-                        <span class="view-value">-</span>
+                    <div class="stat-card">
+                        <span class="stat-label">Média Aritmética</span>
+                        <span class="stat-value">R$ 52.500,00</span>
                     </div>
-                </div>
-                <div class="view-row">
-                    <div class="view-item">
-                        <span class="view-label">Empresa 5:</span>
-                        <span class="view-value">-</span>
-                    </div>
-                    <div class="view-item">
-                        <span class="view-label">Empresa 6:</span>
-                        <span class="view-value">-</span>
+                    <div class="stat-card">
+                        <span class="stat-label">Mediana</span>
+                        <span class="stat-value">R$ 55.000,00</span>
                     </div>
                 </div>
             </div>
 
+            <!-- SEÇÃO 4: Preços das Empresas -->
             <div class="view-section">
-                <h3>Justificativa</h3>
-                <div class="view-full">
-                    <span class="view-label">Justificativa do preço adotado:</span>
-                    <p class="view-text">Preço adotado conforme análise de mercado considerando as cotações recebidas das principais empresas fornecedoras e os históricos de preços anteriores.</p>
+                <h3>🏪 Cotações das Empresas</h3>
+                <div class="companies-grid">
+                    <div class="company-card">
+                        <span class="company-label">Empresa 1</span>
+                        <span class="company-value">R$ 50.000,00</span>
+                    </div>
+                    <div class="company-card">
+                        <span class="company-label">Empresa 2</span>
+                        <span class="company-value">R$ 55.000,00</span>
+                    </div>
+                    <div class="company-card">
+                        <span class="company-label">Empresa 3</span>
+                        <span class="company-value">R$ 52.000,00</span>
+                    </div>
+                    <div class="company-card empty">
+                        <span class="company-label">Empresa 4</span>
+                        <span class="company-value">-</span>
+                    </div>
+                    <div class="company-card empty">
+                        <span class="company-label">Empresa 5</span>
+                        <span class="company-value">-</span>
+                    </div>
+                    <div class="company-card empty">
+                        <span class="company-label">Empresa 6</span>
+                        <span class="company-value">-</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 5: Justificativa -->
+            <div class="view-section">
+                <h3>📝 Justificativa</h3>
+                <div class="justification-box">
+                    <p class="justification-text">Preço adotado conforme análise de mercado considerando as cotações recebidas das principais empresas fornecedoras e os históricos de preços anteriores.</p>
                 </div>
             </div>
 
@@ -504,8 +505,8 @@
 
     // Dados dos serviços (mocados para exemplo)
     const servicosData = {
-        '00001': {
-            idOriginal: '00001',
+        'fev/2026': {
+            idOriginal: 'fev/2026',
             item: 'Assentamento de tubo não sei o que la la la...',
             unidade: 'Un.',
             adopriceCorrigido: '50000.00',
@@ -532,7 +533,7 @@
 
     // Função para copiar dados
     function copyServiceData(serviceId) {
-        const service = servicosData['00001']; // Para este exemplo, sempre copia 00001
+        const service = servicosData['fev/2026']; // Para este exemplo, sempre copia fev/2026
         
         // Dados na ordem exata das colunas da planilha
         // COLUNAS 6, 8, 14 E 22 DEVEM FICAR VAZIAS
@@ -634,7 +635,7 @@
     // Adicionar funcionalidade de cópia aos botões
     document.querySelectorAll('.btn-copiar').forEach((btn, index) => {
         btn.addEventListener('click', function() {
-            copyServiceData('00001');
+            copyServiceData('fev/2026');
         });
     });
 

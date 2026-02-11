@@ -724,6 +724,248 @@
     margin: 0;
 }
 
+/* NOVOS ESTILOS PARA VISUALIZAÇÃO MELHORADA */
+
+/* Seção de Cabeçalho - Responsável e Setor */
+.section-header {
+    background: linear-gradient(135deg, #19d6ff 0%, #0ea5db 100%);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 15px rgba(25, 214, 255, 0.2);
+}
+
+.view-row-header {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.view-item-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.view-item-header .view-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.view-value-header {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards de Informação Principal */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.info-card {
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: #19d6ff;
+}
+
+.info-card.highlight {
+    background: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 100%);
+    border: 2px solid #ffa500;
+}
+
+.info-label {
+    font-size: 11px;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.info-value {
+    font-size: 16px;
+    color: #212529;
+    font-weight: 600;
+}
+
+.info-value.price {
+    color: #0ea5db;
+}
+
+.info-value.price-main {
+    color: #ff8800;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+/* Cards de Estatísticas */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.stat-card {
+    background: #fff;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: #19d6ff;
+    background: #f0f9ff;
+    transform: translateY(-2px);
+}
+
+.stat-label {
+    font-size: 10px;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.stat-value {
+    font-size: 15px;
+    color: #212529;
+    font-weight: 700;
+}
+
+/* Cards de Empresas */
+.companies-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+}
+
+.company-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.company-card:not(.empty):hover {
+    border-color: #19d6ff;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 214, 255, 0.15);
+}
+
+.company-card.empty {
+    opacity: 0.4;
+    background: #f8f9fa;
+}
+
+.company-label {
+    font-size: 11px;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.company-value {
+    font-size: 17px;
+    color: #212529;
+    font-weight: 700;
+}
+
+.company-card.empty .company-value {
+    color: #adb5bd;
+}
+
+/* Box de Justificativa */
+.justification-box {
+    background: #f8f9fa;
+    border-left: 4px solid #19d6ff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 16px;
+}
+
+.justification-text {
+    font-size: 15px;
+    color: #495057;
+    line-height: 1.7;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Ajustes para seções */
+.view-section h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #212529;
+    margin: 0 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .view-row-header {
+        grid-template-columns: 1fr;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .companies-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .info-grid,
+    .stats-grid,
+    .companies-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* COPY NOTIFICATION */
 .copy-notification,
 .paste-notification {
