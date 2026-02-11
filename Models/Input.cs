@@ -47,15 +47,33 @@ namespace CotacoesEPC.Models
 
         public decimal? Mediana { get; set; }
 
+        [StringLength(200)]
+        public string? NomeEmpresa1 { get; set; }
+
         public decimal? Empresa1 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa2 { get; set; }
 
         public decimal? Empresa2 { get; set; }
 
+        [StringLength(200)]
+        public string? NomeEmpresa3 { get; set; }
+
         public decimal? Empresa3 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa4 { get; set; }
 
         public decimal? Empresa4 { get; set; }
 
+        [StringLength(200)]
+        public string? NomeEmpresa5 { get; set; }
+
         public decimal? Empresa5 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa6 { get; set; }
 
         public decimal? Empresa6 { get; set; }
 

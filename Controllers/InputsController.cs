@@ -95,11 +95,17 @@ namespace CotacoesEPC.Controllers
                 MenorValor = request.MenorValor,
                 MediaAritmetica = request.MediaAritmetica,
                 Mediana = request.Mediana,
+                NomeEmpresa1 = request.NomeEmpresa1,
                 Empresa1 = request.Empresa1,
+                NomeEmpresa2 = request.NomeEmpresa2,
                 Empresa2 = request.Empresa2,
+                NomeEmpresa3 = request.NomeEmpresa3,
                 Empresa3 = request.Empresa3,
+                NomeEmpresa4 = request.NomeEmpresa4,
                 Empresa4 = request.Empresa4,
+                NomeEmpresa5 = request.NomeEmpresa5,
                 Empresa5 = request.Empresa5,
+                NomeEmpresa6 = request.NomeEmpresa6,
                 Empresa6 = request.Empresa6,
                 Justificativa = request.Justificativa,
                 CreatedAt = DateTime.UtcNow
@@ -137,11 +143,17 @@ namespace CotacoesEPC.Controllers
             input.MenorValor = request.MenorValor;
             input.MediaAritmetica = request.MediaAritmetica;
             input.Mediana = request.Mediana;
+            input.NomeEmpresa1 = request.NomeEmpresa1;
             input.Empresa1 = request.Empresa1;
+            input.NomeEmpresa2 = request.NomeEmpresa2;
             input.Empresa2 = request.Empresa2;
+            input.NomeEmpresa3 = request.NomeEmpresa3;
             input.Empresa3 = request.Empresa3;
+            input.NomeEmpresa4 = request.NomeEmpresa4;
             input.Empresa4 = request.Empresa4;
+            input.NomeEmpresa5 = request.NomeEmpresa5;
             input.Empresa5 = request.Empresa5;
+            input.NomeEmpresa6 = request.NomeEmpresa6;
             input.Empresa6 = request.Empresa6;
             input.Justificativa = request.Justificativa;
             input.UpdatedAt = DateTime.UtcNow;
@@ -184,11 +196,17 @@ namespace CotacoesEPC.Controllers
         public decimal? MenorValor { get; set; }
         public decimal? MediaAritmetica { get; set; }
         public decimal? Mediana { get; set; }
+        public string? NomeEmpresa1 { get; set; }
         public decimal? Empresa1 { get; set; }
+        public string? NomeEmpresa2 { get; set; }
         public decimal? Empresa2 { get; set; }
+        public string? NomeEmpresa3 { get; set; }
         public decimal? Empresa3 { get; set; }
+        public string? NomeEmpresa4 { get; set; }
         public decimal? Empresa4 { get; set; }
+        public string? NomeEmpresa5 { get; set; }
         public decimal? Empresa5 { get; set; }
+        public string? NomeEmpresa6 { get; set; }
         public decimal? Empresa6 { get; set; }
         public string? Justificativa { get; set; }
     }

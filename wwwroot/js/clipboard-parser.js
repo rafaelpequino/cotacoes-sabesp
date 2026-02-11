@@ -1,5 +1,6 @@
 /**
  * Parser para converter dados de planilha em valores para o formulário
+ * Agora suporta 2 linhas: linha de nomes das empresas e linha de valores
  */
 
 function parseClipboardData(text) {
@@ -14,9 +15,45 @@ function parseClipboardData(text) {
             throw new Error('Nenhum dado foi encontrado na área de transferência');
         }
         
-        // Pegar apenas a última linha (que contém os dados)
-        // Isso evita problemas com cabeçalhos da planilha
-        const lastLine = lines[lines.length - 1];
+        // Verificar se temos pelo menos 2 linhas (nomes das empresas + valores)
+        let companyNames = [];
+        let lastLine;
+        
+        if (lines.length >= 2) {
+            // Primeira linha: nomes das empresas
+            const firstLine = lines[lines.length - 2];
+            const firstLineValues = firstLine.split('\t');
+            
+            // Os nomes das empresas estão NO FINAL da primeira linha
+            // Vamos pegar os últimos valores não vazios antes da justificativa
+            // Pela estrutura da planilha: [...valores...] [Nome1] [Nome2] [Nome3] [Nome4] [Nome5] [Nome6] [Justificativa]
+            
+            // Encontrar os últimos 6 valores antes do fim (ignorando a justificativa que é a última)
+            const reversedValues = [...firstLineValues].reverse();
+            const foundNames = [];
+            
+            // Pular o primeiro (justificativa) e pegar os próximos 6
+            for (let i = 1; i < reversedValues.length && foundNames.length < 6; i++) {
+                const value = reversedValues[i].trim();
+                if (value !== '') {
+                    foundNames.unshift(value); // Adicionar no início para manter a ordem
+                }
+            }
+            
+            // Preencher companyNames com os nomes encontrados
+            // Se encontrou menos de 6, preencher o resto com vazios
+            for (let i = 0; i < 6; i++) {
+                companyNames.push(foundNames[i] || '');
+            }
+            
+            // Segunda linha: valores
+            lastLine = lines[lines.length - 1];
+        } else {
+            // Se há apenas 1 linha, usar comportamento antigo
+            lastLine = lines[lines.length - 1];
+            companyNames = ['', '', '', '', '', '']; // Sem nomes
+        }
+        
         const values = lastLine.split('\t');
         
         // Função para limpar e converter valores monetários
@@ -64,6 +101,16 @@ function parseClipboardData(text) {
             menorValor: getValue(10, true),               // 10. Menor Valor
             mediaAritmetica: getValue(11, true),          // 11. Média Aritmética
             mediana: getValue(12, true),                  // 12. Mediana
+            
+            // Nomes das empresas (dos últimos 6 valores da primeira linha)
+            nomeEmpresa1: companyNames[0],                // Nome da Empresa 1
+            nomeEmpresa2: companyNames[1],                // Nome da Empresa 2
+            nomeEmpresa3: companyNames[2],                // Nome da Empresa 3
+            nomeEmpresa4: companyNames[3],                // Nome da Empresa 4
+            nomeEmpresa5: companyNames[4],                // Nome da Empresa 5
+            nomeEmpresa6: companyNames[5],                // Nome da Empresa 6
+            
+            // Valores das empresas (da segunda linha)
             empresa1: getValue(14, true),                 // 14. Empresa 1 (pula a coluna 13)
             empresa2: getValue(15, true),                 // 15. Empresa 2
             empresa3: getValue(16, true),                 // 16. Empresa 3
@@ -74,6 +121,7 @@ function parseClipboardData(text) {
             justificativa: getValue(20)                   // 20. Justificativa
         };
     } catch (error) {
+        console.error('Erro no parser:', error);
         throw error;
     }
 }
@@ -97,11 +145,12 @@ function fillFormWithParsedData(modal, parsedData) {
         const textareaInputs = modal.querySelectorAll('textarea');
         if (textareaInputs[0]) textareaInputs[0].value = parsedData.justificativa;
         
-        // Preencher inputs de número - precisa ser ordenado cuidadosamente
+        // Preencher inputs de número e texto (nomes das empresas)
         const numberInputs = modal.querySelectorAll('input[type="number"]');
+        const textInputs = modal.querySelectorAll('input[type="text"]');
         
         if (numberInputs.length < 14) {
-            throw new Error(`Não foram encontrados campos suficientes no formulário. Esperado: 14, encontrado: ${numberInputs.length}`);
+            throw new Error(`Não foram encontrados campos suficientes no formulário. Esperado: pelo menos 14, encontrado: ${numberInputs.length}`);
         }
         
         // Mapear cada campo de preço para o seu input correspondente
@@ -121,15 +170,27 @@ function fillFormWithParsedData(modal, parsedData) {
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.mediaAritmetica;            // Média Aritmética
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.mediana;                    // Mediana
         
-        // Seção de preços das empresas
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa1;                   // Empresa 1
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa2;                   // Empresa 2
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa3;                   // Empresa 3
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa4;                   // Empresa 4
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa5;                   // Empresa 5
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.empresa6;                   // Empresa 6
+        // Preencher nomes e valores das empresas
+        for (let i = 1; i <= 6; i++) {
+            const nomeInput = modal.querySelector(`input[name="nomeEmpresa${i}"]`);
+            const valorInput = numberInputs[idx];
+            
+            const nomeEmpresa = parsedData[`nomeEmpresa${i}`];
+            const valorEmpresa = parsedData[`empresa${i}`];
+            
+            if (nomeInput && nomeEmpresa) {
+                nomeInput.value = nomeEmpresa;
+            }
+            
+            if (valorInput && valorEmpresa) {
+                valorInput.value = valorEmpresa;
+            }
+            
+            idx++;
+        }
         
     } catch (error) {
+        console.error('Erro ao preencher formulário:', error);
         throw error;
     }
 }

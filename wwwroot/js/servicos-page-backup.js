@@ -1,10 +1,9 @@
-// Página de Serviços - CRUD funcional
+// Página de Insumos - CRUD funcional
+// Similar ao servicos-page.js mas para inputs
 
-let servicosCrud = new CrudManager('services');
-let servicosPageData = [];
+let insumosCrud = new CrudManager('inputs');
+let insumosPageData = [];
 let sectorsData = [];
-let pendingAttachments = []; // Arquivos selecionados para upload
-let currentServiceAttachments = []; // Anexos existentes do serviço sendo editado/visualizado
 
 // Função para humanizar erros
 function humanizeError(errorMessage) {
@@ -30,10 +29,9 @@ function humanizeError(errorMessage) {
     return errorMessage || 'Ocorreu um erro desconhecido. Por favor, tente novamente.';
 }
 
-// Carregar dados ao iniciar página
 document.addEventListener('DOMContentLoaded', async () => {
     await loadSectors();
-    await loadServicos();
+    await loadInsumos();
     setupEventListeners();
 });
 
@@ -46,18 +44,18 @@ async function loadSectors() {
     }
 }
 
-async function loadServicos() {
+async function loadInsumos() {
     try {
-        servicosPageData = await api.getServices();
-        renderServicosTable(servicosPageData);
+        insumosPageData = await api.getInputs();
+        renderInsumosTable(insumosPageData);
     } catch (error) {
-        servicosPageData = [];
-        renderServicosTable([]);
+        insumosPageData = [];
+        renderInsumosTable([]);
     }
 }
 
-function renderServicosTable(servicos) {
-    const table = document.getElementById('servicosTableElement');
+function renderInsumosTable(insumos) {
+    const table = document.getElementById('insumosTableElement');
     const emptyMessage = document.getElementById('emptyMessage');
     const tbody = table ? table.querySelector('tbody') : null;
     
@@ -67,7 +65,7 @@ function renderServicosTable(servicos) {
 
     tbody.innerHTML = '';
 
-    if (!servicos || servicos.length === 0) {
+    if (!insumos || insumos.length === 0) {
         table.style.display = 'none';
         emptyMessage.style.display = 'block';
         return;
@@ -76,22 +74,22 @@ function renderServicosTable(servicos) {
     table.style.display = 'table';
     emptyMessage.style.display = 'none';
 
-    servicos.forEach(servico => {
-        const sectorName = sectorsData.find(s => s.id === servico.sectorId)?.name || 'N/A';
+    insumos.forEach(insumo => {
+        const sectorName = sectorsData.find(s => s.id === insumo.sectorId)?.name || 'N/A';
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${servico.originalId}</td>
+            <td>${insumo.originalId}</td>
             <td>${sectorName}</td>
-            <td>${servico.item}</td>
-            <td>${servico.unit}</td>
-            <td>R$ ${parseFloat(servico.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td>R$ ${parseFloat(servico.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>${insumo.item}</td>
+            <td>${insumo.unit}</td>
+            <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>Você</td>
             <td class="actions">
-                <button class="action-btn" title="Copiar dados" onclick="copyServico(${servico.id})">📋</button>
-                <button class="action-btn" title="Visualizar" onclick="viewServico(${servico.id})">👁</button>
-                <button class="action-btn" title="Editar" onclick="editServico(${servico.id})">✏️</button>
-                <button class="action-btn" title="Excluir" onclick="deleteServico(${servico.id})">🗑</button>
+                <button class="action-btn" title="Copiar dados" onclick="copyInsumo(${insumo.id})">📋</button>
+                <button class="action-btn" title="Visualizar" onclick="viewInsumo(${insumo.id})">👁</button>
+                <button class="action-btn" title="Editar" onclick="editInsumo(${insumo.id})">✏️</button>
+                <button class="action-btn" title="Excluir" onclick="deleteInsumo(${insumo.id})">🗑</button>
             </td>
         `;
         tbody.appendChild(row);
@@ -99,9 +97,9 @@ function renderServicosTable(servicos) {
 }
 
 function setupEventListeners() {
-    const btnNovaCotacao = document.querySelector('.btn-nova-cotacao');
-    if (btnNovaCotacao) {
-        btnNovaCotacao.addEventListener('click', openCreateModal);
+    const btnNovoInsumo = document.querySelector('.btn-nova-cotacao');
+    if (btnNovoInsumo) {
+        btnNovoInsumo.addEventListener('click', openCreateModal);
     }
 
     // Form de criar
@@ -109,7 +107,7 @@ function setupEventListeners() {
     if (createForm) {
         createForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            await saveServico();
+            await saveInsumo();
         });
     }
 
@@ -118,7 +116,7 @@ function setupEventListeners() {
     if (editForm) {
         editForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            await updateServico();
+            await updateInsumo();
         });
     }
 
@@ -162,8 +160,8 @@ async function applyFilters() {
     const filter = document.getElementById('filterSelect')?.value || '';
 
     try {
-        servicosPageData = await api.getServices(search || null, sort || null, filter || null);
-        renderServicosTable(servicosPageData);
+        insumosPageData = await api.getInputs(search || null, sort || null, filter || null);
+        renderInsumosTable(insumosPageData);
         updateSearchIndicator(search);
     } catch (error) {
         Swal.fire({
@@ -192,7 +190,7 @@ function clearFilters() {
     document.getElementById('sortSelect').value = '';
     document.getElementById('filterSelect').value = '';
     document.getElementById('searchIndicator').style.display = 'none';
-    loadServicos();
+    loadInsumos();
 }
 
 function openCreateModal() {
@@ -226,7 +224,7 @@ function closeCreateModal() {
     if (modal) modal.style.display = 'none';
 }
 
-async function saveServico() {
+async function saveInsumo() {
     const modal = document.getElementById('createModal');
     const form = modal.querySelector('form');
     
@@ -268,84 +266,101 @@ async function saveServico() {
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),
         mediana: toNumber(numberInputs[7]?.value),
+        nomeEmpresa1: form.querySelector('input[name="nomeEmpresa1"]')?.value || null,
         empresa1: toNumber(numberInputs[8]?.value),
+        nomeEmpresa2: form.querySelector('input[name="nomeEmpresa2"]')?.value || null,
         empresa2: toNumber(numberInputs[9]?.value),
+        nomeEmpresa3: form.querySelector('input[name="nomeEmpresa3"]')?.value || null,
         empresa3: toNumber(numberInputs[10]?.value),
+        nomeEmpresa4: form.querySelector('input[name="nomeEmpresa4"]')?.value || null,
         empresa4: toNumber(numberInputs[11]?.value),
+        nomeEmpresa5: form.querySelector('input[name="nomeEmpresa5"]')?.value || null,
         empresa5: toNumber(numberInputs[12]?.value),
+        nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
         justificativa: form.querySelector('textarea')?.value || ''
     };
 
     try {
-        const result = await api.createService(data);
+        const result = await api.createInput(data);
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
-            text: 'Serviço criado com sucesso!',
+            text: 'Insumo criado com sucesso!',
             confirmButtonColor: '#13d0ff'
         }).then(() => {
             closeCreateModal();
-            loadServicos();
+            loadInsumos();
             form.reset();
         });
     } catch (error) {
     }
 }
 
-function editServico(id) {
-    const servico = servicosPageData.find(s => s.id === id);
-    if (!servico) return;
+async function editInsumo(id) {
+    const insumo = insumosPageData.find(i => i.id === id);
+    if (!insumo) {
+        alert('Insumo não encontrado');
+        return;
+    }
 
     const modal = document.getElementById('editModal');
     const form = modal.querySelector('form');
-
+    
     // Popular dropdown de setores
     populateSectorSelect(modal);
     
     // Selecionar o setor correto
     const sectorSelect = form.querySelector('select[name="sectorId"]');
-    if (sectorSelect) sectorSelect.value = servico.sectorId;
-
-    // Preencher campos de texto
-    const textInputs = form.querySelectorAll('input[type="text"]');
-    textInputs[0].value = servico.originalId;
-    textInputs[1].value = servico.item;
-    textInputs[2].value = servico.unit;
+    if (sectorSelect) sectorSelect.value = insumo.sectorId;
+    
+    // Preencher campos de texto (I0, Item, Unidade)
+    const textInputs = form.querySelectorAll('input[type="text"]:not([name^="nomeEmpresa"])');
+    textInputs[0].value = insumo.originalId;
+    textInputs[1].value = insumo.item;
+    textInputs[2].value = insumo.unit;
+    
+    // Preencher nomes das empresas
+    form.querySelector('input[name="nomeEmpresa1"]').value = insumo.nomeEmpresa1 || '';
+    form.querySelector('input[name="nomeEmpresa2"]').value = insumo.nomeEmpresa2 || '';
+    form.querySelector('input[name="nomeEmpresa3"]').value = insumo.nomeEmpresa3 || '';
+    form.querySelector('input[name="nomeEmpresa4"]').value = insumo.nomeEmpresa4 || '';
+    form.querySelector('input[name="nomeEmpresa5"]').value = insumo.nomeEmpresa5 || '';
+    form.querySelector('input[name="nomeEmpresa6"]').value = insumo.nomeEmpresa6 || '';
     
     // Preencher campos de número
     const numberInputs = form.querySelectorAll('input[type="number"]');
-    numberInputs[0].value = servico.priceFornecedor;
-    numberInputs[1].value = servico.precoMontagem;
-    numberInputs[2].value = servico.precoAdotado;
-    numberInputs[3].value = servico.mediaAdotada || '';
-    numberInputs[4].value = servico.mediaSaneada || '';
-    numberInputs[5].value = servico.menorValor || '';
-    numberInputs[6].value = servico.mediaAritmetica || '';
-    numberInputs[7].value = servico.mediana || '';
-    numberInputs[8].value = servico.empresa1 || '';
-    numberInputs[9].value = servico.empresa2 || '';
-    numberInputs[10].value = servico.empresa3 || '';
-    numberInputs[11].value = servico.empresa4 || '';
-    numberInputs[12].value = servico.empresa5 || '';
-    numberInputs[13].value = servico.empresa6 || '';
+    numberInputs[0].value = insumo.priceFornecedor || '';
+    numberInputs[1].value = insumo.precoMontagem || '';
+    numberInputs[2].value = insumo.precoAdotado || '';
+    numberInputs[3].value = insumo.mediaAdotada || '';
+    numberInputs[4].value = insumo.mediaSaneada || '';
+    numberInputs[5].value = insumo.menorValor || '';
+    numberInputs[6].value = insumo.mediaAritmetica || '';
+    numberInputs[7].value = insumo.mediana || '';
+    numberInputs[8].value = insumo.empresa1 || '';
+    numberInputs[9].value = insumo.empresa2 || '';
+    numberInputs[10].value = insumo.empresa3 || '';
+    numberInputs[11].value = insumo.empresa4 || '';
+    numberInputs[12].value = insumo.empresa5 || '';
+    numberInputs[13].value = insumo.empresa6 || '';
     
     // Preencher textarea
     const textarea = form.querySelector('textarea');
-    if (textarea) textarea.value = servico.justificativa || '';
+    if (textarea) textarea.value = insumo.justificativa || '';
 
     // Armazenar ID para update
-    modal.dataset.servicoId = id;
+    modal.dataset.insumoId = id;
     modal.style.display = 'flex';
 }
 
-async function updateServico() {
+async function updateInsumo() {
     const modal = document.getElementById('editModal');
-    const servicoId = modal.dataset.servicoId;
+    const insumoId = modal.dataset.insumoId;
     const form = modal.querySelector('form');
     
-    if (!servicoId) {
-        alert('ID do serviço não encontrado');
+    if (!insumoId) {
+        alert('ID do insumo não encontrado');
         return;
     }
     
@@ -387,79 +402,99 @@ async function updateServico() {
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),
         mediana: toNumber(numberInputs[7]?.value),
+        nomeEmpresa1: form.querySelector('input[name="nomeEmpresa1"]')?.value || null,
         empresa1: toNumber(numberInputs[8]?.value),
+        nomeEmpresa2: form.querySelector('input[name="nomeEmpresa2"]')?.value || null,
         empresa2: toNumber(numberInputs[9]?.value),
+        nomeEmpresa3: form.querySelector('input[name="nomeEmpresa3"]')?.value || null,
         empresa3: toNumber(numberInputs[10]?.value),
+        nomeEmpresa4: form.querySelector('input[name="nomeEmpresa4"]')?.value || null,
         empresa4: toNumber(numberInputs[11]?.value),
+        nomeEmpresa5: form.querySelector('input[name="nomeEmpresa5"]')?.value || null,
         empresa5: toNumber(numberInputs[12]?.value),
+        nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
         justificativa: form.querySelector('textarea')?.value || ''
     };
 
     try {
-        const result = await api.updateService(servicoId, data);
+        const result = await api.updateInput(insumoId, data);
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
-            text: 'Serviço atualizado com sucesso!',
+            text: 'Insumo atualizado com sucesso!',
             confirmButtonColor: '#13d0ff'
         }).then(() => {
             closeEditModal();
-            loadServicos();
+            loadInsumos();
         });
     } catch (error) {
     }
 }
 
-async function deleteServico(id) {
+async function deleteInsumo(id) {
     try {
-        const deleted = await servicosCrud.delete(id);
+        const deleted = await insumosCrud.delete(id);
         if (deleted) {
-            await loadServicos();
+            await loadInsumos();
         }
     } catch (error) {
     }
 }
 
-async function copyServico(id) {
-    const servico = servicosPageData.find(s => s.id === id);
-    if (!servico) {
+async function copyInsumo(id) {
+    const insumo = insumosPageData.find(i => i.id === id);
+    if (!insumo) {
         Swal.fire({
             icon: 'error',
             title: 'Erro',
-            text: 'Serviço não encontrado'
+            text: 'Insumo não encontrado'
         });
         return;
     }
 
     try {
-        // Dados na ordem exata das colunas da planilha
-        // COLUNAS 6, 8, 14 DEVEM FICAR VAZIAS
-        const values = [
-            servico.originalId,                    // 1. I0 Original (jan/00)
-            servico.item,                          // 2. ITEM
-            servico.unit,                          // 3. Unidade
-            servico.priceFornecedor || '',         // 4. Preço Fornecedor
-            servico.precoMontagem || '',           // 5. Preço Montagem
-            '',                                    // 6. COLUNA VAZIA
-            servico.precoAdotado || '',            // 7. Preço Adotado
-            '',                                    // 8. COLUNA VAZIA
-            servico.mediaAdotada || '',            // 9. Média Adotada
-            servico.mediaSaneada || '',            // 10. Média Saneada
-            servico.menorValor || '',              // 11. Menor Valor
-            servico.mediaAritmetica || '',         // 12. Média Aritmética
-            servico.mediana || '',                 // 13. Mediana
-            '',                                    // 14. COLUNA VAZIA
-            servico.empresa1 || '',                // 15. EMPRESA 1
-            servico.empresa2 || '',                // 16. EMPRESA 2
-            servico.empresa3 || '',                // 17. EMPRESA 3
-            servico.empresa4 || '',                // 18. EMPRESA 4
-            servico.empresa5 || '',                // 19. EMPRESA 5
-            servico.empresa6 || '',                // 20. EMPRESA 6
-            servico.justificativa || ''            // 21. Justificativa
+        // PRIMEIRA LINHA: Nomes das empresas
+        const companyNamesLine = [
+            '', '', '', '', '', '', '', '', '', '', '', '', '', '', // 0-13: vazias
+            (insumo.nomeEmpresa1 || ''),  // 14
+            (insumo.nomeEmpresa2 || ''),  // 15
+            (insumo.nomeEmpresa3 || ''),  // 16
+            (insumo.nomeEmpresa4 || ''),  // 17
+            (insumo.nomeEmpresa5 || ''),  // 18
+            (insumo.nomeEmpresa6 || ''),  // 19
+            ''  // 20: Justificativa (vazia)
         ].join('\t');
+        
+        // SEGUNDA LINHA: Valores
+        const valuesLine = [
+            insumo.originalId,                    // 0. I0 Original (jan/00)
+            insumo.item,                          // 1. ITEM
+            insumo.unit,                          // 2. Unidade
+            insumo.priceFornecedor || '',         // 3. Preço Fornecedor
+            insumo.precoMontagem || '',           // 4. Preço Montagem
+            '',                                   // 5. COLUNA VAZIA
+            insumo.precoAdotado || '',            // 6. Preço Adotado
+            '',                                   // 7. COLUNA VAZIA
+            insumo.mediaAdotada || '',            // 8. Média Adotada
+            insumo.mediaSaneada || '',            // 9. Média Saneada
+            insumo.menorValor || '',              // 10. Menor Valor
+            insumo.mediaAritmetica || '',         // 11. Média Aritmética
+            insumo.mediana || '',                 // 12. Mediana
+            '',                                   // 13. COLUNA VAZIA
+            insumo.empresa1 || '',                // 14. EMPRESA 1
+            insumo.empresa2 || '',                // 15. EMPRESA 2
+            insumo.empresa3 || '',                // 16. EMPRESA 3
+            insumo.empresa4 || '',                // 17. EMPRESA 4
+            insumo.empresa5 || '',                // 18. EMPRESA 5
+            insumo.empresa6 || '',                // 19. EMPRESA 6
+            insumo.justificativa || ''            // 20. Justificativa
+        ].join('\t');
+        
+        // Juntar as duas linhas
+        const clipboardData = companyNamesLine + '\n' + valuesLine;
 
-        await navigator.clipboard.writeText(values);
+        await navigator.clipboard.writeText(clipboardData);
         showCopyNotification();
     } catch (error) {
         Swal.fire({
@@ -488,18 +523,18 @@ function showCopyNotification() {
     }, 2000);
 }
 
-function viewServico(id) {
-    const servico = servicosPageData.find(s => s.id === id);
-    if (!servico) {
+function viewInsumo(id) {
+    const insumo = insumosPageData.find(i => i.id === id);
+    if (!insumo) {
         Swal.fire({
             icon: 'error',
             title: 'Erro',
-            text: 'Serviço não encontrado'
+            text: 'Insumo não encontrado'
         });
         return;
     }
 
-    // Preencher modal de visualização com os dados do serviço
+    // Preencher modal de visualização com os dados do insumo
     const modal = document.getElementById('viewModal');
     
     if (!modal) {
@@ -523,56 +558,83 @@ function viewServico(id) {
         let index = 0;
         
         // Informações Básicas
-        if (viewValues[index]) viewValues[index++].textContent = servico.originalId || '-';
-        if (viewValues[index]) viewValues[index++].textContent = servico.item || '-';
-        if (viewValues[index]) viewValues[index++].textContent = servico.unit || '-';
+        if (viewValues[index]) viewValues[index++].textContent = insumo.originalId || '-';
+        if (viewValues[index]) viewValues[index++].textContent = insumo.item || '-';
+        if (viewValues[index]) viewValues[index++].textContent = insumo.unit || '-';
         if (viewValues[index]) viewValues[index++].textContent = 'Você'; // Responsável
         
         // Preços
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.priceFornecedor);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.precoMontagem);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.precoAdotado);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaAdotada);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaSaneada);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.menorValor);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaAritmetica);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediana);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.priceFornecedor);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.precoMontagem);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.precoAdotado);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediaAdotada);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediaSaneada);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.menorValor);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediaAritmetica);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediana);
         
         // Preços das Empresas
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa1);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa2);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa3);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa4);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa5);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa6);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa1);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa2);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa3);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa4);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa5);
+        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa6);
         
         // Justificativa e Índices
-        if (viewValues[index]) viewValues[index++].textContent = servico.justificativa || '-';
-        if (viewValues[index]) viewValues[index++].textContent = (servico.tempoPassado || '0') + ' dias';
-        if (viewValues[index]) viewValues[index++].textContent = servico.mesAnterior || '-';
-        if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAnterior || '0') + '%';
-        if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAtual || '0') + '%';
+        if (viewValues[index]) viewValues[index++].textContent = insumo.justificativa || '-';
+        if (viewValues[index]) viewValues[index++].textContent = (insumo.tempoPassado || '0') + ' dias';
+        if (viewValues[index]) viewValues[index++].textContent = insumo.mesAnterior || '-';
+        if (viewValues[index]) viewValues[index++].textContent = (insumo.indiceAnterior || '0') + '%';
+        if (viewValues[index]) viewValues[index++].textContent = (insumo.indiceAtual || '0') + '%';
+    }
+    
+    // Atualizar nomes das empresas nos cards
+    for (let i = 1; i <= 6; i++) {
+        const nameLabel = modal.querySelector(`#company-name-${i}`);
+        const valueLabel = modal.querySelector(`#company-value-${i}`);
+        const card = modal.querySelector(`#company-card-${i}`);
+        
+        const companyName = insumo[`nomeEmpresa${i}`];
+        const companyValue = insumo[`empresa${i}`];
+        
+        if (nameLabel) {
+            nameLabel.textContent = companyName || `Empresa ${i}`;
+        }
+        
+        if (valueLabel) {
+            valueLabel.textContent = formatCurrency(companyValue);
+        }
+        
+        // Marcar como vazio se não houver valor
+        if (card) {
+            if (!companyValue && companyValue !== 0) {
+                card.classList.add('empty');
+            } else {
+                card.classList.remove('empty');
+            }
+        }
     }
 
-    // Armazenar o ID do serviço para ações futuras
-    modal.dataset.servicoId = id;
+    // Armazenar o ID do insumo para ações futuras
+    modal.dataset.insumoId = id;
     modal.style.display = 'flex';
 }
 
 function editFromView() {
     const viewModal = document.getElementById('viewModal');
-    const servicoId = viewModal.dataset.servicoId;
+    const insumoId = viewModal.dataset.insumoId;
     
-    if (!servicoId) {
-        alert('ID do serviço não encontrado');
+    if (!insumoId) {
+        alert('ID do insumo não encontrado');
         return;
     }
     
     // Fechar modal de visualização
     closeViewModal();
     
-    // Abrir modal de edição com os dados do serviço
-    editServico(parseInt(servicoId));
+    // Abrir modal de edição com os dados do insumo
+    editInsumo(parseInt(insumoId));
 }
 
 function closeEditModal() {
@@ -604,4 +666,3 @@ document.addEventListener('keydown', function(event) {
         closeViewModal();
     }
 });
-

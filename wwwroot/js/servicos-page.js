@@ -127,7 +127,7 @@ function setupEventListeners() {
 function setupFilterListeners() {
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
-    const filterSelect = document.getElementById('filterSelect');
+    const sectorFilterSelect = document.getElementById('sectorFilterSelect');
     const btnFiltrar = document.getElementById('btnFiltrar');
     const btnLimpar = document.getElementById('btnLimpar');
 
@@ -143,6 +143,11 @@ function setupFilterListeners() {
     if (sortSelect) {
         sortSelect.addEventListener('change', applyFilters);
     }
+    
+    // Filtro de setor dispara requisição automaticamente
+    if (sectorFilterSelect) {
+        sectorFilterSelect.addEventListener('change', applyFilters);
+    }
 
     // Permitir busca ao digitar (Enter)
     if (searchInput) {
@@ -152,15 +157,47 @@ function setupFilterListeners() {
             }
         });
     }
+    
+    // Popular o select de setores do filtro
+    populateSectorFilter();
+}
+
+async function populateSectorFilter() {
+    const sectorFilterSelect = document.getElementById('sectorFilterSelect');
+    if (!sectorFilterSelect) return;
+    
+    try {
+        const sectors = await api.getSectors();
+        
+        // Limpar opções existentes (exceto "Todos os Setores")
+        sectorFilterSelect.innerHTML = '<option value="">Todos os Setores</option>';
+        
+        // Adicionar setores
+        sectors.forEach(sector => {
+            const option = document.createElement('option');
+            option.value = sector.id;
+            option.textContent = sector.name;
+            sectorFilterSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar setores para filtro:', error);
+    }
 }
 
 async function applyFilters() {
     const search = document.getElementById('searchInput')?.value || '';
     const sort = document.getElementById('sortSelect')?.value || '';
-    const filter = document.getElementById('filterSelect')?.value || '';
+    const sectorId = document.getElementById('sectorFilterSelect')?.value || '';
 
     try {
-        servicosPageData = await api.getServices(search || null, sort || null, filter || null);
+        // Filtrar localmente por setor se selecionado
+        let filteredData = await api.getServices(search || null, sort || null, null);
+        
+        if (sectorId) {
+            filteredData = filteredData.filter(item => item.sectorId === parseInt(sectorId));
+        }
+        
+        servicosPageData = filteredData;
         renderServicosTable(servicosPageData);
         updateSearchIndicator(search);
     } catch (error) {
@@ -188,7 +225,7 @@ function updateSearchIndicator(searchText) {
 function clearFilters() {
     document.getElementById('searchInput').value = '';
     document.getElementById('sortSelect').value = '';
-    document.getElementById('filterSelect').value = '';
+    document.getElementById('sectorFilterSelect').value = '';
     document.getElementById('searchIndicator').style.display = 'none';
     loadServicos();
 }
@@ -266,11 +303,17 @@ async function saveServico() {
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),
         mediana: toNumber(numberInputs[7]?.value),
+        nomeEmpresa1: form.querySelector('input[name="nomeEmpresa1"]')?.value || null,
         empresa1: toNumber(numberInputs[8]?.value),
+        nomeEmpresa2: form.querySelector('input[name="nomeEmpresa2"]')?.value || null,
         empresa2: toNumber(numberInputs[9]?.value),
+        nomeEmpresa3: form.querySelector('input[name="nomeEmpresa3"]')?.value || null,
         empresa3: toNumber(numberInputs[10]?.value),
+        nomeEmpresa4: form.querySelector('input[name="nomeEmpresa4"]')?.value || null,
         empresa4: toNumber(numberInputs[11]?.value),
+        nomeEmpresa5: form.querySelector('input[name="nomeEmpresa5"]')?.value || null,
         empresa5: toNumber(numberInputs[12]?.value),
+        nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
         justificativa: form.querySelector('textarea')?.value || ''
     };
@@ -305,11 +348,19 @@ function editServico(id) {
     const sectorSelect = form.querySelector('select[name="sectorId"]');
     if (sectorSelect) sectorSelect.value = servico.sectorId;
 
-    // Preencher campos de texto
-    const textInputs = form.querySelectorAll('input[type="text"]');
+    // Preencher campos de texto (I0, Item, Unidade)
+    const textInputs = form.querySelectorAll('input[type="text"]:not([name^="nomeEmpresa"])');
     textInputs[0].value = servico.originalId;
     textInputs[1].value = servico.item;
     textInputs[2].value = servico.unit;
+    
+    // Preencher nomes das empresas
+    form.querySelector('input[name="nomeEmpresa1"]').value = servico.nomeEmpresa1 || '';
+    form.querySelector('input[name="nomeEmpresa2"]').value = servico.nomeEmpresa2 || '';
+    form.querySelector('input[name="nomeEmpresa3"]').value = servico.nomeEmpresa3 || '';
+    form.querySelector('input[name="nomeEmpresa4"]').value = servico.nomeEmpresa4 || '';
+    form.querySelector('input[name="nomeEmpresa5"]').value = servico.nomeEmpresa5 || '';
+    form.querySelector('input[name="nomeEmpresa6"]').value = servico.nomeEmpresa6 || '';
     
     // Preencher campos de número
     const numberInputs = form.querySelectorAll('input[type="number"]');
@@ -385,11 +436,17 @@ async function updateServico() {
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),
         mediana: toNumber(numberInputs[7]?.value),
+        nomeEmpresa1: form.querySelector('input[name="nomeEmpresa1"]')?.value || null,
         empresa1: toNumber(numberInputs[8]?.value),
+        nomeEmpresa2: form.querySelector('input[name="nomeEmpresa2"]')?.value || null,
         empresa2: toNumber(numberInputs[9]?.value),
+        nomeEmpresa3: form.querySelector('input[name="nomeEmpresa3"]')?.value || null,
         empresa3: toNumber(numberInputs[10]?.value),
+        nomeEmpresa4: form.querySelector('input[name="nomeEmpresa4"]')?.value || null,
         empresa4: toNumber(numberInputs[11]?.value),
+        nomeEmpresa5: form.querySelector('input[name="nomeEmpresa5"]')?.value || null,
         empresa5: toNumber(numberInputs[12]?.value),
+        nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
         justificativa: form.querySelector('textarea')?.value || ''
     };
@@ -431,33 +488,47 @@ async function copyServico(id) {
     }
 
     try {
-        // Dados na ordem exata das colunas da planilha
-        // COLUNAS 6, 8, 14 DEVEM FICAR VAZIAS
-        const values = [
-            servico.originalId,                    // 1. I0 Original (jan/00)
-            servico.item,                          // 2. ITEM
-            servico.unit,                          // 3. Unidade
-            servico.priceFornecedor || '',         // 4. Preço Fornecedor
-            servico.precoMontagem || '',           // 5. Preço Montagem
-            '',                                    // 6. COLUNA VAZIA
-            servico.precoAdotado || '',            // 7. Preço Adotado
-            '',                                    // 8. COLUNA VAZIA
-            servico.mediaAdotada || '',            // 9. Média Adotada
-            servico.mediaSaneada || '',            // 10. Média Saneada
-            servico.menorValor || '',              // 11. Menor Valor
-            servico.mediaAritmetica || '',         // 12. Média Aritmética
-            servico.mediana || '',                 // 13. Mediana
-            '',                                    // 14. COLUNA VAZIA
-            servico.empresa1 || '',                // 15. EMPRESA 1
-            servico.empresa2 || '',                // 16. EMPRESA 2
-            servico.empresa3 || '',                // 17. EMPRESA 3
-            servico.empresa4 || '',                // 18. EMPRESA 4
-            servico.empresa5 || '',                // 19. EMPRESA 5
-            servico.empresa6 || '',                // 20. EMPRESA 6
-            servico.justificativa || ''            // 21. Justificativa
+        // PRIMEIRA LINHA: Nomes das empresas
+        const companyNamesLine = [
+            '', '', '', '', '', '', '', '', '', '', '', '', '', '', // 0-13: vazias
+            (servico.nomeEmpresa1 || ''),  // 14
+            (servico.nomeEmpresa2 || ''),  // 15
+            (servico.nomeEmpresa3 || ''),  // 16
+            (servico.nomeEmpresa4 || ''),  // 17
+            (servico.nomeEmpresa5 || ''),  // 18
+            (servico.nomeEmpresa6 || ''),  // 19
+            ''  // 20: Justificativa (vazia)
         ].join('\t');
+        
+        // SEGUNDA LINHA: Valores
+        const valuesLine = [
+            servico.originalId,                    // 0. I0 Original (jan/00)
+            servico.item,                          // 1. ITEM
+            servico.unit,                          // 2. Unidade
+            servico.priceFornecedor || '',         // 3. Preço Fornecedor
+            servico.precoMontagem || '',           // 4. Preço Montagem
+            '',                                    // 5. COLUNA VAZIA
+            servico.precoAdotado || '',            // 6. Preço Adotado
+            '',                                    // 7. COLUNA VAZIA
+            servico.mediaAdotada || '',            // 8. Média Adotada
+            servico.mediaSaneada || '',            // 9. Média Saneada
+            servico.menorValor || '',              // 10. Menor Valor
+            servico.mediaAritmetica || '',         // 11. Média Aritmética
+            servico.mediana || '',                 // 12. Mediana
+            '',                                    // 13. COLUNA VAZIA
+            servico.empresa1 || '',                // 14. EMPRESA 1
+            servico.empresa2 || '',                // 15. EMPRESA 2
+            servico.empresa3 || '',                // 16. EMPRESA 3
+            servico.empresa4 || '',                // 17. EMPRESA 4
+            servico.empresa5 || '',                // 18. EMPRESA 5
+            servico.empresa6 || '',                // 19. EMPRESA 6
+            servico.justificativa || ''            // 20. Justificativa
+        ].join('\t');
+        
+        // Juntar as duas linhas
+        const clipboardData = companyNamesLine + '\n' + valuesLine;
 
-        await navigator.clipboard.writeText(values);
+        await navigator.clipboard.writeText(clipboardData);
         showCopyNotification();
     } catch (error) {
         Swal.fire({
@@ -513,43 +584,63 @@ function viewServico(id) {
         });
     };
 
-    // Obter todos os elementos .view-value
-    const viewValues = modal.querySelectorAll('.view-value');
-
-    // Mapear valores aos elementos
-    if (viewValues.length > 0) {
-        let index = 0;
+    // Preencher seção de informações básicas
+    const infoValues = modal.querySelectorAll('.info-value');
+    if (infoValues.length >= 6) {
+        infoValues[0].textContent = servico.originalId || '-';  // I0 Original
+        infoValues[1].textContent = servico.item || '-';        // Item
+        infoValues[2].textContent = servico.unit || '-';        // Unidade
+        infoValues[3].textContent = formatCurrency(servico.priceFornecedor);  // Adotada
+        infoValues[4].textContent = formatCurrency(servico.precoMontagem);    // Preço Montagem
+    }
+    
+    // Preço Adotado (price-main)
+    const priceMain = modal.querySelector('.price-main');
+    if (priceMain) {
+        priceMain.textContent = formatCurrency(servico.precoAdotado);
+    }
+    
+    // Preencher estatísticas
+    const statValues = modal.querySelectorAll('.stat-value');
+    if (statValues.length >= 5) {
+        statValues[0].textContent = formatCurrency(servico.mediaAdotada);      // Média Adotada
+        statValues[1].textContent = formatCurrency(servico.mediaSaneada);      // Média Saneada
+        statValues[2].textContent = formatCurrency(servico.menorValor);        // Menor Valor
+        statValues[3].textContent = formatCurrency(servico.mediaAritmetica);   // Média Aritmética
+        statValues[4].textContent = formatCurrency(servico.mediana);           // Mediana
+    }
+    
+    // Atualizar nomes e valores das empresas nos cards
+    for (let i = 1; i <= 6; i++) {
+        const nameLabel = modal.querySelector(`#company-name-${i}`);
+        const valueLabel = modal.querySelector(`#company-value-${i}`);
+        const card = modal.querySelector(`#company-card-${i}`);
         
-        // Informações Básicas
-        if (viewValues[index]) viewValues[index++].textContent = servico.originalId || '-';
-        if (viewValues[index]) viewValues[index++].textContent = servico.item || '-';
-        if (viewValues[index]) viewValues[index++].textContent = servico.unit || '-';
-        if (viewValues[index]) viewValues[index++].textContent = 'Você'; // Responsável
+        const companyName = servico[`nomeEmpresa${i}`];
+        const companyValue = servico[`empresa${i}`];
         
-        // Preços
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.priceFornecedor);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.precoMontagem);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.precoAdotado);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaAdotada);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaSaneada);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.menorValor);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediaAritmetica);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.mediana);
+        if (nameLabel) {
+            nameLabel.textContent = companyName || `Empresa ${i}`;
+        }
         
-        // Preços das Empresas
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa1);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa2);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa3);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa4);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa5);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(servico.empresa6);
+        if (valueLabel) {
+            valueLabel.textContent = formatCurrency(companyValue);
+        }
         
-        // Justificativa e Índices
-        if (viewValues[index]) viewValues[index++].textContent = servico.justificativa || '-';
-        if (viewValues[index]) viewValues[index++].textContent = (servico.tempoPassado || '0') + ' dias';
-        if (viewValues[index]) viewValues[index++].textContent = servico.mesAnterior || '-';
-        if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAnterior || '0') + '%';
-        if (viewValues[index]) viewValues[index++].textContent = (servico.indiceAtual || '0') + '%';
+        // Marcar como vazio se não houver valor
+        if (card) {
+            if (!companyValue && companyValue !== 0) {
+                card.classList.add('empty');
+            } else {
+                card.classList.remove('empty');
+            }
+        }
+    }
+    
+    // Preencher justificativa
+    const justificationText = modal.querySelector('.justification-text');
+    if (justificationText) {
+        justificationText.textContent = servico.justificativa || '-';
     }
 
     // Armazenar o ID do serviço para ações futuras

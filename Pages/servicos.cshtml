@@ -60,10 +60,9 @@
         </div>
 
         <div class="filter-group">
-            <label class="filter-label">Filtrar por:</label>
-            <select class="filter-select" id="filterSelect">
-                <option value="">Minhas Cotações</option>
-                <option value="todas">Todas as Cotações</option>
+            <label class="filter-label">Filtrar por Setor:</label>
+            <select class="filter-select" id="sectorFilterSelect">
+                <option value="">Todos os Setores</option>
             </select>
         </div>
     </section>
@@ -111,11 +110,11 @@
                     </select>
                 </div>
             </div>
-        </form>
-        <div class="paste-button-container">
-            <button type="button" class="btn-paste" onclick="pasteFromClipboard()">📋 Colar dados da planilha</button>
-        </div>
-        <form class="modal-form">
+            
+            <div class="paste-button-container">
+                <button type="button" class="btn-paste" onclick="pasteFromClipboard()">📋 Colar dados da planilha</button>
+            </div>
+            
             <div class="form-row">
                 <div class="form-group">
                     <label>I0 Original da Cotação*</label>
@@ -175,31 +174,62 @@
             <h3 class="section-title">Preços das Empresas</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label>Empresa 1</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Nome da Empresa 1</label>
+                    <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" />
                 </div>
                 <div class="form-group">
-                    <label>Empresa 2</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
-                </div>
-                <div class="form-group">
-                    <label>Empresa 3</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Valor Empresa 1</label>
+                    <input type="number" name="empresa1" placeholder="0,00" step="0.01" />
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
-                    <label>Empresa 4</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Nome da Empresa 2</label>
+                    <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" />
                 </div>
                 <div class="form-group">
-                    <label>Empresa 5</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Valor Empresa 2</label>
+                    <input type="number" name="empresa2" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 3</label>
+                    <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" />
                 </div>
                 <div class="form-group">
-                    <label>Empresa 6</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Valor Empresa 3</label>
+                    <input type="number" name="empresa3" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 4</label>
+                    <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+                </div>
+                <div class="form-group">
+                    <label>Valor Empresa 4</label>
+                    <input type="number" name="empresa4" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 5</label>
+                    <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+                </div>
+                <div class="form-group">
+                    <label>Valor Empresa 5</label>
+                    <input type="number" name="empresa5" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 6</label>
+                    <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
+                </div>
+                <div class="form-group">
+                    <label>Valor Empresa 6</label>
+                    <input type="number" name="empresa6" placeholder="0,00" step="0.01" />
                 </div>
             </div>
 
@@ -293,31 +323,62 @@
             <h3 class="section-title">Preços das Empresas</h3>
             <div class="form-row">
                 <div class="form-group">
-                    <label>Empresa 1</label>
-                    <input type="number" placeholder="0,00" step="0.01" value="50000" />
+                    <label>Nome da Empresa 1</label>
+                    <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" value="Sabesp" />
                 </div>
                 <div class="form-group">
-                    <label>Empresa 2</label>
-                    <input type="number" placeholder="0,00" step="0.01" value="55000" />
-                </div>
-                <div class="form-group">
-                    <label>Empresa 3</label>
-                    <input type="number" placeholder="0,00" step="0.01" value="52000" />
+                    <label>Valor Empresa 1</label>
+                    <input type="number" name="empresa1" placeholder="0,00" step="0.01" value="50000" />
                 </div>
             </div>
-
             <div class="form-row">
                 <div class="form-group">
-                    <label>Empresa 4</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Nome da Empresa 2</label>
+                    <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" value="Enel" />
                 </div>
                 <div class="form-group">
-                    <label>Empresa 5</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Valor Empresa 2</label>
+                    <input type="number" name="empresa2" placeholder="0,00" step="0.01" value="55000" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 3</label>
+                    <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" value="Light" />
                 </div>
                 <div class="form-group">
-                    <label>Empresa 6</label>
-                    <input type="number" placeholder="0,00" step="0.01" />
+                    <label>Valor Empresa 3</label>
+                    <input type="number" name="empresa3" placeholder="0,00" step="0.01" value="52000" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 4</label>
+                    <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+                </div>
+                <div class="form-group">
+                    <label>Valor Empresa 4</label>
+                    <input type="number" name="empresa4" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 5</label>
+                    <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+                </div>
+                <div class="form-group">
+                    <label>Valor Empresa 5</label>
+                    <input type="number" name="empresa5" placeholder="0,00" step="0.01" />
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nome da Empresa 6</label>
+                    <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
+                </div>
+                <div class="form-group">
+                    <label>Valor Empresa 6</label>
+                    <input type="number" name="empresa6" placeholder="0,00" step="0.01" />
                 </div>
             </div>
 
@@ -364,27 +425,27 @@
                 <div class="info-grid">
                     <div class="info-card">
                         <span class="info-label">I0 Original</span>
-                        <span class="info-value">fev/2026</span>
+                        <span class="info-value">-</span>
                     </div>
                     <div class="info-card">
                         <span class="info-label">Item</span>
-                        <span class="info-value">Assentamento de tubo não sei o que la la la...</span>
+                        <span class="info-value">-</span>
                     </div>
                     <div class="info-card">
                         <span class="info-label">Unidade</span>
-                        <span class="info-value">Un.</span>
+                        <span class="info-value">-</span>
                     </div>
                     <div class="info-card">
                         <span class="info-label">Adotada</span>
-                        <span class="info-value price">R$ 50.000,00</span>
+                        <span class="info-value price">-</span>
                     </div>
                     <div class="info-card">
                         <span class="info-label">Preço Montagem</span>
-                        <span class="info-value price">R$ 5.000,00</span>
+                        <span class="info-value price">-</span>
                     </div>
                     <div class="info-card highlight">
                         <span class="info-label">Preço Adotado</span>
-                        <span class="info-value price-main">R$ 55.000,00</span>
+                        <span class="info-value price-main">-</span>
                     </div>
                 </div>
             </div>
@@ -395,23 +456,23 @@
                 <div class="stats-grid">
                     <div class="stat-card">
                         <span class="stat-label">Média Adotada</span>
-                        <span class="stat-value">R$ 55.000,00</span>
+                        <span class="stat-value">-</span>
                     </div>
                     <div class="stat-card">
                         <span class="stat-label">Média Saneada</span>
-                        <span class="stat-value">R$ 54.500,00</span>
+                        <span class="stat-value">-</span>
                     </div>
                     <div class="stat-card">
                         <span class="stat-label">Menor Valor</span>
-                        <span class="stat-value">R$ 50.000,00</span>
+                        <span class="stat-value">-</span>
                     </div>
                     <div class="stat-card">
                         <span class="stat-label">Média Aritmética</span>
-                        <span class="stat-value">R$ 52.500,00</span>
+                        <span class="stat-value">-</span>
                     </div>
                     <div class="stat-card">
                         <span class="stat-label">Mediana</span>
-                        <span class="stat-value">R$ 55.000,00</span>
+                        <span class="stat-value">-</span>
                     </div>
                 </div>
             </div>
@@ -420,29 +481,29 @@
             <div class="view-section">
                 <h3>🏪 Cotações das Empresas</h3>
                 <div class="companies-grid">
-                    <div class="company-card">
-                        <span class="company-label">Empresa 1</span>
-                        <span class="company-value">R$ 50.000,00</span>
+                    <div class="company-card" id="company-card-1">
+                        <span class="company-label" id="company-name-1">Empresa 1</span>
+                        <span class="company-value" id="company-value-1">-</span>
                     </div>
-                    <div class="company-card">
-                        <span class="company-label">Empresa 2</span>
-                        <span class="company-value">R$ 55.000,00</span>
+                    <div class="company-card" id="company-card-2">
+                        <span class="company-label" id="company-name-2">Empresa 2</span>
+                        <span class="company-value" id="company-value-2">-</span>
                     </div>
-                    <div class="company-card">
-                        <span class="company-label">Empresa 3</span>
-                        <span class="company-value">R$ 52.000,00</span>
+                    <div class="company-card" id="company-card-3">
+                        <span class="company-label" id="company-name-3">Empresa 3</span>
+                        <span class="company-value" id="company-value-3">-</span>
                     </div>
-                    <div class="company-card empty">
-                        <span class="company-label">Empresa 4</span>
-                        <span class="company-value">-</span>
+                    <div class="company-card" id="company-card-4">
+                        <span class="company-label" id="company-name-4">Empresa 4</span>
+                        <span class="company-value" id="company-value-4">-</span>
                     </div>
-                    <div class="company-card empty">
-                        <span class="company-label">Empresa 5</span>
-                        <span class="company-value">-</span>
+                    <div class="company-card" id="company-card-5">
+                        <span class="company-label" id="company-name-5">Empresa 5</span>
+                        <span class="company-value" id="company-value-5">-</span>
                     </div>
-                    <div class="company-card empty">
-                        <span class="company-label">Empresa 6</span>
-                        <span class="company-value">-</span>
+                    <div class="company-card" id="company-card-6">
+                        <span class="company-label" id="company-name-6">Empresa 6</span>
+                        <span class="company-value" id="company-value-6">-</span>
                     </div>
                 </div>
             </div>
@@ -451,7 +512,7 @@
             <div class="view-section">
                 <h3>📝 Justificativa</h3>
                 <div class="justification-box">
-                    <p class="justification-text">Preço adotado conforme análise de mercado considerando as cotações recebidas das principais empresas fornecedoras e os históricos de preços anteriores.</p>
+                    <p class="justification-text">-</p>
                 </div>
             </div>
 
@@ -503,77 +564,7 @@
         openEditModal();
     }
 
-    // Dados dos serviços (mocados para exemplo)
-    const servicosData = {
-        'fev/2026': {
-            idOriginal: 'fev/2026',
-            item: 'Assentamento de tubo não sei o que la la la...',
-            unidade: 'Un.',
-            adopriceCorrigido: '50000.00',
-            precoMontagem: '5000.00',
-            precoAdotado: '55000.00',
-            mediaAdotada: '55000.00',
-            mediaSaneada: '54500.00',
-            menorValor: '50000.00',
-            mediaAritmetica: '52500.00',
-            mediana: '55000.00',
-            empresa1: '50000.00',
-            empresa2: '55000.00',
-            empresa3: '52000.00',
-            empresa4: '-',
-            empresa5: '-',
-            empresa6: '-',
-            justificativa: 'Preço adotado conforme análise de mercado',
-            tempoPassado: '30',
-            mesAnterior: 'Agosto',
-            indiceAnterior: '105.50',
-            indiceAtual: '108.30'
-        }
-    };
-
     // Função para copiar dados
-    function copyServiceData(serviceId) {
-        const service = servicosData['fev/2026']; // Para este exemplo, sempre copia fev/2026
-        
-        // Dados na ordem exata das colunas da planilha
-        // COLUNAS 6, 8, 14 E 22 DEVEM FICAR VAZIAS
-        const values = [
-            service.idOriginal,                    // 1. I0 original da cotação
-            service.item,                          // 2. ITEM
-            service.unidade,                       // 3. Unidade
-            service.adopriceCorrigido,             // 4. Adotada - Preço de Forn. (corrigido)
-            service.precoMontagem,                 // 5. Preço de montagem / instalação
-            '',                                    // 6. COLUNA VAZIA
-            service.precoAdotado,                  // 7. Preço adotado
-            '',                                    // 8. COLUNA VAZIA
-            service.mediaAdotada,                  // 9. Média adotada
-            service.mediaSaneada,                  // 10. Média Saneada
-            service.menorValor,                    // 11. Menor Valor
-            service.mediaAritmetica,               // 12. Média Aritmética
-            service.mediana,                       // 13. Mediana
-            '',                                    // 14. COLUNA VAZIA
-            (service.empresa1 || '-'),             // 15. EMPRESA 1
-            (service.empresa2 || '-'),             // 16. EMPRESA 2
-            (service.empresa3 || '-'),             // 17. EMPRESA 3
-            (service.empresa4 || '-'),             // 18. EMPRESA 4
-            (service.empresa5 || '-'),             // 19. EMPRESA 5
-            (service.empresa6 || '-'),             // 20. EMPRESA 6
-            service.justificativa,                 // 21. Justificativa do preço adotado
-            '',                                    // 22. COLUNA VAZIA
-            service.tempoPassado,                  // 23. Tempo passado entre os períodos
-            service.mesAnterior,                   // 24. Mês anterior ao inicial
-            service.indiceAnterior,                // 25. Índice do mês anterior ao inicial
-            service.indiceAtual                    // 26. Índice atual
-        ].join('\t');
-
-        navigator.clipboard.writeText(values).then(() => {
-            // Mostrar notificação de sucesso
-            showCopyNotification();
-        }).catch(() => {
-            alert('Erro ao copiar dados. Tente novamente.');
-        });
-    }
-
     // Função para mostrar notificação de cópia
     function showCopyNotification() {
         const notification = document.createElement('div');

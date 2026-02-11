@@ -127,7 +127,7 @@ function setupEventListeners() {
 function setupFilterListeners() {
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
-    const filterSelect = document.getElementById('filterSelect');
+    const sectorFilterSelect = document.getElementById('sectorFilterSelect');
     const btnFiltrar = document.getElementById('btnFiltrar');
     const btnLimpar = document.getElementById('btnLimpar');
 
@@ -143,6 +143,11 @@ function setupFilterListeners() {
     if (sortSelect) {
         sortSelect.addEventListener('change', applyFilters);
     }
+    
+    // Filtro de setor dispara requisição automaticamente
+    if (sectorFilterSelect) {
+        sectorFilterSelect.addEventListener('change', applyFilters);
+    }
 
     // Permitir busca ao digitar (Enter)
     if (searchInput) {
@@ -152,15 +157,47 @@ function setupFilterListeners() {
             }
         });
     }
+    
+    // Popular o select de setores do filtro
+    populateSectorFilter();
+}
+
+async function populateSectorFilter() {
+    const sectorFilterSelect = document.getElementById('sectorFilterSelect');
+    if (!sectorFilterSelect) return;
+    
+    try {
+        const sectors = await api.getSectors();
+        
+        // Limpar opções existentes (exceto "Todos os Setores")
+        sectorFilterSelect.innerHTML = '<option value="">Todos os Setores</option>';
+        
+        // Adicionar setores
+        sectors.forEach(sector => {
+            const option = document.createElement('option');
+            option.value = sector.id;
+            option.textContent = sector.name;
+            sectorFilterSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erro ao carregar setores para filtro:', error);
+    }
 }
 
 async function applyFilters() {
     const search = document.getElementById('searchInput')?.value || '';
     const sort = document.getElementById('sortSelect')?.value || '';
-    const filter = document.getElementById('filterSelect')?.value || '';
+    const sectorId = document.getElementById('sectorFilterSelect')?.value || '';
 
     try {
-        insumosPageData = await api.getInputs(search || null, sort || null, filter || null);
+        // Filtrar localmente por setor se selecionado
+        let filteredData = await api.getInputs(search || null, sort || null, null);
+        
+        if (sectorId) {
+            filteredData = filteredData.filter(item => item.sectorId === parseInt(sectorId));
+        }
+        
+        insumosPageData = filteredData;
         renderInsumosTable(insumosPageData);
         updateSearchIndicator(search);
     } catch (error) {
@@ -188,7 +225,7 @@ function updateSearchIndicator(searchText) {
 function clearFilters() {
     document.getElementById('searchInput').value = '';
     document.getElementById('sortSelect').value = '';
-    document.getElementById('filterSelect').value = '';
+    document.getElementById('sectorFilterSelect').value = '';
     document.getElementById('searchIndicator').style.display = 'none';
     loadInsumos();
 }
@@ -266,11 +303,17 @@ async function saveInsumo() {
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),
         mediana: toNumber(numberInputs[7]?.value),
+        nomeEmpresa1: form.querySelector('input[name="nomeEmpresa1"]')?.value || null,
         empresa1: toNumber(numberInputs[8]?.value),
+        nomeEmpresa2: form.querySelector('input[name="nomeEmpresa2"]')?.value || null,
         empresa2: toNumber(numberInputs[9]?.value),
+        nomeEmpresa3: form.querySelector('input[name="nomeEmpresa3"]')?.value || null,
         empresa3: toNumber(numberInputs[10]?.value),
+        nomeEmpresa4: form.querySelector('input[name="nomeEmpresa4"]')?.value || null,
         empresa4: toNumber(numberInputs[11]?.value),
+        nomeEmpresa5: form.querySelector('input[name="nomeEmpresa5"]')?.value || null,
         empresa5: toNumber(numberInputs[12]?.value),
+        nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
         justificativa: form.querySelector('textarea')?.value || ''
     };
@@ -288,6 +331,12 @@ async function saveInsumo() {
             form.reset();
         });
     } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Erro ao criar insumo: ' + (error.message || 'Erro desconhecido'),
+            confirmButtonColor: '#ff4444'
+        });
     }
 }
 
@@ -308,11 +357,19 @@ async function editInsumo(id) {
     const sectorSelect = form.querySelector('select[name="sectorId"]');
     if (sectorSelect) sectorSelect.value = insumo.sectorId;
     
-    // Preencher campos de texto
-    const textInputs = form.querySelectorAll('input[type="text"]');
+    // Preencher campos de texto (I0, Item, Unidade)
+    const textInputs = form.querySelectorAll('input[type="text"]:not([name^="nomeEmpresa"])');
     textInputs[0].value = insumo.originalId;
     textInputs[1].value = insumo.item;
     textInputs[2].value = insumo.unit;
+    
+    // Preencher nomes das empresas
+    form.querySelector('input[name="nomeEmpresa1"]').value = insumo.nomeEmpresa1 || '';
+    form.querySelector('input[name="nomeEmpresa2"]').value = insumo.nomeEmpresa2 || '';
+    form.querySelector('input[name="nomeEmpresa3"]').value = insumo.nomeEmpresa3 || '';
+    form.querySelector('input[name="nomeEmpresa4"]').value = insumo.nomeEmpresa4 || '';
+    form.querySelector('input[name="nomeEmpresa5"]').value = insumo.nomeEmpresa5 || '';
+    form.querySelector('input[name="nomeEmpresa6"]').value = insumo.nomeEmpresa6 || '';
     
     // Preencher campos de número
     const numberInputs = form.querySelectorAll('input[type="number"]');
@@ -388,11 +445,17 @@ async function updateInsumo() {
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),
         mediana: toNumber(numberInputs[7]?.value),
+        nomeEmpresa1: form.querySelector('input[name="nomeEmpresa1"]')?.value || null,
         empresa1: toNumber(numberInputs[8]?.value),
+        nomeEmpresa2: form.querySelector('input[name="nomeEmpresa2"]')?.value || null,
         empresa2: toNumber(numberInputs[9]?.value),
+        nomeEmpresa3: form.querySelector('input[name="nomeEmpresa3"]')?.value || null,
         empresa3: toNumber(numberInputs[10]?.value),
+        nomeEmpresa4: form.querySelector('input[name="nomeEmpresa4"]')?.value || null,
         empresa4: toNumber(numberInputs[11]?.value),
+        nomeEmpresa5: form.querySelector('input[name="nomeEmpresa5"]')?.value || null,
         empresa5: toNumber(numberInputs[12]?.value),
+        nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
         justificativa: form.querySelector('textarea')?.value || ''
     };
@@ -409,6 +472,12 @@ async function updateInsumo() {
             loadInsumos();
         });
     } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Erro ao atualizar insumo: ' + (error.message || 'Erro desconhecido'),
+            confirmButtonColor: '#ff4444'
+        });
     }
 }
 
@@ -434,33 +503,47 @@ async function copyInsumo(id) {
     }
 
     try {
-        // Dados na ordem exata das colunas da planilha
-        // COLUNAS 6, 8, 14 DEVEM FICAR VAZIAS
-        const values = [
-            insumo.originalId,                    // 1. I0 Original (jan/00)
-            insumo.item,                          // 2. ITEM
-            insumo.unit,                          // 3. Unidade
-            insumo.priceFornecedor || '',         // 4. Preço Fornecedor
-            insumo.precoMontagem || '',           // 5. Preço Montagem
-            '',                                   // 6. COLUNA VAZIA
-            insumo.precoAdotado || '',            // 7. Preço Adotado
-            '',                                   // 8. COLUNA VAZIA
-            insumo.mediaAdotada || '',            // 9. Média Adotada
-            insumo.mediaSaneada || '',            // 10. Média Saneada
-            insumo.menorValor || '',              // 11. Menor Valor
-            insumo.mediaAritmetica || '',         // 12. Média Aritmética
-            insumo.mediana || '',                 // 13. Mediana
-            '',                                   // 14. COLUNA VAZIA
-            insumo.empresa1 || '',                // 15. EMPRESA 1
-            insumo.empresa2 || '',                // 16. EMPRESA 2
-            insumo.empresa3 || '',                // 17. EMPRESA 3
-            insumo.empresa4 || '',                // 18. EMPRESA 4
-            insumo.empresa5 || '',                // 19. EMPRESA 5
-            insumo.empresa6 || '',                // 20. EMPRESA 6
-            insumo.justificativa || ''            // 21. Justificativa
+        // PRIMEIRA LINHA: Nomes das empresas
+        const companyNamesLine = [
+            '', '', '', '', '', '', '', '', '', '', '', '', '', '', // 0-13: vazias
+            (insumo.nomeEmpresa1 || ''),  // 14
+            (insumo.nomeEmpresa2 || ''),  // 15
+            (insumo.nomeEmpresa3 || ''),  // 16
+            (insumo.nomeEmpresa4 || ''),  // 17
+            (insumo.nomeEmpresa5 || ''),  // 18
+            (insumo.nomeEmpresa6 || ''),  // 19
+            ''  // 20: Justificativa (vazia)
         ].join('\t');
+        
+        // SEGUNDA LINHA: Valores
+        const valuesLine = [
+            insumo.originalId,                    // 0. I0 Original (jan/00)
+            insumo.item,                          // 1. ITEM
+            insumo.unit,                          // 2. Unidade
+            insumo.priceFornecedor || '',         // 3. Preço Fornecedor
+            insumo.precoMontagem || '',           // 4. Preço Montagem
+            '',                                   // 5. COLUNA VAZIA
+            insumo.precoAdotado || '',            // 6. Preço Adotado
+            '',                                   // 7. COLUNA VAZIA
+            insumo.mediaAdotada || '',            // 8. Média Adotada
+            insumo.mediaSaneada || '',            // 9. Média Saneada
+            insumo.menorValor || '',              // 10. Menor Valor
+            insumo.mediaAritmetica || '',         // 11. Média Aritmética
+            insumo.mediana || '',                 // 12. Mediana
+            '',                                   // 13. COLUNA VAZIA
+            insumo.empresa1 || '',                // 14. EMPRESA 1
+            insumo.empresa2 || '',                // 15. EMPRESA 2
+            insumo.empresa3 || '',                // 16. EMPRESA 3
+            insumo.empresa4 || '',                // 17. EMPRESA 4
+            insumo.empresa5 || '',                // 18. EMPRESA 5
+            insumo.empresa6 || '',                // 19. EMPRESA 6
+            insumo.justificativa || ''            // 20. Justificativa
+        ].join('\t');
+        
+        // Juntar as duas linhas
+        const clipboardData = companyNamesLine + '\n' + valuesLine;
 
-        await navigator.clipboard.writeText(values);
+        await navigator.clipboard.writeText(clipboardData);
         showCopyNotification();
     } catch (error) {
         Swal.fire({
@@ -516,43 +599,63 @@ function viewInsumo(id) {
         });
     };
 
-    // Obter todos os elementos .view-value
-    const viewValues = modal.querySelectorAll('.view-value');
-
-    // Mapear valores aos elementos
-    if (viewValues.length > 0) {
-        let index = 0;
+    // Preencher seção de informações básicas
+    const infoValues = modal.querySelectorAll('.info-value');
+    if (infoValues.length >= 6) {
+        infoValues[0].textContent = insumo.originalId || '-';  // I0 Original
+        infoValues[1].textContent = insumo.item || '-';        // Item
+        infoValues[2].textContent = insumo.unit || '-';        // Unidade
+        infoValues[3].textContent = formatCurrency(insumo.priceFornecedor);  // Adotada
+        infoValues[4].textContent = formatCurrency(insumo.precoMontagem);    // Preço Montagem
+    }
+    
+    // Preço Adotado (price-main)
+    const priceMain = modal.querySelector('.price-main');
+    if (priceMain) {
+        priceMain.textContent = formatCurrency(insumo.precoAdotado);
+    }
+    
+    // Preencher estatísticas
+    const statValues = modal.querySelectorAll('.stat-value');
+    if (statValues.length >= 5) {
+        statValues[0].textContent = formatCurrency(insumo.mediaAdotada);      // Média Adotada
+        statValues[1].textContent = formatCurrency(insumo.mediaSaneada);      // Média Saneada
+        statValues[2].textContent = formatCurrency(insumo.menorValor);        // Menor Valor
+        statValues[3].textContent = formatCurrency(insumo.mediaAritmetica);   // Média Aritmética
+        statValues[4].textContent = formatCurrency(insumo.mediana);           // Mediana
+    }
+    
+    // Atualizar nomes e valores das empresas nos cards
+    for (let i = 1; i <= 6; i++) {
+        const nameLabel = modal.querySelector(`#company-name-${i}`);
+        const valueLabel = modal.querySelector(`#company-value-${i}`);
+        const card = modal.querySelector(`#company-card-${i}`);
         
-        // Informações Básicas
-        if (viewValues[index]) viewValues[index++].textContent = insumo.originalId || '-';
-        if (viewValues[index]) viewValues[index++].textContent = insumo.item || '-';
-        if (viewValues[index]) viewValues[index++].textContent = insumo.unit || '-';
-        if (viewValues[index]) viewValues[index++].textContent = 'Você'; // Responsável
+        const companyName = insumo[`nomeEmpresa${i}`];
+        const companyValue = insumo[`empresa${i}`];
         
-        // Preços
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.priceFornecedor);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.precoMontagem);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.precoAdotado);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediaAdotada);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediaSaneada);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.menorValor);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediaAritmetica);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.mediana);
+        if (nameLabel) {
+            nameLabel.textContent = companyName || `Empresa ${i}`;
+        }
         
-        // Preços das Empresas
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa1);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa2);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa3);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa4);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa5);
-        if (viewValues[index]) viewValues[index++].textContent = formatCurrency(insumo.empresa6);
+        if (valueLabel) {
+            valueLabel.textContent = formatCurrency(companyValue);
+        }
         
-        // Justificativa e Índices
-        if (viewValues[index]) viewValues[index++].textContent = insumo.justificativa || '-';
-        if (viewValues[index]) viewValues[index++].textContent = (insumo.tempoPassado || '0') + ' dias';
-        if (viewValues[index]) viewValues[index++].textContent = insumo.mesAnterior || '-';
-        if (viewValues[index]) viewValues[index++].textContent = (insumo.indiceAnterior || '0') + '%';
-        if (viewValues[index]) viewValues[index++].textContent = (insumo.indiceAtual || '0') + '%';
+        // Marcar como vazio se não houver valor
+        if (card) {
+            if (!companyValue && companyValue !== 0) {
+                card.classList.add('empty');
+            } else {
+                card.classList.remove('empty');
+            }
+        }
+    }
+    
+    // Preencher justificativa
+    const justificationText = modal.querySelector('.justification-text');
+    if (justificationText) {
+        justificationText.textContent = insumo.justificativa || '-';
     }
 
     // Armazenar o ID do insumo para ações futuras
