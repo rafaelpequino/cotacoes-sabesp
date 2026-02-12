@@ -19,20 +19,20 @@ cd CotacoesEPC
 
 ### 2. Configurar variáveis de ambiente
 
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
+Edite o arquivo `appsettings.json` na raiz do projeto com suas configurações:
 
-```env
-# Database Configuration
-ConnectionStrings__DefaultConnection=Server=(localdb)\mssqllocaldb;Database=CotacoesEPC;Trusted_Connection=true;
-
-# JWT Configuration
-Jwt__Key=sua-chave-secreta-com-no-minimo-32-caracteres-para-hs256
-Jwt__Issuer=CotacoesEPC
-Jwt__Audience=CotacoesEPCUsers
-Jwt__ExpirationMinutes=1440
-
-# Environment
-ASPNETCORE_ENVIRONMENT=Development
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=CotacoesEPC;Trusted_Connection=true;"
+  },
+  "Jwt": {
+    "Key": "sua-chave-secreta-com-no-minimo-32-caracteres-para-hs256",
+    "Issuer": "CotacoesEPC",
+    "Audience": "CotacoesEPCUsers",
+    "ExpirationMinutes": 1440
+  }
+}
 ```
 
 ### 3. Instalar dependências

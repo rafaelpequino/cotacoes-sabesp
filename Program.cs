@@ -4,15 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using DotNetEnv;
-
-// Load .env file
-DotNetEnv.Env.Load();
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add environment variables to configuration
-builder.Configuration.AddEnvironmentVariables();
 
 // Add database
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
