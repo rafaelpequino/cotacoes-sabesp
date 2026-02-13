@@ -13,3 +13,36 @@ document.addEventListener('click', function(event) {
     }
 });
 
+// Menu hamburguer mobile
+document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const menu = document.querySelector('.menu');
+    
+    if (menuToggle && menu) {
+        menuToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            menu.classList.toggle('active');
+            
+            // Animar ícone do hamburguer
+            const icon = menuToggle.textContent;
+            menuToggle.textContent = menu.classList.contains('active') ? '✕' : '☰';
+        });
+        
+        // Fechar menu ao clicar em um item
+        const menuItems = menu.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function() {
+                menu.classList.remove('active');
+                menuToggle.textContent = '☰';
+            });
+        });
+        
+        // Fechar menu ao clicar fora
+        document.addEventListener('click', function(event) {
+            if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
+                menu.classList.remove('active');
+                menuToggle.textContent = '☰';
+            }
+        });
+    }
+});

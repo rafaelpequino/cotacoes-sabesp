@@ -16,6 +16,8 @@
         <img src="~/images/sabesp.svg" alt="sabesp" class="logo" />
     </div>
 
+    <button class="menu-toggle" aria-label="Menu">☰</button>
+
     <nav class="menu">
         <a class="menu-item" href="/dashboard">Dashboard</a>
         <a class="menu-item active" href="/servicos">Serviços</a>
@@ -116,21 +118,21 @@
             </div>
             
             <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Item*</label>
+                    <input type="text" placeholder="Descrição do item" required />
+                </div>
+            </div>
+            
+            <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>I0 Original da Cotação*</label>
                     <input type="text" placeholder="Ex: jan/00" required />
                 </div>
                 <div class="form-group">
-                    <label>Item*</label>
-                    <input type="text" placeholder="Descrição do item" required />
-                </div>
-                <div class="form-group">
                     <label>Unidade*</label>
                     <input type="text" placeholder="Ex: Un., m², Kg" required />
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="form-group">
                     <label>Adotada - Preço de Forn. (corrigido)*</label>
                     <input type="number" placeholder="0,00" step="0.01" required />
@@ -139,13 +141,13 @@
                     <label>Preço de montagem / instalação*</label>
                     <input type="number" placeholder="0,00" step="0.01" required />
                 </div>
+            </div>
+
+            <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>Preço adotado*</label>
                     <input type="number" placeholder="0,00" step="0.01" required />
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="form-group">
                     <label>Média adotada</label>
                     <input type="number" placeholder="0,00" step="0.01" />
@@ -160,7 +162,7 @@
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>Média Aritmética</label>
                     <input type="number" placeholder="0,00" step="0.01" />
@@ -172,64 +174,70 @@
             </div>
 
             <h3 class="section-title">Preços das Empresas</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 1</label>
-                    <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" />
+            <div class="form-row form-row-4col">
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 1</label>
+                        <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 1</label>
+                        <input type="number" name="empresa1" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Valor Empresa 1</label>
-                    <input type="number" name="empresa1" placeholder="0,00" step="0.01" />
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 2</label>
-                    <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" />
-                </div>
-                <div class="form-group">
-                    <label>Valor Empresa 2</label>
-                    <input type="number" name="empresa2" placeholder="0,00" step="0.01" />
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 3</label>
-                    <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" />
-                </div>
-                <div class="form-group">
-                    <label>Valor Empresa 3</label>
-                    <input type="number" name="empresa3" placeholder="0,00" step="0.01" />
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 2</label>
+                        <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 2</label>
+                        <input type="number" name="empresa2" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 4</label>
-                    <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+            <div class="form-row form-row-4col">
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 3</label>
+                        <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 3</label>
+                        <input type="number" name="empresa3" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Valor Empresa 4</label>
-                    <input type="number" name="empresa4" placeholder="0,00" step="0.01" />
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 4</label>
+                        <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 4</label>
+                        <input type="number" name="empresa4" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 5</label>
-                    <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+            <div class="form-row form-row-4col">
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 5</label>
+                        <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 5</label>
+                        <input type="number" name="empresa5" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Valor Empresa 5</label>
-                    <input type="number" name="empresa5" placeholder="0,00" step="0.01" />
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 6</label>
-                    <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
-                </div>
-                <div class="form-group">
-                    <label>Valor Empresa 6</label>
-                    <input type="number" name="empresa6" placeholder="0,00" step="0.01" />
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 6</label>
+                        <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 6</label>
+                        <input type="number" name="empresa6" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
             </div>
 
@@ -275,21 +283,21 @@
                 </div>
             </div>
             <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Item*</label>
+                    <input type="text" placeholder="Descrição do item" value="Assentamento de tubo não sei o que la la la..." required />
+                </div>
+            </div>
+            
+            <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>I0 Original da Cotação*</label>
                     <input type="text" placeholder="Ex: jan/00" value="jan/00" required />
                 </div>
                 <div class="form-group">
-                    <label>Item*</label>
-                    <input type="text" placeholder="Descrição do item" value="Assentamento de tubo não sei o que la la la..." required />
-                </div>
-                <div class="form-group">
                     <label>Unidade*</label>
                     <input type="text" placeholder="Ex: Un., m², Kg" value="Un." required />
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="form-group">
                     <label>Adotada - Preço de Forn. (corrigido)*</label>
                     <input type="number" placeholder="0,00" step="0.01" value="50000" required />
@@ -298,13 +306,13 @@
                     <label>Preço de montagem / instalação*</label>
                     <input type="number" placeholder="0,00" step="0.01" value="5000" required />
                 </div>
+            </div>
+
+            <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>Preço adotado*</label>
                     <input type="number" placeholder="0,00" step="0.01" value="55000" required />
                 </div>
-            </div>
-
-            <div class="form-row">
                 <div class="form-group">
                     <label>Média adotada</label>
                     <input type="number" placeholder="0,00" step="0.01" value="55000" />
@@ -319,7 +327,7 @@
                 </div>
             </div>
 
-            <div class="form-row">
+            <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>Média Aritmética</label>
                     <input type="number" placeholder="0,00" step="0.01" value="52500" />
@@ -331,64 +339,70 @@
             </div>
 
             <h3 class="section-title">Preços das Empresas</h3>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 1</label>
-                    <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" value="Sabesp" />
+            <div class="form-row form-row-4col">
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 1</label>
+                        <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" value="Sabesp" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 1</label>
+                        <input type="number" name="empresa1" placeholder="0,00" step="0.01" value="50000" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Valor Empresa 1</label>
-                    <input type="number" name="empresa1" placeholder="0,00" step="0.01" value="50000" />
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 2</label>
-                    <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" value="Enel" />
-                </div>
-                <div class="form-group">
-                    <label>Valor Empresa 2</label>
-                    <input type="number" name="empresa2" placeholder="0,00" step="0.01" value="55000" />
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 3</label>
-                    <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" value="Light" />
-                </div>
-                <div class="form-group">
-                    <label>Valor Empresa 3</label>
-                    <input type="number" name="empresa3" placeholder="0,00" step="0.01" value="52000" />
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 2</label>
+                        <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" value="Enel" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 2</label>
+                        <input type="number" name="empresa2" placeholder="0,00" step="0.01" value="55000" />
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 4</label>
-                    <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+            <div class="form-row form-row-4col">
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 3</label>
+                        <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" value="Light" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 3</label>
+                        <input type="number" name="empresa3" placeholder="0,00" step="0.01" value="52000" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Valor Empresa 4</label>
-                    <input type="number" name="empresa4" placeholder="0,00" step="0.01" />
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 4</label>
+                        <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 4</label>
+                        <input type="number" name="empresa4" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 5</label>
-                    <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+            <div class="form-row form-row-4col">
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 5</label>
+                        <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 5</label>
+                        <input type="number" name="empresa5" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Valor Empresa 5</label>
-                    <input type="number" name="empresa5" placeholder="0,00" step="0.01" />
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Nome da Empresa 6</label>
-                    <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
-                </div>
-                <div class="form-group">
-                    <label>Valor Empresa 6</label>
-                    <input type="number" name="empresa6" placeholder="0,00" step="0.01" />
+                <div class="form-group-pair">
+                    <div class="form-group">
+                        <label>Nome da Empresa 6</label>
+                        <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
+                    </div>
+                    <div class="form-group">
+                        <label>Valor Empresa 6</label>
+                        <input type="number" name="empresa6" placeholder="0,00" step="0.01" />
+                    </div>
                 </div>
             </div>
 

@@ -34,6 +34,7 @@
             padding: 40px;
             max-width: 450px;
             width: 100%;
+            margin: 20px auto;
         }
 
         .logo {
@@ -196,6 +197,112 @@
             height: 20px;
             animation: spin 1s linear infinite;
             display: inline-block;
+        }
+
+        /* Responsividade Mobile */
+        @@media (max-width: 480px) {
+            body {
+                padding: 12px;
+                align-items: flex-start;
+            }
+
+            .register-container {
+                padding: 28px 20px;
+                border-radius: 12px;
+                margin: 12px auto;
+            }
+
+            .logo img {
+                max-width: 120px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+                margin-bottom: 24px;
+            }
+
+            .form-label {
+                font-size: 13px;
+                margin-bottom: 6px;
+            }
+
+            .form-control {
+                padding: 11px 14px;
+                font-size: 16px; /* Previne zoom em iOS */
+            }
+
+            .form-text {
+                font-size: 11px;
+            }
+
+            .btn-register {
+                padding: 13px;
+                font-size: 15px;
+            }
+
+            .login-link {
+                margin-top: 16px;
+                font-size: 14px;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            .password-toggle .toggle-btn {
+                right: 10px;
+                font-size: 14px;
+            }
+        }
+
+        /* Tablets */
+        @@media (max-width: 768px) and (min-width: 481px) {
+            .register-container {
+                padding: 36px 32px;
+                max-width: 420px;
+            }
+        }
+
+        /* Landscape mobile */
+        @@media (max-height: 650px) and (orientation: landscape) {
+            body {
+                padding: 8px;
+                align-items: flex-start;
+            }
+
+            .register-container {
+                margin: 12px auto;
+                padding: 20px;
+            }
+
+            .logo {
+                margin-bottom: 16px;
+            }
+
+            .logo img {
+                max-width: 100px;
+            }
+
+            .subtitle {
+                font-size: 13px;
+                margin-bottom: 16px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .form-label {
+                margin-bottom: 4px;
+            }
+
+            .btn-register {
+                margin-top: 6px;
+            }
+
+            .login-link {
+                margin-top: 12px;
+            }
         }
     </style>
 </head>

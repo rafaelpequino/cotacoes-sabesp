@@ -13,10 +13,33 @@
     align-items: center;
     padding: 12px 4vw;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
 }
 
 .logo {
     width: 130px;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* Menu hamburguer */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 28px;
+    cursor: pointer;
+    padding: 4px 8px;
+    color: #333;
+    transition: color 0.2s;
+}
+
+.menu-toggle:hover {
+    color: #19d6ff;
 }
 
 .menu {
@@ -31,6 +54,7 @@
     padding: 8px 16px;
     border-radius: 24px;
     transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
 }
 
     .menu-item:hover {
@@ -454,15 +478,21 @@
     padding: 24px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
 }
 
     .servicos-table table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 800px;
     }
 
     .servicos-table thead {
         background: #f8f8f8;
+        position: sticky;
+        top: 0;
+        z-index: 10;
     }
 
     .servicos-table th {
@@ -472,6 +502,7 @@
         font-weight: 600;
         color: #333;
         border-bottom: 2px solid #eee;
+        white-space: nowrap;
     }
 
     .servicos-table td {
@@ -491,6 +522,22 @@
 
     .servicos-table tbody tr:last-child td {
         border-bottom: none;
+    }
+
+    /* Indicador de scroll em mobile */
+    .servicos-table::after {
+        content: '← Deslize para ver mais →';
+        display: none;
+        position: absolute;
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        color: #999;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 4px 12px;
+        border-radius: 12px;
+        pointer-events: none;
     }
 
 .actions {
@@ -530,6 +577,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
+    overflow-y: auto;
 }
 
 .modal-content {
@@ -540,6 +588,15 @@
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    margin: auto;
+    position: relative;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Evitar que o body role quando modal está aberto */
+body.modal-open {
+    overflow: hidden;
 }
 
 .modal-header {
@@ -548,7 +605,11 @@
     align-items: center;
     padding: 24px;
     border-bottom: 1px solid #eee;
-    position: relative;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+    border-radius: 16px 16px 0 0;
 }
 
     .modal-header h2 {
@@ -569,12 +630,19 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.2s;
+    transition: color 0.2s, transform 0.2s, background 0.2s;
     flex-shrink: 0;
+    border-radius: 50%;
 }
 
     .modal-close:hover {
         color: #333;
+        background: #f5f5f5;
+        transform: rotate(90deg);
+    }
+
+    .modal-close:active {
+        transform: rotate(90deg) scale(0.95);
     }
 
 .modal-form {
@@ -586,6 +654,10 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 20px;
+}
+
+.form-row-4col {
+    grid-template-columns: repeat(4, 1fr);
 }
 
 .form-group {
@@ -600,6 +672,29 @@
         color: #333;
     }
 
+/* Agrupamento visual para pares de empresa (nome + valor) */
+.form-group-pair {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    padding: 16px;
+    background: #f8fafb;
+    border: 2px solid #e3e8ef;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.form-group-pair:hover {
+    border-color: #19d6ff;
+    background: #f0f9ff;
+    box-shadow: 0 2px 8px rgba(25, 214, 255, 0.1);
+}
+
+.form-group-pair .form-group {
+    margin: 0;
+}
+
     .form-group input,
     .form-group textarea,
     .form-group select {
@@ -608,7 +703,9 @@
         border-radius: 8px;
         font-size: 14px;
         font-family: inherit;
-        transition: border-color 0.2s;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        width: 100%;
+        box-sizing: border-box;
     }
 
     .form-group input:focus,
@@ -628,6 +725,8 @@
     font-weight: 600;
     margin: 24px 0 16px;
     color: #333;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 8px;
 }
 
 .modal-actions {
@@ -636,6 +735,12 @@
     justify-content: flex-end;
     padding-top: 16px;
     border-top: 1px solid #eee;
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    border-radius: 0 0 16px 16px;
+    margin: 0 -24px -24px -24px;
+    padding: 16px 24px;
 }
 
 .btn-cancel,
@@ -659,6 +764,10 @@
         color: #333;
     }
 
+    .btn-cancel:active {
+        transform: scale(0.98);
+    }
+
 .btn-submit {
     background: #19d6ff;
     color: #fff;
@@ -667,6 +776,17 @@
     .btn-submit:hover {
         background: #00bfff;
         transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(25, 214, 255, 0.3);
+    }
+
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+
+    .btn-submit:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
     }
 
 /* MODAL VISUALIZAR */
@@ -1246,24 +1366,169 @@
 }
 
 /* RESPONSIVO */
-@media (max-width: 768px) {
-    .menu {
-        display: none;
+/* Desktop grande */
+@media (min-width: 1400px) {
+    .dashboard-container {
+        padding: 32px 8vw;
     }
 
+    .modal-content {
+        max-width: 1000px;
+    }
+}
+
+/* Tablets grandes e desktop pequeno */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .companies-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .dashboard-header {
+        padding: 12px 3vw;
+    }
+
+    .dashboard-container {
+        padding: 24px 4vw;
+    }
+
+    .form-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-row-4col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .logo {
+        width: 110px;
+    }
+
+    .menu {
+        gap: 16px;
+    }
+
+    .menu-item {
+        padding: 7px 14px;
+        font-size: 14px;
+    }
+
+    .card {
+        min-width: 220px;
+    }
+
+    .servicos-table th,
+    .servicos-table td {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+}
+
+/* Tablets pequenos */
+@media (max-width: 900px) {
+    .search-group {
+        flex-wrap: wrap;
+    }
+
+    .servicos-filters {
+        gap: 12px;
+    }
+}
+
+/* Mobile e Tablets menores */
+@media (max-width: 768px) {
+    /* Header mobile com menu hamburguer */
+    .dashboard-header {
+        padding: 10px 16px;
+        flex-wrap: wrap;
+    }
+
+    .logo-area {
+        flex: 1;
+    }
+
+    .logo {
+        width: 100px;
+    }
+
+    .menu-toggle {
+        display: block;
+        order: 2;
+    }
+
+    .user-area {
+        order: 3;
+    }
+
+    .menu {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        padding: 12px;
+        gap: 8px;
+        z-index: 100;
+        order: 4;
+        width: 100%;
+        animation: slideDown 0.3s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .menu.active {
+        display: flex;
+    }
+
+    .menu-item {
+        padding: 12px 16px;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    /* Container */
+    .dashboard-container {
+        padding: 20px 16px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    /* Cards */
     .cards {
         flex-direction: column;
         gap: 12px;
     }
 
     .card {
-        padding: 16px;
+        padding: 20px 16px;
+        min-width: 100%;
     }
 
     .card h3 {
         font-size: 24px;
     }
 
+    /* Tables */
     .table-card {
         padding: 16px;
     }
@@ -1272,6 +1537,7 @@
         grid-template-columns: 1fr;
     }
 
+    /* Serviços/Insumos/Planilhas */
     .servicos-header {
         flex-direction: column;
         gap: 16px;
@@ -1280,14 +1546,27 @@
 
     .btn-nova-cotacao {
         justify-content: center;
+        width: 100%;
     }
 
     .servicos-filters {
         flex-direction: column;
+        gap: 12px;
+    }
+
+    .search-group {
+        flex-direction: column;
+        min-width: 100%;
+        gap: 8px;
     }
 
     .search-input {
         min-width: 100%;
+    }
+
+    .btn-filtrar,
+    .btn-limpar {
+        width: 100%;
     }
 
     .filter-group {
@@ -1298,19 +1577,24 @@
         width: 100%;
     }
 
-    .btn-limpar {
-        width: 100%;
+    .servicos-table {
+        padding: 12px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
-    .servicos-table {
-        padding: 16px;
-        overflow-x: auto;
+    .servicos-table::after {
+        display: block;
+    }
+
+    .servicos-table table {
+        min-width: 800px;
     }
 
     .servicos-table th,
     .servicos-table td {
-        padding: 8px 12px;
-        font-size: 12px;
+        padding: 10px 12px;
+        font-size: 13px;
     }
 
     .actions {
@@ -1322,17 +1606,95 @@
         padding: 4px;
     }
 
+    /* Modais */
+    .form-row,
+    .form-row-4col {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group.full-width {
+        grid-column: 1;
+    }
+
+    /* Pares de empresa em mobile: empilhar verticalmente */
+    .form-group-pair {
+        grid-column: span 1;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .view-row {
+        grid-template-columns: 1fr;
+    }
+
+    .modal {
+        padding: 8px;
+    }
+
+    .modal-content {
+        max-height: 95vh;
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    .modal-header {
+        padding: 16px;
+    }
+
+    .modal-header h2 {
+        flex: 1;
+        font-size: 18px;
+    }
+
+    .modal-form {
+        padding: 16px;
+    }
+
+    .modal-view-content {
+        padding: 16px;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+        gap: 8px;
+    }
+
+    .btn-cancel,
+    .btn-submit {
+        width: 100%;
+    }
+
+    .copy-notification,
+    .paste-notification {
+        bottom: 10px;
+        left: 10px;
+        right: 10px;
+        transform: translateX(0) translateY(120px);
+        width: calc(100% - 20px);
+    }
+
+    .copy-notification.show,
+    .paste-notification.show {
+        transform: translateX(0) translateY(0);
+    }
+
+    /* Upload de arquivos */
     .file-upload-area {
         padding: 20px 16px;
     }
 
     .upload-icon {
-        width: 40px;
-        height: 40px;
+        width: 36px;
+        height: 36px;
     }
 
     .upload-text {
         font-size: 14px;
+    }
+
+    .upload-hint {
+        font-size: 11px;
     }
 
     .share-link-container {
@@ -1361,6 +1723,7 @@
     .current-file-info {
         flex-direction: column;
         align-items: flex-start;
+        gap: 8px;
     }
 
     /* User menu responsivo */
@@ -1380,5 +1743,267 @@
 
     .user-area .dropdown-menu {
         min-width: 180px;
+    }
+
+    /* Seção de visualização */
+    .view-row-header {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .companies-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .section-title {
+        font-size: 15px;
+    }
+
+    .view-section h3 {
+        font-size: 15px;
+    }
+}
+
+/* Mobile médio */
+@media (max-width: 600px) {
+    .servicos-table table {
+        min-width: 700px;
+    }
+
+    .info-card,
+    .stat-card,
+    .company-card {
+        padding: 12px;
+    }
+
+    .info-label,
+    .stat-label,
+    .company-label {
+        font-size: 10px;
+    }
+
+    .info-value {
+        font-size: 14px;
+    }
+
+    .stat-value {
+        font-size: 13px;
+    }
+
+    .company-value {
+        font-size: 15px;
+    }
+}
+
+/* Mobile pequeno */
+@media (max-width: 480px) {
+    .dashboard-header {
+        padding: 8px 12px;
+    }
+
+    .logo {
+        width: 90px;
+    }
+
+    .dashboard-container {
+        padding: 16px 12px;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .card {
+        padding: 16px 12px;
+    }
+
+    .card h3 {
+        font-size: 22px;
+    }
+
+    .card p {
+        font-size: 13px;
+    }
+
+    .servicos-table {
+        padding: 8px;
+    }
+
+    .servicos-table table {
+        min-width: 650px;
+    }
+
+    .servicos-table th,
+    .servicos-table td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+    .modal-content {
+        border-radius: 8px;
+    }
+
+    .modal-header,
+    .modal-form,
+    .modal-view-content {
+        padding: 12px;
+    }
+
+    .btn-nova-cotacao {
+        padding: 11px 20px;
+        font-size: 13px;
+    }
+
+    .info-grid,
+    .stats-grid,
+    .companies-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .info-card,
+    .stat-card,
+    .company-card {
+        padding: 14px;
+    }
+
+    .section-header {
+        padding: 18px;
+    }
+
+    .justification-box {
+        padding: 16px;
+    }
+
+    .user-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
+    }
+
+    .form-group label {
+        font-size: 12px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        font-size: 16px; /* Previne zoom em iOS */
+    }
+}
+
+/* Mobile muito pequeno */
+@media (max-width: 360px) {
+    .logo {
+        width: 80px;
+    }
+
+    .title {
+        font-size: 16px;
+    }
+
+    .card h3 {
+        font-size: 20px;
+    }
+
+    .servicos-table table {
+        min-width: 600px;
+    }
+
+    .btn-nova-cotacao {
+        padding: 10px 16px;
+        font-size: 12px;
+    }
+}
+
+/* Landscape mobile pequeno */
+@media (max-height: 500px) and (orientation: landscape) {
+    .dashboard-header {
+        padding: 6px 12px;
+    }
+
+    .logo {
+        width: 80px;
+    }
+
+    .menu-item {
+        padding: 6px 12px;
+        font-size: 13px;
+    }
+
+    .dashboard-container {
+        padding: 12px;
+    }
+
+    .modal-content {
+        max-height: 98vh;
+    }
+
+    .modal-header {
+        padding: 10px 12px;
+    }
+
+    .modal-form,
+    .modal-view-content {
+        padding: 10px 12px;
+    }
+
+    .section-header {
+        padding: 12px;
+    }
+}
+
+/* Tablets em landscape */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
+    .form-row,
+    .form-row-4col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .info-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .companies-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* Print styles */
+@media print {
+    .dashboard-header,
+    .servicos-filters,
+    .btn-nova-cotacao,
+    .actions,
+    .menu-toggle {
+        display: none !important;
+    }
+
+    .dashboard-container {
+        padding: 0;
+    }
+
+    .servicos-table {
+        box-shadow: none;
+        border: 1px solid #ddd;
+    }
+
+    body {
+        background: #fff;
     }
 }
