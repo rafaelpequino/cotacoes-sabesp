@@ -240,6 +240,16 @@
                 </div>
             </div>
 
+            <h3 class="section-title">Anexos (PDFs)</h3>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Adicionar Anexos PDF</label>
+                    <input type="file" id="createAttachmentInput" accept=".pdf" multiple style="margin-bottom: 10px;" />
+                    <p style="font-size: 12px; color: #666; margin: 5px 0;">Máximo 10MB por arquivo. Você será solicitado a descrever cada arquivo.</p>
+                    <div id="createAttachmentsList"></div>
+                </div>
+            </div>
+
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeCreateModal()">Cancelar</button>
                 <button type="submit" class="btn-submit">Salvar</button>
@@ -389,6 +399,16 @@
                 </div>
             </div>
 
+            <h3 class="section-title">Anexos (PDFs)</h3>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Adicionar Novos Anexos PDF</label>
+                    <input type="file" id="editAttachmentInput" accept=".pdf" multiple style="margin-bottom: 10px;" />
+                    <p style="font-size: 12px; color: #666; margin: 5px 0;">Máximo 10MB por arquivo. Você será solicitado a descrever cada arquivo.</p>
+                    <div id="editAttachmentsList"></div>
+                </div>
+            </div>
+
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
                 <button type="submit" class="btn-submit">Atualizar</button>
@@ -513,6 +533,14 @@
                 <h3>📝 Justificativa</h3>
                 <div class="justification-box">
                     <p class="justification-text">-</p>
+                </div>
+            </div>
+
+            <!-- SEÇÃO 6: Anexos -->
+            <div class="view-section">
+                <h3>📎 Anexos (PDFs)</h3>
+                <div id="viewAttachmentsList">
+                    <p class="view-text" style="color: #999;">Nenhum anexo disponível</p>
                 </div>
             </div>
 
@@ -661,8 +689,18 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/api.js"></script>
+<script src="~/js/attachments-manager.js"></script>
 <script src="~/js/clipboard-parser.js"></script>
 <script src="~/js/site.js"></script>
-<script src="~/js/api.js"></script>
 <script src="~/js/crud.js"></script>
 <script src="~/js/servicos-page.js"></script>
+
+<script>
+    // Inicializar handlers de anexos após o DOM carregar
+    document.addEventListener('DOMContentLoaded', () => {
+        if (typeof setupAttachmentHandlers !== 'undefined') {
+            setupAttachmentHandlers();
+        }
+    });
+</script>

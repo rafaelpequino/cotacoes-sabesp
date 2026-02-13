@@ -3,6 +3,8 @@
 
 let pendingAttachments = []; // Array de { file, description }
 let currentServiceAttachments = []; // Anexos existentes
+let currentEntityType = ''; // Tipo da entidade (Service ou Input)
+let currentEntityId = 0; // ID da entidade
 
 // Inicializar handlers de anexos
 function setupAttachmentHandlers() {
@@ -40,8 +42,9 @@ async function handleCreateAttachmentsChange(event) {
             title: `Descrição do anexo`,
             html: `
                 <p style="margin-bottom: 10px; color: #666;">Arquivo: <strong>${file.name}</strong></p>
-                <input id="swal-input1" class="swal2-input" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 90%;">
+                <input id="swal-input1" class="swal2-input" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 90%; max-width: 100%; box-sizing: border-box;">
             `,
+            width: '600px',
             focusConfirm: false,
             showCancelButton: true,
             confirmButtonText: 'Adicionar',
@@ -93,8 +96,9 @@ async function handleEditAttachmentsChange(event) {
             title: `Descrição do anexo`,
             html: `
                 <p style="margin-bottom: 10px; color: #666;">Arquivo: <strong>${file.name}</strong></p>
-                <input id="swal-input1" class="swal2-input" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 90%;">
+                <input id="swal-input1" class="swal2-input" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 90%; max-width: 100%; box-sizing: border-box;">
             `,
+            width: '600px',
             focusConfirm: false,
             showCancelButton: true,
             confirmButtonText: 'Adicionar',
@@ -169,10 +173,14 @@ async function loadAttachments(entityType, entityId) {
     try {
         const attachments = await api.getAttachments(entityType, entityId);
         currentServiceAttachments = attachments;
+        currentEntityType = entityType;
+        currentEntityId = entityId;
         return attachments;
     } catch (error) {
         console.error('Erro ao carregar anexos:', error);
         currentServiceAttachments = [];
+        currentEntityType = '';
+        currentEntityId = 0;
         return [];
     }
 }
@@ -241,12 +249,27 @@ function renderViewAttachments() {
     }
     
     let html = '';
+    
+    // Botão "Baixar Tudo" se houver mais de 1 anexo
+    if (currentServiceAttachments.length > 1) {
+        html += `
+            <div style="margin-bottom: 12px; text-align: right;">
+                <button type="button" onclick="downloadAllAttachments()" style="background: #4caf50; color: white; border: none; border-radius: 4px; padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                    📦 Baixar Todos (${currentServiceAttachments.length})
+                </button>
+            </div>
+        `;
+    }
+    
     currentServiceAttachments.forEach(att => {
         html += `
             <div class="attachment-item" style="display: flex; flex-direction: column; padding: 10px; background: #e8f4f8; border-radius: 4px; margin-bottom: 8px; border-left: 3px solid #19d6ff;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                     <span style="font-size: 14px; font-weight: 500;">📄 ${att.originalFileName}</span>
-                    <button type="button" onclick="downloadAttachment(${att.id}, '${att.originalFileName}')" style="background: #19d6ff; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px;">Baixar</button>
+                    <div>
+                        <button type="button" onclick="viewAttachmentInNewTab(${att.id})" style="background: #ff9800; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px; margin-right: 4px;">👁 Visualizar</button>
+                        <button type="button" onclick="downloadAttachment(${att.id}, '${att.originalFileName}')" style="background: #19d6ff; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px;">⬇ Baixar</button>
+                    </div>
                 </div>
                 <div style="font-size: 12px; color: #666;">
                     <span><strong>Descrição:</strong> ${att.description}</span>
@@ -347,4 +370,107 @@ function validateAttachments() {
         };
     }
     return { valid: true };
+}
+
+// Visualizar anexo em nova aba
+async function viewAttachmentInNewTab(id) {
+    try {
+        // Como PDFs precisam de autenticação, vamos fazer um fetch e abrir em nova aba
+        const token = await api.getToken();
+        const headers = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const response = await fetch(`${api.baseUrl}/attachments/${id}/download`, {
+            method: 'GET',
+            headers
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        window.open(url, '_blank');
+        
+        // Liberar URL após um tempo (o navegador já carregou)
+        setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+        }, 1000);
+    } catch (error) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Erro ao visualizar anexo',
+            confirmButtonColor: '#d32f2f'
+        });
+    }
+}
+
+// Baixar todos os anexos em um arquivo ZIP
+async function downloadAllAttachments() {
+    if (currentServiceAttachments.length === 0) {
+        return;
+    }
+    
+    if (!currentEntityType || !currentEntityId) {
+        await Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Informações da entidade não encontradas',
+            confirmButtonColor: '#d32f2f'
+        });
+        return;
+    }
+    
+    const result = await Swal.fire({
+        title: 'Baixar Todos os Anexos',
+        text: `Deseja baixar ${currentServiceAttachments.length} arquivo(s) em um arquivo ZIP?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#4caf50',
+        cancelButtonColor: '#999',
+        confirmButtonText: 'Sim, baixar ZIP',
+        cancelButtonText: 'Cancelar'
+    });
+    
+    if (result.isConfirmed) {
+        try {
+            // Mostrar loading
+            Swal.fire({
+                title: 'Preparando arquivo ZIP...',
+                text: 'Por favor aguarde',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Baixar ZIP com todos os anexos
+            await api.downloadAllAttachments(currentEntityType, currentEntityId);
+            
+            Swal.close();
+            
+            await Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: `Arquivo ZIP com ${currentServiceAttachments.length} anexo(s) baixado com sucesso`,
+                confirmButtonColor: '#4caf50',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        } catch (error) {
+            Swal.close();
+            await Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: 'Erro ao criar arquivo ZIP: ' + (error.message || 'Erro desconhecido'),
+                confirmButtonColor: '#d32f2f'
+            });
+        }
+    }
 }

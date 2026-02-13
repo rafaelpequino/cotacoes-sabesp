@@ -235,6 +235,13 @@ function openCreateModal() {
     if (modal) {
         populateSectorSelect(modal);
         modal.style.display = 'flex';
+        // Limpar anexos pendentes
+        if (typeof pendingAttachments !== 'undefined') {
+            pendingAttachments = [];
+            if (typeof renderPendingAttachments !== 'undefined') {
+                renderPendingAttachments('create');
+            }
+        }
     }
 }
 
@@ -320,6 +327,17 @@ async function saveServico() {
 
     try {
         const result = await api.createService(data);
+        
+        // Fazer upload dos anexos pendentes
+        if (typeof uploadPendingAttachments !== 'undefined' && typeof pendingAttachments !== 'undefined' && pendingAttachments.length > 0) {
+            try {
+                await uploadPendingAttachments('Service', result.id);
+            } catch (uploadError) {
+                console.error('Erro ao fazer upload de anexos:', uploadError);
+                // Continua mesmo se houver erro no upload
+            }
+        }
+        
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -329,8 +347,21 @@ async function saveServico() {
             closeCreateModal();
             loadServicos();
             form.reset();
+            // Limpar anexos pendentes
+            if (typeof pendingAttachments !== 'undefined') {
+                pendingAttachments = [];
+                if (typeof renderPendingAttachments !== 'undefined') {
+                    renderPendingAttachments('create');
+                }
+            }
         });
     } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: humanizeError(error.message || 'Erro ao criar serviço'),
+            confirmButtonColor: '#d32f2f'
+        });
     }
 }
 
@@ -386,6 +417,14 @@ function editServico(id) {
     // Armazenar ID para update
     modal.dataset.servicoId = id;
     modal.style.display = 'flex';
+    
+    // Carregar e renderizar anexos
+    if (typeof loadAttachments !== 'undefined' && typeof renderEditAttachments !== 'undefined') {
+        loadAttachments('Service', id).then(() => {
+            pendingAttachments = [];
+            renderEditAttachments();
+        });
+    }
 }
 
 async function updateServico() {
@@ -453,6 +492,17 @@ async function updateServico() {
 
     try {
         const result = await api.updateService(servicoId, data);
+        
+        // Fazer upload dos anexos pendentes
+        if (typeof uploadPendingAttachments !== 'undefined' && typeof pendingAttachments !== 'undefined' && pendingAttachments.length > 0) {
+            try {
+                await uploadPendingAttachments('Service', servicoId);
+            } catch (uploadError) {
+                console.error('Erro ao fazer upload de anexos:', uploadError);
+                // Continua mesmo se houver erro no upload
+            }
+        }
+        
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -461,8 +511,18 @@ async function updateServico() {
         }).then(() => {
             closeEditModal();
             loadServicos();
+            // Limpar anexos pendentes
+            if (typeof pendingAttachments !== 'undefined') {
+                pendingAttachments = [];
+            }
         });
     } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: humanizeError(error.message || 'Erro ao atualizar serviço'),
+            confirmButtonColor: '#d32f2f'
+        });
     }
 }
 
@@ -646,6 +706,13 @@ function viewServico(id) {
     // Armazenar o ID do serviço para ações futuras
     modal.dataset.servicoId = id;
     modal.style.display = 'flex';
+    
+    // Carregar e renderizar anexos
+    if (typeof loadAttachments !== 'undefined' && typeof renderViewAttachments !== 'undefined') {
+        loadAttachments('Service', id).then(() => {
+            renderViewAttachments();
+        });
+    }
 }
 
 function editFromView() {

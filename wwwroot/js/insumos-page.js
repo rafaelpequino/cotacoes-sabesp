@@ -235,6 +235,13 @@ function openCreateModal() {
     if (modal) {
         populateSectorSelect(modal);
         modal.style.display = 'flex';
+        // Limpar anexos pendentes
+        if (typeof pendingAttachments !== 'undefined') {
+            pendingAttachments = [];
+            if (typeof renderPendingAttachments !== 'undefined') {
+                renderPendingAttachments('create');
+            }
+        }
     }
 }
 
@@ -320,6 +327,17 @@ async function saveInsumo() {
 
     try {
         const result = await api.createInput(data);
+        
+        // Fazer upload dos anexos pendentes
+        if (typeof uploadPendingAttachments !== 'undefined' && typeof pendingAttachments !== 'undefined' && pendingAttachments.length > 0) {
+            try {
+                await uploadPendingAttachments('Input', result.id);
+            } catch (uploadError) {
+                console.error('Erro ao fazer upload de anexos:', uploadError);
+                // Continua mesmo se houver erro no upload
+            }
+        }
+        
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -329,6 +347,13 @@ async function saveInsumo() {
             closeCreateModal();
             loadInsumos();
             form.reset();
+            // Limpar anexos pendentes
+            if (typeof pendingAttachments !== 'undefined') {
+                pendingAttachments = [];
+                if (typeof renderPendingAttachments !== 'undefined') {
+                    renderPendingAttachments('create');
+                }
+            }
         });
     } catch (error) {
         Swal.fire({
@@ -395,6 +420,14 @@ async function editInsumo(id) {
     // Armazenar ID para update
     modal.dataset.insumoId = id;
     modal.style.display = 'flex';
+    
+    // Carregar e renderizar anexos
+    if (typeof loadAttachments !== 'undefined' && typeof renderEditAttachments !== 'undefined') {
+        loadAttachments('Input', id).then(() => {
+            pendingAttachments = [];
+            renderEditAttachments();
+        });
+    }
 }
 
 async function updateInsumo() {
@@ -462,6 +495,17 @@ async function updateInsumo() {
 
     try {
         const result = await api.updateInput(insumoId, data);
+        
+        // Fazer upload dos anexos pendentes
+        if (typeof uploadPendingAttachments !== 'undefined' && typeof pendingAttachments !== 'undefined' && pendingAttachments.length > 0) {
+            try {
+                await uploadPendingAttachments('Input', insumoId);
+            } catch (uploadError) {
+                console.error('Erro ao fazer upload de anexos:', uploadError);
+                // Continua mesmo se houver erro no upload
+            }
+        }
+        
         Swal.fire({
             icon: 'success',
             title: 'Sucesso!',
@@ -470,6 +514,10 @@ async function updateInsumo() {
         }).then(() => {
             closeEditModal();
             loadInsumos();
+            // Limpar anexos pendentes
+            if (typeof pendingAttachments !== 'undefined') {
+                pendingAttachments = [];
+            }
         });
     } catch (error) {
         Swal.fire({
@@ -661,6 +709,13 @@ function viewInsumo(id) {
     // Armazenar o ID do insumo para ações futuras
     modal.dataset.insumoId = id;
     modal.style.display = 'flex';
+    
+    // Carregar e renderizar anexos
+    if (typeof loadAttachments !== 'undefined' && typeof renderViewAttachments !== 'undefined') {
+        loadAttachments('Input', id).then(() => {
+            renderViewAttachments();
+        });
+    }
 }
 
 function editFromView() {

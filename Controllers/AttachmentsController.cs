@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using System.IO.Compression;
 
 namespace CotacoesEPC.Controllers
 {
@@ -242,6 +243,67 @@ namespace CotacoesEPC.Controllers
             {
                 _logger.LogError(ex, "Erro ao baixar anexo");
                 return StatusCode(500, new { message = "Erro ao baixar anexo" });
+            }
+        }
+
+        // GET: api/attachments/download-all?entityType=Service&entityId=1
+        [HttpGet("download-all")]
+        public async Task<IActionResult> DownloadAllAttachments([FromQuery] string entityType, [FromQuery] int entityId)
+        {
+            try
+            {
+                var userId = GetUserId();
+
+                // Verificar se o usuário tem permissão para acessar esta entidade
+                bool hasAccess = entityType.ToLower() switch
+                {
+                    "service" => await _context.Services.AnyAsync(s => s.Id == entityId && s.UserId == userId),
+                    "input" => await _context.Inputs.AnyAsync(i => i.Id == entityId && i.UserId == userId),
+                    _ => false
+                };
+
+                if (!hasAccess)
+                    return Forbid();
+
+                // Buscar todos os anexos desta entidade
+                var attachments = await _context.Attachments
+                    .Where(a => a.EntityType == entityType && a.EntityId == entityId)
+                    .ToListAsync();
+
+                if (attachments.Count == 0)
+                    return NotFound(new { message = "Nenhum anexo encontrado" });
+
+                // Criar arquivo ZIP em memória
+                using var memoryStream = new MemoryStream();
+                using (var archive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+                {
+                    foreach (var attachment in attachments)
+                    {
+                        var filePath = Path.Combine(_env.WebRootPath, "attachments", attachment.StoredFileName);
+
+                        if (System.IO.File.Exists(filePath))
+                        {
+                            // Criar entrada no ZIP com o nome original do arquivo
+                            var zipEntry = archive.CreateEntry(attachment.OriginalFileName, CompressionLevel.Optimal);
+
+                            using var zipEntryStream = zipEntry.Open();
+                            using var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                            await fileStream.CopyToAsync(zipEntryStream);
+                        }
+                    }
+                }
+
+                memoryStream.Position = 0;
+
+                // Gerar nome do arquivo ZIP
+                var zipFileName = $"{entityType}_{entityId}_anexos_{DateTime.UtcNow:yyyyMMddHHmmss}.zip";
+
+                return File(memoryStream.ToArray(), "application/zip", zipFileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao baixar anexos em ZIP");
+                return StatusCode(500, new { message = "Erro ao criar arquivo ZIP" });
             }
         }
     }

@@ -282,6 +282,132 @@ class ApiClient {
         }
     }
 
+    // Attachments endpoints
+    async getAttachments(entityType, entityId) {
+        return this.request(`/attachments?entityType=${entityType}&entityId=${entityId}`);
+    }
+
+    async uploadAttachment(entityType, entityId, file, description) {
+        const token = await this.getToken();
+        const formData = new FormData();
+        formData.append('entityType', entityType);
+        formData.append('entityId', entityId);
+        formData.append('file', file);
+        formData.append('description', description);
+
+        const headers = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        try {
+            const response = await fetch(`${this.baseUrl}/attachments/upload`, {
+                method: 'POST',
+                headers,
+                body: formData
+            });
+
+            const responseText = await response.text();
+
+            if (!response.ok) {
+                let errorMessage = `Erro ${response.status}`;
+                try {
+                    if (responseText) {
+                        const error = JSON.parse(responseText);
+                        errorMessage = error.message || errorMessage;
+                    }
+                } catch (e) {
+                }
+                throw new Error(errorMessage);
+            }
+
+            if (!responseText) {
+                throw new Error('Resposta vazia do servidor');
+            }
+
+            return JSON.parse(responseText);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async downloadAttachment(id, filename) {
+        const token = await this.getToken();
+        const headers = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        try {
+            const response = await fetch(`${this.baseUrl}/attachments/${id}/download`, {
+                method: 'GET',
+                headers
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro ${response.status}: ${response.statusText}`);
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteAttachment(id) {
+        return this.request(`/attachments/${id}`, 'DELETE');
+    }
+
+    async downloadAllAttachments(entityType, entityId) {
+        const token = await this.getToken();
+        const headers = {};
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        try {
+            const response = await fetch(`${this.baseUrl}/attachments/download-all?entityType=${entityType}&entityId=${entityId}`, {
+                method: 'GET',
+                headers
+            });
+
+            if (!response.ok) {
+                throw new Error(`Erro ${response.status}: ${response.statusText}`);
+            }
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            
+            // Extrair nome do arquivo do header ou usar padrão
+            const contentDisposition = response.headers.get('Content-Disposition');
+            let filename = `anexos_${entityType}_${entityId}.zip`;
+            if (contentDisposition) {
+                const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                if (filenameMatch && filenameMatch[1]) {
+                    filename = filenameMatch[1].replace(/['"]/g, '');
+                }
+            }
+            
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     // Traduzir erros para português
     translateError(error) {
         if (!error) return 'Erro desconhecido';
