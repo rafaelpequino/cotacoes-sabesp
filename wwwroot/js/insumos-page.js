@@ -4,6 +4,8 @@
 let insumosCrud = new CrudManager('inputs');
 let insumosPageData = [];
 let sectorsData = [];
+let usersData = [];
+let currentUserId = null;
 
 // Função para humanizar erros
 function humanizeError(errorMessage) {
@@ -31,6 +33,7 @@ function humanizeError(errorMessage) {
 
 document.addEventListener('DOMContentLoaded', async () => {
     await loadSectors();
+    await loadUsers();
     await loadInsumos();
     setupEventListeners();
 });
@@ -41,6 +44,29 @@ async function loadSectors() {
     } catch (error) {
         sectorsData = [];
         console.error('Erro ao carregar setores:', error);
+    }
+}
+
+async function loadUsers() {
+    try {
+        usersData = await api.getUsers();
+        // Obter ID do usuário logado via chamada ao elemento que está na página
+        const userIcon = document.querySelector('.user-icon');
+        if (userIcon && userIcon.textContent) {
+            // Usar a inicial para encontrar o usuário
+            const initial = userIcon.textContent.trim();
+            const userName = document.querySelector('.user-name');
+            if (userName) {
+                const userNameText = userName.textContent.trim();
+                const currentUser = usersData.find(u => u.name === userNameText);
+                if (currentUser) {
+                    currentUserId = currentUser.id;
+                }
+            }
+        }
+    } catch (error) {
+        usersData = [];
+        console.error('Erro ao carregar usuários:', error);
     }
 }
 
@@ -76,6 +102,8 @@ function renderInsumosTable(insumos) {
 
     insumos.forEach(insumo => {
         const sectorName = sectorsData.find(s => s.id === insumo.sectorId)?.name || 'N/A';
+        const responsibleUser = usersData.find(u => u.id === insumo.userId);
+        const responsibleName = responsibleUser ? responsibleUser.name : 'N/A';
         const row = document.createElement('tr');
         row.innerHTML = `
             <td>${insumo.originalId}</td>
@@ -84,7 +112,7 @@ function renderInsumosTable(insumos) {
             <td>${insumo.unit}</td>
             <td>R$ ${parseFloat(insumo.precoMontagem).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td>Você</td>
+            <td>${responsibleName}</td>
             <td class="actions">
                 <button class="action-btn" title="Copiar dados" onclick="copyInsumo(${insumo.id})">📋</button>
                 <button class="action-btn" title="Visualizar" onclick="viewInsumo(${insumo.id})">👁</button>
@@ -128,6 +156,7 @@ function setupFilterListeners() {
     const searchInput = document.getElementById('searchInput');
     const sortSelect = document.getElementById('sortSelect');
     const sectorFilterSelect = document.getElementById('sectorFilterSelect');
+    const responsibleFilterSelect = document.getElementById('responsibleFilterSelect');
     const btnFiltrar = document.getElementById('btnFiltrar');
     const btnLimpar = document.getElementById('btnLimpar');
 
@@ -149,6 +178,11 @@ function setupFilterListeners() {
         sectorFilterSelect.addEventListener('change', applyFilters);
     }
 
+    // Filtro de responsável dispara requisição automaticamente
+    if (responsibleFilterSelect) {
+        responsibleFilterSelect.addEventListener('change', applyFilters);
+    }
+
     // Permitir busca ao digitar (Enter)
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -160,6 +194,9 @@ function setupFilterListeners() {
     
     // Popular o select de setores do filtro
     populateSectorFilter();
+    
+    // Popular o select de responsáveis do filtro
+    populateResponsibleFilter();
 }
 
 async function populateSectorFilter() {
@@ -184,10 +221,41 @@ async function populateSectorFilter() {
     }
 }
 
+async function populateResponsibleFilter() {
+    const responsibleFilterSelect = document.getElementById('responsibleFilterSelect');
+    if (!responsibleFilterSelect) return;
+    
+    try {
+        // Limpar opções existentes
+        responsibleFilterSelect.innerHTML = '<option value="">Todos os Responsáveis</option>';
+        
+        // Adicionar o usuário logado como primeira opção com label "Eu"
+        if (currentUserId) {
+            const option = document.createElement('option');
+            option.value = currentUserId;
+            option.textContent = 'Eu';
+            responsibleFilterSelect.appendChild(option);
+        }
+        
+        // Adicionar outros usuários
+        usersData.forEach(user => {
+            if (user.id !== currentUserId) {
+                const option = document.createElement('option');
+                option.value = user.id;
+                option.textContent = user.name;
+                responsibleFilterSelect.appendChild(option);
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao carregar responsáveis para filtro:', error);
+    }
+}
+
 async function applyFilters() {
     const search = document.getElementById('searchInput')?.value || '';
     const sort = document.getElementById('sortSelect')?.value || '';
     const sectorId = document.getElementById('sectorFilterSelect')?.value || '';
+    const responsibleId = document.getElementById('responsibleFilterSelect')?.value || '';
 
     try {
         // Filtrar localmente por setor se selecionado
@@ -195,6 +263,10 @@ async function applyFilters() {
         
         if (sectorId) {
             filteredData = filteredData.filter(item => item.sectorId === parseInt(sectorId));
+        }
+
+        if (responsibleId) {
+            filteredData = filteredData.filter(item => item.userId === parseInt(responsibleId));
         }
         
         insumosPageData = filteredData;
@@ -226,6 +298,7 @@ function clearFilters() {
     document.getElementById('searchInput').value = '';
     document.getElementById('sortSelect').value = '';
     document.getElementById('sectorFilterSelect').value = '';
+    document.getElementById('responsibleFilterSelect').value = '';
     document.getElementById('searchIndicator').style.display = 'none';
     loadInsumos();
 }

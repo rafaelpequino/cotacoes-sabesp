@@ -172,6 +172,11 @@ class ApiClient {
         return this.request(`/sectors/${id}`);
     }
 
+    // Users endpoints
+    async getUsers() {
+        return this.request('/users');
+    }
+
     // Spreadsheets endpoints
     async getSpreadsheets(search = null, sort = null, filter = null) {
         let endpoint = '/spreadsheets';
