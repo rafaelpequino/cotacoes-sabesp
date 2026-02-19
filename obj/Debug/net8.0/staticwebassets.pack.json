@@ -17,6 +17,10 @@
       "PackagePath": "staticwebassets\\attachments\\Service_5002_20260212112048001_Bilhete_Unico22.pdf"
     },
     {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\attachments\\Service_8002_20260219114300548_Consorcio_AF475_379.pdf",
+      "PackagePath": "staticwebassets\\attachments\\Service_8002_20260219114300548_Consorcio_AF475_379.pdf"
+    },
+    {
       "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\css\\dashboard.css",
       "PackagePath": "staticwebassets\\css\\dashboard.css"
     },
@@ -55,6 +59,10 @@
     {
       "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\attachments-manager.js",
       "PackagePath": "staticwebassets\\js\\attachments-manager.js"
+    },
+    {
+      "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\bulk-import.js",
+      "PackagePath": "staticwebassets\\js\\bulk-import.js"
     },
     {
       "Id": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\clipboard-parser.js",

@@ -82,7 +82,7 @@ function renderInsumosTable(insumos) {
             <td>${sectorName}</td>
             <td>${insumo.item}</td>
             <td>${insumo.unit}</td>
-            <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>R$ ${parseFloat(insumo.precoMontagem).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>Você</td>
             <td class="actions">
@@ -97,7 +97,7 @@ function renderInsumosTable(insumos) {
 }
 
 function setupEventListeners() {
-    const btnNovoInsumo = document.querySelector('.btn-nova-cotacao');
+    const btnNovoInsumo = document.querySelector('.btn-criar-individual');
     if (btnNovoInsumo) {
         btnNovoInsumo.addEventListener('click', openCreateModal);
     }

@@ -82,7 +82,7 @@ function renderServicosTable(servicos) {
             <td>${sectorName}</td>
             <td>${servico.item}</td>
             <td>${servico.unit}</td>
-            <td>R$ ${parseFloat(servico.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>R$ ${parseFloat(servico.precoMontagem).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>R$ ${parseFloat(servico.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
             <td>Você</td>
             <td class="actions">
@@ -97,7 +97,7 @@ function renderServicosTable(servicos) {
 }
 
 function setupEventListeners() {
-    const btnNovaCotacao = document.querySelector('.btn-nova-cotacao');
+    const btnNovaCotacao = document.querySelector('.btn-criar-individual');
     if (btnNovaCotacao) {
         btnNovaCotacao.addEventListener('click', openCreateModal);
     }

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "SrGjJo1Z4oc1dIGurlRStfPkXMtJTtx6lZCY1nPwbqs=",
+  "Hash": "QNyLJ5NT3AtwaCS2NnCeFQ5XxAWiSkA04h9qeAxHZLk=",
   "Source": "CotacoesEPC",
   "BasePath": "_content/CotacoesEPC",
   "Mode": "Default",
@@ -110,6 +110,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\attachments\\Service_5002_20260212112048001_Bilhete_Unico22.pdf"
+    },
+    {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\attachments\\Service_8002_20260219114300548_Consorcio_AF475_379.pdf",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "attachments/Service_8002_20260219114300548_Consorcio_AF475_379.pdf",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\attachments\\Service_8002_20260219114300548_Consorcio_AF475_379.pdf"
     },
     {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\css\\dashboard.css",
@@ -300,6 +319,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\attachments-manager.js"
+    },
+    {
+      "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\bulk-import.js",
+      "SourceId": "CotacoesEPC",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\",
+      "BasePath": "_content/CotacoesEPC",
+      "RelativePath": "js/bulk-import.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\bulk-import.js"
     },
     {
       "Identity": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\wwwroot\\js\\clipboard-parser.js",

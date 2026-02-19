@@ -350,6 +350,11 @@
     margin-bottom: 28px;
 }
 
+.header-buttons {
+    display: flex;
+    gap: 12px;
+}
+
 .btn-nova-cotacao {
     background: #19d6ff;
     color: #fff;
@@ -368,6 +373,18 @@
     .btn-nova-cotacao:hover {
         background: #00bfff;
         transform: translateY(-1px);
+    }
+
+.btn-secondary {
+    background: transparent;
+    color: #19d6ff;
+    border: 2px solid #19d6ff;
+}
+
+    .btn-secondary:hover {
+        background: #19d6ff;
+        color: #fff;
+        border-color: #19d6ff;
     }
 
 .servicos-filters {
@@ -646,7 +663,7 @@ body.modal-open {
     }
 
 .modal-form {
-    padding: 24px;
+    padding: 16px;
 }
 
 .form-row {
@@ -788,6 +805,25 @@ body.modal-open {
         cursor: not-allowed;
         transform: none;
     }
+
+/* Estilo para botões primários gerais */
+.btn-primary {
+    background: #19d6ff !important;
+    color: #fff !important;
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background: #00bfff !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(25, 214, 255, 0.3);
+}
 
 /* MODAL VISUALIZAR */
 .modal-view-content {
@@ -1298,6 +1334,326 @@ body.modal-open {
     .btn-paste:active {
         transform: translateY(0);
     }
+
+/* ========================================
+   BULK IMPORT STYLES
+   ======================================== */
+
+/* Modais de bulk import */
+#bulkImportModal {
+    z-index: 1100;
+}
+
+#bulkCompaniesModal,
+#bulkPricesModal,
+#bulkViewAttachmentsModal {
+    z-index: 1300;
+}
+
+#bulkAttachmentDescriptionModal {
+    z-index: 1400;
+}
+
+/* Quando os modais secundários forem abertos, centralizá-los */
+#bulkCompaniesModal[style*="display: block"],
+#bulkPricesModal[style*="display: block"],
+#bulkViewAttachmentsModal[style*="display: block"] {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+#bulkCompaniesModal .modal-content,
+#bulkPricesModal .modal-content,
+#bulkViewAttachmentsModal .modal-content {
+    max-width: 600px;
+    width: 90%;
+    max-height: 70vh;
+}
+
+/* Área de colagem */
+.bulk-paste-area {
+    padding: 16px;
+    text-align: center;
+}
+
+.bulk-paste-area .btn {
+    padding: 12px 24px;
+    font-size: 16px;
+}
+
+/* Área de pré-visualização */
+.bulk-preview-area {
+    padding: 16px;
+}
+
+.bulk-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.bulk-preview-header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.bulk-count {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.bulk-sector-all {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bulk-sector-all label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+}
+
+.bulk-sector-all select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    min-width: 200px;
+}
+
+.btn-limpar-bulk {
+    padding: 8px 16px;
+    background: #6c757d;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn-limpar-bulk:hover {
+    background: #5a6268;
+}
+
+/* Tabela de pré-visualização */
+.bulk-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 20px;
+}
+
+.bulk-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1000px;
+}
+
+.bulk-table th {
+    background: #f8f8f8;
+    padding: 12px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+    white-space: nowrap;
+}
+
+.bulk-table td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* Coluna do Item com largura maior e limite de 2 linhas */
+.bulk-table td:nth-child(3) {
+    max-width: 300px;
+    min-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.4;
+}
+
+.bulk-table select {
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 150px;
+}
+
+.bulk-table .btn-action {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: #fff;
+    color: #555;
+}
+
+.bulk-table .btn-action:hover {
+    background: #f8f9fa;
+    border-color: #19d6ff;
+    color: #19d6ff;
+}
+
+.bulk-table .btn-remove {
+    background: transparent;
+    color: #dc3545;
+    padding: 4px 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s;
+}
+
+.bulk-table .btn-remove:hover {
+    background: #fff5f5;
+    color: #c82333;
+    transform: scale(1.1);
+}
+
+.bulk-table .btn-view-companies,
+.bulk-table .btn-view-prices,
+.bulk-table .btn-view-attachments {
+    background: #fff;
+    color: #555;
+}
+
+.bulk-table .btn-view-companies:hover,
+.bulk-table .btn-view-prices:hover,
+.bulk-table .btn-view-attachments:hover {
+    background: #f8f9fa;
+    border-color: #19d6ff;
+    color: #19d6ff;
+}
+
+/* Modal de empresas */
+.bulk-companies-modal-content {
+    max-width: 600px !important;
+    width: 85% !important;
+}
+
+.bulk-companies-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.bulk-company-item {
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bulk-company-item strong {
+    color: #495057;
+    font-size: 14px;
+}
+
+.bulk-company-item span {
+    color: #0ea5db;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Modal de preços */
+.bulk-prices-modal-content {
+    max-width: 550px !important;
+    width: 85% !important;
+}
+
+.bulk-prices-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.bulk-price-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px;
+    background: #f8f9fa;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+}
+
+.bulk-price-item.highlight {
+    background: #fff5e6;
+    border-color: #ffa500;
+}
+
+.bulk-price-item span {
+    color: #495057;
+    font-size: 14px;
+}
+
+.bulk-price-item strong {
+    color: #0ea5db;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.bulk-price-item.highlight strong {
+    color: #ff8800;
+}
+
+/* Modal de anexos */
+.bulk-view-attachments-modal-content {
+    max-width: 550px !important;
+    width: 85% !important;
+}
+
+.bulk-view-attachment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.bulk-view-attachment-item strong {
+    color: #495057;
+    font-size: 14px;
+}
+
+.bulk-view-attachment-item p {
+    color: #6c757d;
+    font-size: 12px;
+    margin: 4px 0 0;
+}
+
+/* SweetAlert2 sempre no topo */
+.swal2-container {
+    z-index: 10000 !important;
+}
 
 /* RESPONSIVO */
 @media (max-width: 1024px) {

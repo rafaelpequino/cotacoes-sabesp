@@ -41,7 +41,10 @@
 <main class="dashboard-container">
     <div class="servicos-header">
         <h2 class="title">Serviços</h2>
-        <button class="btn-nova-cotacao">+ Nova Cotação</button>
+        <div class="header-buttons">
+            <button class="btn-nova-cotacao btn-criar-individual" onclick="openCreateModal()">+ Nova Cotação</button>
+            <button class="btn-nova-cotacao btn-secondary" onclick="openBulkImportModal()">Adicionar em Lote</button>
+        </div>
     </div>
 
     <section class="servicos-filters">
@@ -566,17 +569,112 @@
     </div>
 </div>
 
+<!-- ========================================
+     MODAIS DE IMPORTAÇÃO EM MASSA
+     ======================================== -->
+
+<!-- MODAL PRINCIPAL: IMPORTAÇÃO EM MASSA -->
+<div id="bulkImportModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Importação em Massa de Cotações</h2>
+            <button class="modal-close" onclick="closeBulkImportModal()">&times;</button>
+        </div>
+        <div class="modal-form">
+            <!-- Área de colagem -->
+            <div id="bulkPasteArea" class="bulk-paste-area">
+                <button onclick="bulkPasteFromClipboard()" class="btn btn-primary">
+                    📋 Colar do Excel
+                </button>
+            </div>
+
+            <!-- Área de pré-visualização -->
+            <div id="bulkPreviewArea" class="bulk-preview-area">
+                <!-- Será preenchido dinamicamente -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SECUNDÁRIO: VER EMPRESAS -->
+<div id="bulkCompaniesModal" class="modal">
+    <div class="modal-content bulk-companies-modal-content">
+        <div class="modal-header">
+            <h2>Empresas e Valores</h2>
+            <button class="modal-close" onclick="closeBulkCompaniesModal()">&times;</button>
+        </div>
+        <div class="modal-form">
+            <div id="bulkCompaniesContent">
+                <!-- Será preenchido dinamicamente -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SECUNDÁRIO: VER PREÇOS -->
+<div id="bulkPricesModal" class="modal">
+    <div class="modal-content bulk-prices-modal-content">
+        <div class="modal-header">
+            <h2>Preços e Médias</h2>
+            <button class="modal-close" onclick="closeBulkPricesModal()">&times;</button>
+        </div>
+        <div class="modal-form">
+            <div id="bulkPricesContent">
+                <!-- Será preenchido dinamicamente -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL SECUNDÁRIO: VER/ADICIONAR ANEXOS -->
+<div id="bulkViewAttachmentsModal" class="modal">
+    <div class="modal-content bulk-view-attachments-modal-content">
+        <div class="modal-header">
+            <h2>Anexos</h2>
+            <button class="modal-close" onclick="closeBulkViewAttachmentsModal()">&times;</button>
+        </div>
+        <div class="modal-form">
+            <div id="bulkViewAttachmentsList">
+                <!-- Será preenchido dinamicamente -->
+            </div>
+            
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #eee;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">Adicionar novo anexo:</label>
+                <input type="file" id="bulkAttachmentFileInput" accept=".pdf" multiple onchange="handleBulkFileUpload(event)" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: DESCRIÇÃO DO ANEXO -->
+<div id="bulkAttachmentDescriptionModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; width: 90%;">
+        <div class="modal-header">
+            <h2>Descrição do Anexo</h2>
+            <button class="modal-close" onclick="closeBulkAttachmentDescriptionModal()">&times;</button>
+        </div>
+        <div class="modal-form">
+            <p style="margin-bottom: 16px; color: #555;">Digite uma descrição para o(s) arquivo(s) selecionado(s):</p>
+            <div class="form-group">
+                <label>Descrição*</label>
+                <input type="text" id="bulkAttachmentDescription" placeholder="Ex: Orçamento da empresa X" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" />
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeBulkAttachmentDescriptionModal()">Cancelar</button>
+                <button type="button" class="btn-submit" onclick="confirmBulkAttachmentDescription()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     // MODAL CRIAR
-    const btnNovaCotacao = document.querySelector('.btn-nova-cotacao');
-    const createModal = document.getElementById('createModal');
-    
-    btnNovaCotacao.addEventListener('click', function() {
-        createModal.style.display = 'flex';
-    });
+    function openCreateModal() {
+        document.getElementById('createModal').style.display = 'flex';
+    }
 
     function closeCreateModal() {
-        createModal.style.display = 'none';
+        document.getElementById('createModal').style.display = 'none';
     }
 
     // MODAL EDITAR
@@ -634,7 +732,7 @@
                 const parsedData = parseClipboardData(text);
                 
                 // Preencher o formulário com os dados parseados
-                fillFormWithParsedData(createModal, parsedData);
+                fillFormWithParsedData(document.getElementById('createModal'), parsedData);
                 
                 showPasteNotification();
             } catch (error) {
@@ -674,6 +772,15 @@
 
     // Fechar modal ao clicar fora
     window.addEventListener('click', function(event) {
+        const createModal = document.getElementById('createModal');
+        const editModal = document.getElementById('editModal');
+        const viewModal = document.getElementById('viewModal');
+        const bulkImportModal = document.getElementById('bulkImportModal');
+        const bulkCompaniesModal = document.getElementById('bulkCompaniesModal');
+        const bulkPricesModal = document.getElementById('bulkPricesModal');
+        const bulkViewAttachmentsModal = document.getElementById('bulkViewAttachmentsModal');
+        const bulkAttachmentDescriptionModal = document.getElementById('bulkAttachmentDescriptionModal');
+
         if (event.target === createModal) {
             closeCreateModal();
         }
@@ -683,11 +790,78 @@
         if (event.target === viewModal) {
             closeViewModal();
         }
+        if (event.target === bulkImportModal) {
+            closeBulkImportModal();
+        }
+        if (event.target === bulkCompaniesModal) {
+            closeBulkCompaniesModal();
+        }
+        if (event.target === bulkPricesModal) {
+            closeBulkPricesModal();
+        }
+        if (event.target === bulkViewAttachmentsModal) {
+            closeBulkViewAttachmentsModal();
+        }
+        if (event.target === bulkAttachmentDescriptionModal) {
+            closeBulkAttachmentDescriptionModal();
+        }
     });
 
-    // Fechar modais com a tecla ESC
+    // Fechar modais com a tecla ESC - COM LÓGICA INTELIGENTE
+    let escPressCount = 0;
+    let escTimeout = null;
+
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
+            const bulkAttachmentDescriptionModal = document.getElementById('bulkAttachmentDescriptionModal');
+            const bulkCompaniesModal = document.getElementById('bulkCompaniesModal');
+            const bulkPricesModal = document.getElementById('bulkPricesModal');
+            const bulkViewAttachmentsModal = document.getElementById('bulkViewAttachmentsModal');
+            const bulkImportModal = document.getElementById('bulkImportModal');
+            const createModal = document.getElementById('createModal');
+            const editModal = document.getElementById('editModal');
+            const viewModal = document.getElementById('viewModal');
+
+            // Modal de descrição tem prioridade máxima
+            if (bulkAttachmentDescriptionModal.style.display === 'block') {
+                closeBulkAttachmentDescriptionModal();
+                return;
+            }
+
+            // Se algum modal secundário estiver aberto, fechar apenas ele
+            if (bulkCompaniesModal.style.display === 'block') {
+                closeBulkCompaniesModal();
+                return;
+            }
+            if (bulkPricesModal.style.display === 'block') {
+                closeBulkPricesModal();
+                return;
+            }
+            if (bulkViewAttachmentsModal.style.display === 'block') {
+                closeBulkViewAttachmentsModal();
+                return;
+            }
+
+            // Se modal principal de bulk import estiver aberto, precisa apertar ESC duas vezes
+            if (bulkImportModal.style.display === 'block') {
+                escPressCount++;
+                clearTimeout(escTimeout);
+
+                if (escPressCount === 1) {
+                    // Primeira vez: avisar
+                    console.log('⚠️ Pressione ESC novamente para fechar');
+                    escTimeout = setTimeout(() => {
+                        escPressCount = 0;
+                    }, 1000);
+                } else if (escPressCount >= 2) {
+                    // Segunda vez: fechar
+                    closeBulkImportModal();
+                    escPressCount = 0;
+                }
+                return;
+            }
+
+            // Outros modais normais
             if (createModal.style.display === 'flex') {
                 closeCreateModal();
             }
@@ -704,6 +878,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/api.js"></script>
+<script src="~/js/bulk-import.js"></script>
 <script src="~/js/attachments-manager.js"></script>
 <script src="~/js/clipboard-parser.js"></script>
 <script src="~/js/site.js"></script>
