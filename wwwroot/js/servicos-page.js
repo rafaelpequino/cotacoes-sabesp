@@ -283,7 +283,12 @@ async function saveServico() {
     
     // Validação básica
     if (!sectorId || !originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Campos obrigatórios',
+            text: 'Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
@@ -433,7 +438,12 @@ async function updateServico() {
     const form = modal.querySelector('form');
     
     if (!servicoId) {
-        alert('ID do serviço não encontrado');
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Erro',
+            text: 'ID do serviço não encontrado',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
@@ -448,7 +458,12 @@ async function updateServico() {
     
     // Validação básica
     if (!sectorId || !originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Campos obrigatórios',
+            text: 'Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
@@ -720,7 +735,12 @@ function editFromView() {
     const servicoId = viewModal.dataset.servicoId;
     
     if (!servicoId) {
-        alert('ID do serviço não encontrado');
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Erro',
+            text: 'ID do serviço não encontrado',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     

@@ -219,7 +219,12 @@ function openUploadModal() {
     if (modal) {
         modal.style.display = 'flex';
     } else {
-        alert('Funcionalidade de upload de planilhas em desenvolvimento');
+        Swal.fire({
+            icon: 'info',
+            title: 'ℹ️ Em desenvolvimento',
+            text: 'Funcionalidade de upload de planilhas em desenvolvimento',
+            confirmButtonText: 'OK'
+        });
     }
 }
 

@@ -121,7 +121,7 @@ function fillFormWithParsedData(modal, parsedData) {
         
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.precoFornCorrigido;  // Preço de Fornecedor (corrigido)
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.precoMontagem;      // Preço de montagem/instalação
-        if (idx < numberInputs.length) numberInputs[idx++].value = '';                             // Preço adotado - deixar VAZIO para o usuário preencher
+        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.precoAdotado;       // Preço adotado
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.mediaAdotada;
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.mediaSaneada;
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.menorValor;

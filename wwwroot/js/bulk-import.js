@@ -39,12 +39,22 @@ async function bulkPasteFromClipboard() {
     try {
         const text = await navigator.clipboard.readText();
         if (!text || text.trim() === '') {
-            alert('⚠️ Nenhum dado encontrado na área de transferência!');
+            Swal.fire({
+                icon: 'warning',
+                title: '⚠️ Nenhum dado',
+                text: 'Nenhum dado encontrado na área de transferência!',
+                confirmButtonText: 'OK'
+            });
             return;
         }
         processBulkData(text);
     } catch (err) {
-        alert('❌ Erro ao ler dados da área de transferência. Verifique as permissões do navegador.');
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Erro',
+            text: 'Erro ao ler dados da área de transferência. Verifique as permissões do navegador.',
+            confirmButtonText: 'OK'
+        });
     }
 }
 
@@ -65,7 +75,12 @@ function processBulkData(text) {
     const lines = text.split('\n').filter(l => l.trim() !== '');
     
     if (lines.length < 2 || lines.length % 2 !== 0) {
-        alert('⚠️ Formato inválido! Cada cotação deve ter 2 linhas (nomes das empresas + dados da cotação).');
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Formato inválido',
+            text: 'Cada cotação deve ter 2 linhas (nomes das empresas + dados da cotação).',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -99,11 +114,11 @@ function processBulkData(text) {
                 adotada: parseMoneyValue(lineDados[3]),
                 precoMontagem: parseMoneyValue(lineDados[4]),
                 precoAdotado: parseMoneyValue(lineDados[6]),
-                mediaAdotada: parseMoneyValue(lineDados[9]),
-                mediaSaneada: parseMoneyValue(lineDados[8]),
-                menorValor: parseMoneyValue(lineDados[9]),
-                mediaAritmetica: parseMoneyValue(lineDados[10]),
-                mediana: parseMoneyValue(lineDados[11]),
+                mediaAdotada: parseMoneyValue(lineDados[8]),
+                mediaSaneada: parseMoneyValue(lineDados[9]),
+                menorValor: parseMoneyValue(lineDados[10]),
+                mediaAritmetica: parseMoneyValue(lineDados[11]),
+                mediana: parseMoneyValue(lineDados[12]),
                 empresa1: empresasTemp[0]?.valor || 0,
                 empresa2: empresasTemp[1]?.valor || 0,
                 empresa3: empresasTemp[2]?.valor || 0,
@@ -124,7 +139,12 @@ function processBulkData(text) {
     }
 
     if (bulkCotacoesData.length === 0) {
-        alert('⚠️ Nenhuma cotação válida foi encontrada!');
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Nenhuma cotação',
+            text: 'Nenhuma cotação válida foi encontrada!',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -246,15 +266,25 @@ function updateAttachmentCount(index) {
 
 // Remover item da lista
 function removeBulkItem(index) {
-    if (confirm('Deseja realmente remover esta cotação?')) {
-        bulkCotacoesData.splice(index, 1);
-        if (bulkCotacoesData.length === 0) {
-            resetBulkImport();
-        } else {
-            displayBulkPreview();
-            loadSectorsForBulk();
+    Swal.fire({
+        icon: 'warning',
+        title: '⚠️ Remover cotação?',
+        text: 'Deseja realmente remover esta cotação?',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, remover',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#d32f2f'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            bulkCotacoesData.splice(index, 1);
+            if (bulkCotacoesData.length === 0) {
+                resetBulkImport();
+            } else {
+                displayBulkPreview();
+                loadSectorsForBulk();
+            }
         }
-    }
+    });
 }
 
 // Carregar setores
@@ -287,7 +317,12 @@ async function loadSectorsForBulk() {
         });
 
     } catch (error) {
-        alert('❌ Erro ao carregar setores');
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Erro',
+            text: 'Erro ao carregar setores',
+            confirmButtonText: 'OK'
+        });
     }
 }
 
@@ -322,13 +357,15 @@ function openBulkCompaniesModal(index) {
         { nome: cotacao.nomeEmpresa4, valor: cotacao.empresa4 },
         { nome: cotacao.nomeEmpresa5, valor: cotacao.empresa5 },
         { nome: cotacao.nomeEmpresa6, valor: cotacao.empresa6 }
-    ].filter(e => e.nome && e.nome.trim() !== '');
+    ];
 
     let html = '<h3>📊 Cotações das Empresas</h3><div class="bulk-companies-grid">';
 
     empresas.forEach((emp, i) => {
+        const temValor = emp.nome && emp.nome.trim() !== '' && emp.valor > 0;
+        const opacity = temValor ? '' : 'style="opacity: 0.4; pointer-events: none;"';
         html += `
-            <div class="bulk-company-item">
+            <div class="bulk-company-item" ${opacity}>
                 <strong>${emp.nome || `EMPRESA ${i+1}`}</strong>
                 <span>R$ ${emp.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
@@ -447,7 +484,12 @@ function confirmBulkAttachmentDescription() {
     const descricao = document.getElementById('bulkAttachmentDescription').value.trim();
     
     if (!descricao) {
-        alert('⚠️ Descrição é obrigatória!');
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Campo obrigatório',
+            text: 'Descrição é obrigatória!',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -499,11 +541,21 @@ function displayBulkAttachments(index) {
 }
 
 function removeBulkAttachment(cotacaoIndex, attachmentIndex) {
-    if (confirm('Deseja remover este anexo?')) {
-        bulkCotacoesData[cotacaoIndex].attachments.splice(attachmentIndex, 1);
-        displayBulkAttachments(cotacaoIndex);
-        updateAttachmentCount(cotacaoIndex);
-    }
+    Swal.fire({
+        icon: 'warning',
+        title: '⚠️ Remover anexo?',
+        text: 'Deseja remover este anexo?',
+        showCancelButton: true,
+        confirmButtonText: 'Sim, remover',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#d32f2f'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            bulkCotacoesData[cotacaoIndex].attachments.splice(attachmentIndex, 1);
+            displayBulkAttachments(cotacaoIndex);
+            updateAttachmentCount(cotacaoIndex);
+        }
+    });
 }
 
 // ========================================
@@ -538,9 +590,19 @@ async function saveBulkCotacoes() {
     // Validar setores
     const semSetor = bulkCotacoesData.filter(c => !c.sectorId || c.sectorId === '');
     if (semSetor.length > 0) {
-        alert(`⚠️ ${semSetor.length} cotação(ões) sem setor definido!`);
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Setor não definido',
+            text: `${semSetor.length} cotação(ões) sem setor definido!`,
+            confirmButtonText: 'OK'
+        });
         return;
     }
+
+    // Detectar se é serviço ou insumo
+    const isInsumo = typeof loadInsumos === 'function';
+    const entityType = isInsumo ? 'Input' : 'Service';
+    const apiMethod = isInsumo ? api.createInput : api.createService;
 
     // Loading
     if (typeof Swal !== 'undefined') {
@@ -560,12 +622,12 @@ async function saveBulkCotacoes() {
     for (const cotacao of bulkCotacoesData) {
         try {
             // Preparar dados para API
-            const serviceData = {
+            const data = {
                 sectorId: parseInt(cotacao.sectorId),
-                i0Original: cotacao.i0Original,
+                originalId: cotacao.i0Original,
                 item: cotacao.item,
-                unidade: cotacao.unidade,
-                adotada: cotacao.adotada,
+                unit: cotacao.unidade,
+                priceFornecedor: cotacao.adotada,
                 precoMontagem: cotacao.precoMontagem,
                 precoAdotado: cotacao.precoAdotado,
                 mediaAdotada: cotacao.mediaAdotada,
@@ -588,24 +650,19 @@ async function saveBulkCotacoes() {
                 justificativa: cotacao.justificativa
             };
 
-            // Criar serviço
-            const createdService = await api.createService(serviceData);
+            // Criar serviço ou insumo
+            const created = await apiMethod.call(api, data);
 
             // Upload de anexos
             if (cotacao.attachments && cotacao.attachments.length > 0) {
                 for (const attachment of cotacao.attachments) {
-                    const formData = new FormData();
-                    formData.append('file', attachment.file);
-                    formData.append('description', attachment.description);
-                    formData.append('entityType', 'Service');
-                    formData.append('entityId', createdService.id);
-
-                    await api.uploadAttachment(formData);
+                    await api.uploadAttachment(entityType, created.id, attachment.file, attachment.description);
                 }
             }
 
             sucessos++;
         } catch (error) {
+            console.error('Erro ao salvar cotação:', error);
             erros++;
         }
     }
@@ -621,7 +678,15 @@ async function saveBulkCotacoes() {
             icon: sucessos > 0 ? 'success' : 'error'
         });
     } else {
-        alert(`✅ ${sucessos} cotação(ões) salva(s)\n${erros > 0 ? `❌ ${erros} erro(s)` : ''}`);
+        Swal.fire({
+            icon: sucessos > 0 ? 'success' : 'error',
+            title: sucessos > 0 ? '✅ Concluído!' : '❌ Erro!',
+            html: `
+                <p>✅ ${sucessos} cotação(ões) salva(s) com sucesso</p>
+                ${erros > 0 ? `<p style="color: #dc3545;">❌ ${erros} erro(s)</p>` : ''}
+            `,
+            confirmButtonText: 'OK'
+        });
     }
 
     if (sucessos > 0) {

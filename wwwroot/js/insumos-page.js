@@ -283,7 +283,12 @@ async function saveInsumo() {
     
     // Validação básica
     if (!sectorId || !originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Campos obrigatórios',
+            text: 'Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
@@ -368,7 +373,12 @@ async function saveInsumo() {
 async function editInsumo(id) {
     const insumo = insumosPageData.find(i => i.id === id);
     if (!insumo) {
-        alert('Insumo não encontrado');
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Erro',
+            text: 'Insumo não encontrado',
+            confirmButtonText: 'OK'
+        });
         return;
     }
 
@@ -436,7 +446,12 @@ async function updateInsumo() {
     const form = modal.querySelector('form');
     
     if (!insumoId) {
-        alert('ID do insumo não encontrado');
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Erro',
+            text: 'ID do insumo não encontrado',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
@@ -451,7 +466,12 @@ async function updateInsumo() {
     
     // Validação básica
     if (!sectorId || !originalId || !item || !unit) {
-        alert('Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)');
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Campos obrigatórios',
+            text: 'Por favor, preencha os campos obrigatórios (Setor, I0 Original, Item, Unidade)',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
@@ -723,7 +743,12 @@ function editFromView() {
     const insumoId = viewModal.dataset.insumoId;
     
     if (!insumoId) {
-        alert('ID do insumo não encontrado');
+        Swal.fire({
+            icon: 'error',
+            title: '❌ Erro',
+            text: 'ID do insumo não encontrado',
+            confirmButtonText: 'OK'
+        });
         return;
     }
     
