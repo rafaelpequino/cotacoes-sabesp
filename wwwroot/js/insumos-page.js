@@ -50,19 +50,10 @@ async function loadSectors() {
 async function loadUsers() {
     try {
         usersData = await api.getUsers();
-        // Obter ID do usuário logado via chamada ao elemento que está na página
-        const userIcon = document.querySelector('.user-icon');
-        if (userIcon && userIcon.textContent) {
-            // Usar a inicial para encontrar o usuário
-            const initial = userIcon.textContent.trim();
-            const userName = document.querySelector('.user-name');
-            if (userName) {
-                const userNameText = userName.textContent.trim();
-                const currentUser = usersData.find(u => u.name === userNameText);
-                if (currentUser) {
-                    currentUserId = currentUser.id;
-                }
-            }
+        // Obter ID do usuário logado
+        const currentUser = await api.getCurrentUser();
+        if (currentUser) {
+            currentUserId = currentUser.id;
         }
     } catch (error) {
         usersData = [];
@@ -104,7 +95,15 @@ function renderInsumosTable(insumos) {
         const sectorName = sectorsData.find(s => s.id === insumo.sectorId)?.name || 'N/A';
         const responsibleUser = usersData.find(u => u.id === insumo.userId);
         const responsibleName = responsibleUser ? responsibleUser.name : 'N/A';
+        const isOwner = currentUserId === insumo.userId;
         const row = document.createElement('tr');
+        
+        // Botões de editar e deletar apenas aparecem se for o dono
+        const editDeleteButtons = isOwner ? `
+                <button class="action-btn" title="Editar" onclick="editInsumo(${insumo.id})">✏️</button>
+                <button class="action-btn" title="Excluir" onclick="deleteInsumo(${insumo.id})">🗑</button>
+            ` : '';
+        
         row.innerHTML = `
             <td>${insumo.originalId}</td>
             <td>${sectorName}</td>
@@ -116,8 +115,7 @@ function renderInsumosTable(insumos) {
             <td class="actions">
                 <button class="action-btn" title="Copiar dados" onclick="copyInsumo(${insumo.id})">📋</button>
                 <button class="action-btn" title="Visualizar" onclick="viewInsumo(${insumo.id})">👁</button>
-                <button class="action-btn" title="Editar" onclick="editInsumo(${insumo.id})">✏️</button>
-                <button class="action-btn" title="Excluir" onclick="deleteInsumo(${insumo.id})">🗑</button>
+                ${editDeleteButtons}
             </td>
         `;
         tbody.appendChild(row);

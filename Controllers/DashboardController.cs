@@ -30,20 +30,14 @@ namespace CotacoesEPC.Controllers
         {
             var userId = GetUserId();
 
-            var servicesCount = await _context.Services
-                .Where(s => s.UserId == userId)
-                .CountAsync();
+            // Contar TODAS as cotações e spreadsheets (compartilhadas)
+            var servicesCount = await _context.Services.CountAsync();
 
-            var inputsCount = await _context.Inputs
-                .Where(i => i.UserId == userId)
-                .CountAsync();
+            var inputsCount = await _context.Inputs.CountAsync();
 
-            var spreadsheetsCount = await _context.Spreadsheets
-                .Where(s => s.UserId == userId)
-                .CountAsync();
+            var spreadsheetsCount = await _context.Spreadsheets.CountAsync();
 
             var recentServices = await _context.Services
-                .Where(s => s.UserId == userId)
                 .OrderByDescending(s => s.CreatedAt)
                 .Take(3)
                 .Select(s => new
@@ -58,7 +52,6 @@ namespace CotacoesEPC.Controllers
                 .ToListAsync();
 
             var recentInputs = await _context.Inputs
-                .Where(i => i.UserId == userId)
                 .OrderByDescending(i => i.CreatedAt)
                 .Take(3)
                 .Select(i => new
@@ -72,7 +65,6 @@ namespace CotacoesEPC.Controllers
                 .ToListAsync();
 
             var recentSpreadsheets = await _context.Spreadsheets
-                .Where(s => s.UserId == userId)
                 .OrderByDescending(s => s.CreatedAt)
                 .Take(3)
                 .Select(s => new

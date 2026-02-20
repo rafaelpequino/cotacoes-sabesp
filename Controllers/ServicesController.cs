@@ -30,7 +30,8 @@ namespace CotacoesEPC.Controllers
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
             var userId = GetUserId();
-            var query = _context.Services.Where(s => s.UserId == userId);
+            // Mostrar todos os serviços (compartilhados entre usuários)
+            var query = _context.Services.AsQueryable();
 
             // Aplicar filtro de texto
             if (!string.IsNullOrEmpty(search))
@@ -61,9 +62,9 @@ namespace CotacoesEPC.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var userId = GetUserId();
+            // Permitir visualização de qualquer serviço (todos podem ver, mas só podem editar/deletar os seus)
             var service = await _context.Services
-                .FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (service == null)
                 return NotFound(new { message = "Serviço não encontrado" });

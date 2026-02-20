@@ -177,6 +177,10 @@ class ApiClient {
         return this.request('/users');
     }
 
+    async getCurrentUser() {
+        return this.request('/users/current');
+    }
+
     // Spreadsheets endpoints
     async getSpreadsheets(search = null, sort = null, filter = null) {
         let endpoint = '/spreadsheets';

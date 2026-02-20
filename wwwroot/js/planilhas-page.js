@@ -3,6 +3,8 @@
 let planilhasCrud = new CrudManager('spreadsheets');
 let planilhasPageData = [];
 let sectorsData = [];
+let usersData = [];
+let currentUserId = null;
 
 // Função para humanizar erros (cópia do método em crud.js)
 function humanizeError(errorMessage) {
@@ -63,8 +65,22 @@ async function loadSectors() {
     }
 }
 
+async function loadUsers() {
+    try {
+        usersData = await api.getUsers();
+        // Obter ID do usuário logado
+        const currentUser = await api.getCurrentUser();
+        if (currentUser) {
+            currentUserId = currentUser.id;
+        }
+    } catch (error) {
+        usersData = [];
+    }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     await loadSectors();
+    await loadUsers();
     await loadPlanilhas();
     setupEventListeners();
 });
@@ -106,15 +122,28 @@ function renderPlanilhasTable(planilhas) {
         const sector = sectorsData.find(s => s.id === planilha.sectorId);
         const sectorName = sector ? sector.name : '-';
         
+        // Procurar o nome do usuário
+        const owner = usersData.find(u => u.id === planilha.userId);
+        const ownerName = owner ? owner.name : 'N/A';
+        
+        // Verificar se é o proprietário
+        const isOwner = currentUserId === planilha.userId;
+        
+        // Botões de editar e deletar apenas aparecem se for o dono
+        const editDeleteButtons = isOwner ? `
+                <button class="action-btn" title="Editar" onclick="editPlanilha(${planilha.id})">✏️</button>
+                <button class="action-btn" title="Deletar" onclick="deletePlanilha(${planilha.id})">🗑</button>
+            ` : '';
+        
         row.innerHTML = `
             <td>${planilha.name || '-'}</td>
             <td>${new Date(planilha.createdAt).toLocaleDateString('pt-BR')}</td>
             <td>${sectorName}</td>
-            <td>Você</td>
+            <td>${ownerName}</td>
             <td>${planilha.fileSize ? (planilha.fileSize / 1024).toFixed(2) + ' KB' : '-'}</td>
             <td class="actions">
                 <button class="action-btn" title="Download" onclick="downloadPlanilha(${planilha.id})">⬇️</button>
-                <button class="action-btn" title="Deletar" onclick="deletePlanilha(${planilha.id})">🗑</button>
+                ${editDeleteButtons}
             </td>
         `;
         tbody.appendChild(row);
@@ -217,6 +246,11 @@ function clearFilters() {
 function openUploadModal() {
     const modal = document.getElementById('uploadModal');
     if (modal) {
+        // Resetar para modo de criação
+        modal.dataset.isEditing = 'false';
+        delete modal.dataset.planilhaId;
+        const form = modal.querySelector('form');
+        if (form) form.reset();
         modal.style.display = 'flex';
     } else {
         Swal.fire({
@@ -232,12 +266,16 @@ function closeUploadModal() {
     const modal = document.getElementById('uploadModal');
     if (modal) {
         modal.style.display = 'none';
+        modal.dataset.isEditing = 'false';
+        delete modal.dataset.planilhaId;
     }
 }
 
 async function savePlanilha() {
     const modal = document.getElementById('uploadModal');
     const form = modal.querySelector('form');
+    const isEditing = modal.dataset.isEditing === 'true';
+    const planilhaId = modal.dataset.planilhaId;
     
     // Buscar input pelo placeholder ou label
     const nameInput = form.querySelector('input[type="text"]');
@@ -245,6 +283,8 @@ async function savePlanilha() {
     const sectorSelect = document.getElementById('sectorSelect');
     const sector = sectorSelect?.value || '';
     const description = form.querySelector('textarea')?.value || '';
+    const isSharedCheckbox = form.querySelector('input[name="isShared"]');
+    const isShared = isSharedCheckbox?.checked || false;
     const fileInput = form.querySelector('input[type="file"]');
     
     if (!name) {
@@ -265,32 +305,21 @@ async function savePlanilha() {
         return;
     }
 
-    if (!fileInput || !fileInput.files.length) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Arquivo obrigatório',
-            text: 'Por favor, selecione um arquivo'
-        });
-        return;
-    }
-
-    const file = fileInput.files[0];
-    
-    // Validar extensão do arquivo
-    const fileName = file.name.toLowerCase();
-    if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xlsm') && !fileName.endsWith('.xls') && !fileName.endsWith('.csv')) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Arquivo inválido',
-            text: 'Por favor, selecione um arquivo Excel (.xlsx, .xlsm, .xls) ou CSV (.csv)',
-            confirmButtonColor: '#13d0ff'
-        });
-        return;
+    // Se não está editando, arquivo é obrigatório
+    if (!isEditing) {
+        if (!fileInput || !fileInput.files.length) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Arquivo obrigatório',
+                text: 'Por favor, selecione um arquivo'
+            });
+            return;
+        }
     }
 
     // Mostrar loading
     Swal.fire({
-        title: 'Enviando arquivo...',
+        title: isEditing ? 'Atualizando planilha...' : 'Enviando arquivo...',
         text: 'Por favor, aguarde.',
         icon: 'info',
         allowOutsideClick: false,
@@ -301,35 +330,87 @@ async function savePlanilha() {
     });
 
     try {
-        // Fazer upload do arquivo
-        const uploadResult = await api.uploadFile(file);
+        let filePath = null;
+        let fileType = null;
+        let fileSize = null;
 
-        // Extrair a extensão do arquivo
-        const fileExtension = fileName.split('.').pop() || 'unknown';
+        // Se há um arquivo novo, fazer upload
+        if (fileInput && fileInput.files.length) {
+            const file = fileInput.files[0];
+            const fileName = file.name.toLowerCase();
+            
+            // Validar extensão do arquivo
+            if (!fileName.endsWith('.xlsx') && !fileName.endsWith('.xlsm') && !fileName.endsWith('.xls') && !fileName.endsWith('.csv')) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Arquivo inválido',
+                    text: 'Por favor, selecione um arquivo Excel (.xlsx, .xlsm, .xls) ou CSV (.csv)',
+                    confirmButtonColor: '#13d0ff'
+                });
+                return;
+            }
 
-        // Criar a planilha no banco com o fileKey
-        const data = {
-            name: name,
-            sectorId: parseInt(sector),
-            description: description || null,
-            filePath: uploadResult.fileKey,  // Usar a chave gerada pelo servidor
-            fileType: fileExtension,
-            fileSize: file.size,
-            isShared: false
-        };
+            const uploadResult = await api.uploadFile(file);
+            filePath = uploadResult.fileKey;
+            fileType = fileName.split('.').pop() || 'unknown';
+            fileSize = file.size;
+        }
 
-        const result = await api.createSpreadsheet(data);
+        if (isEditing) {
+            // Modo de edição - atualizar planilha
+            const data = {
+                name: name,
+                sectorId: parseInt(sector),
+                description: description || null,
+                isShared: isShared
+            };
 
-        Swal.fire({
-            icon: 'success',
-            title: 'Sucesso!',
-            text: 'Planilha enviada e criada com sucesso!',
-            confirmButtonColor: '#13d0ff'
-        }).then(() => {
-            closeUploadModal();
-            loadPlanilhas();
-            form.reset();
-        });
+            // Adicionar dados do arquivo apenas se houver novo arquivo
+            if (filePath) {
+                data.filePath = filePath;
+                data.fileType = fileType;
+                data.fileSize = fileSize;
+            }
+
+            await api.updateSpreadsheet(planilhaId, data);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Planilha atualizada com sucesso!',
+                confirmButtonColor: '#13d0ff'
+            }).then(() => {
+                closeUploadModal();
+                loadPlanilhas();
+                form.reset();
+                modal.dataset.isEditing = 'false';
+                delete modal.dataset.planilhaId;
+            });
+        } else {
+            // Modo de criação - criar nova planilha
+            const data = {
+                name: name,
+                sectorId: parseInt(sector),
+                description: description || null,
+                filePath: filePath,
+                fileType: fileType,
+                fileSize: fileSize,
+                isShared: true  // Compartilhada por padrão
+            };
+
+            await api.createSpreadsheet(data);
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Sucesso!',
+                text: 'Planilha enviada e criada com sucesso!',
+                confirmButtonColor: '#13d0ff'
+            }).then(() => {
+                closeUploadModal();
+                loadPlanilhas();
+                form.reset();
+            });
+        }
     } catch (error) {
         const mensagem = humanizeError(error.message);
         Swal.fire({
@@ -392,6 +473,49 @@ async function downloadPlanilha(id) {
             text: mensagem || 'Não foi possível fazer o download da planilha'
         });
     }
+}
+
+async function editPlanilha(id) {
+    const planilha = planilhasPageData.find(p => p.id === id);
+    if (!planilha) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: 'Planilha não encontrada'
+        });
+        return;
+    }
+
+    // Verificar se é o proprietário
+    if (currentUserId !== planilha.userId) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Não permitido',
+            text: 'Você só pode editar planilhas que você criou'
+        });
+        return;
+    }
+
+    // Abrir modal de edição
+    const modal = document.getElementById('uploadModal');
+    const form = modal.querySelector('form');
+    
+    // Popular campos
+    const nameInput = form.querySelector('input[name="name"]');
+    const descriptionInput = form.querySelector('textarea[name="description"]');
+    const sectorSelect = form.querySelector('select[name="sectorId"]');
+    const isSharedCheckbox = form.querySelector('input[name="isShared"]');
+    
+    if (nameInput) nameInput.value = planilha.name || '';
+    if (descriptionInput) descriptionInput.value = planilha.description || '';
+    if (sectorSelect) sectorSelect.value = planilha.sectorId || '';
+    if (isSharedCheckbox) isSharedCheckbox.checked = planilha.isShared || false;
+    
+    // Armazenar ID para update
+    modal.dataset.planilhaId = id;
+    modal.dataset.isEditing = 'true';
+    
+    modal.style.display = 'flex';
 }
 
 async function deletePlanilha(id) {

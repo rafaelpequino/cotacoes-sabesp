@@ -50,19 +50,10 @@ async function loadSectors() {
 async function loadUsers() {
     try {
         usersData = await api.getUsers();
-        // Obter ID do usuário logado via chamada ao elemento que está na página
-        const userIcon = document.querySelector('.user-icon');
-        if (userIcon && userIcon.textContent) {
-            // Usar a inicial para encontrar o usuário
-            const initial = userIcon.textContent.trim();
-            const userName = document.querySelector('.user-name');
-            if (userName) {
-                const userNameText = userName.textContent.trim();
-                const currentUser = usersData.find(u => u.name === userNameText);
-                if (currentUser) {
-                    currentUserId = currentUser.id;
-                }
-            }
+        // Obter ID do usuário logado
+        const currentUser = await api.getCurrentUser();
+        if (currentUser) {
+            currentUserId = currentUser.id;
         }
     } catch (error) {
         usersData = [];
@@ -104,7 +95,15 @@ function renderServicosTable(servicos) {
         const sectorName = sectorsData.find(s => s.id === servico.sectorId)?.name || 'N/A';
         const responsibleUser = usersData.find(u => u.id === servico.userId);
         const responsibleName = responsibleUser ? responsibleUser.name : 'N/A';
+        const isOwner = currentUserId === servico.userId;
         const row = document.createElement('tr');
+        
+        // Botões de editar e deletar apenas aparecem se for o dono
+        const editDeleteButtons = isOwner ? `
+                <button class="action-btn" title="Editar" onclick="editServico(${servico.id})">✏️</button>
+                <button class="action-btn" title="Excluir" onclick="deleteServico(${servico.id})">🗑</button>
+            ` : '';
+        
         row.innerHTML = `
             <td>${servico.originalId}</td>
             <td>${sectorName}</td>
@@ -116,8 +115,7 @@ function renderServicosTable(servicos) {
             <td class="actions">
                 <button class="action-btn" title="Copiar dados" onclick="copyServico(${servico.id})">📋</button>
                 <button class="action-btn" title="Visualizar" onclick="viewServico(${servico.id})">👁</button>
-                <button class="action-btn" title="Editar" onclick="editServico(${servico.id})">✏️</button>
-                <button class="action-btn" title="Excluir" onclick="deleteServico(${servico.id})">🗑</button>
+                ${editDeleteButtons}
             </td>
         `;
         tbody.appendChild(row);

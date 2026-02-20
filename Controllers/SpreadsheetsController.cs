@@ -43,7 +43,8 @@ namespace CotacoesEPC.Controllers
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
             var userId = GetUserId();
-            var query = _context.Spreadsheets.Where(s => s.UserId == userId);
+            // Mostrar TODAS as planilhas (compartilhadas entre usuários)
+            var query = _context.Spreadsheets.AsQueryable();
 
             // Aplicar filtro de texto
             if (!string.IsNullOrEmpty(search))
@@ -82,8 +83,9 @@ namespace CotacoesEPC.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var userId = GetUserId();
+            // Permitir visualização de qualquer planilha (todos podem ver, mas só podem editar/deletar as suas)
             var spreadsheet = await _context.Spreadsheets
-                .FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
+                .FirstOrDefaultAsync(s => s.Id == id);
 
             if (spreadsheet == null)
                 return NotFound(new { message = "Planilha não encontrada" });

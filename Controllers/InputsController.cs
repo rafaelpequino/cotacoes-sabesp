@@ -30,7 +30,8 @@ namespace CotacoesEPC.Controllers
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
             var userId = GetUserId();
-            var query = _context.Inputs.Where(i => i.UserId == userId);
+            // Mostrar todas as cotações (compartilhadas entre usuários)
+            var query = _context.Inputs.AsQueryable();
 
             // Aplicar filtro de texto
             if (!string.IsNullOrEmpty(search))
@@ -61,9 +62,9 @@ namespace CotacoesEPC.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var userId = GetUserId();
+            // Permitir visualização de qualquer insumo (todos podem ver, mas só podem editar/deletar os seus)
             var input = await _context.Inputs
-                .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+                .FirstOrDefaultAsync(i => i.Id == id);
 
             if (input == null)
                 return NotFound(new { message = "Insumo não encontrado" });

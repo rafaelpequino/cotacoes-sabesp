@@ -45,4 +45,34 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Carregar dados do usuário e atualizar header
+    updateUserHeader();
 });
+
+async function updateUserHeader() {
+    try {
+        const currentUser = await api.getCurrentUser();
+        if (currentUser) {
+            // Atualizar nome do usuário
+            const userNameElement = document.querySelector('.user-name');
+            if (userNameElement) {
+                userNameElement.textContent = currentUser.name;
+            }
+            
+            // Atualizar inicial do usuário
+            const userIconElement = document.querySelector('.user-icon');
+            if (userIconElement) {
+                userIconElement.textContent = currentUser.initialLetter || currentUser.name.charAt(0).toUpperCase();
+            }
+            
+            // Atualizar nome no dropdown
+            const dropdownHeader = document.querySelector('.dropdown-header');
+            if (dropdownHeader) {
+                dropdownHeader.textContent = currentUser.name;
+            }
+        }
+    } catch (error) {
+        console.error('Erro ao carregar dados do usuário:', error);
+    }
+}
