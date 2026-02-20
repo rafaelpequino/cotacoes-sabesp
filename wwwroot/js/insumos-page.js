@@ -783,9 +783,9 @@ function viewInsumo(id) {
             valueLabel.textContent = formatCurrency(companyValue);
         }
         
-        // Marcar como vazio se não houver valor
+        // Marcar como vazio se não houver valor ou se for 0
         if (card) {
-            if (!companyValue && companyValue !== 0) {
+            if (!companyValue || companyValue === 0 || companyValue === '0') {
                 card.classList.add('empty');
             } else {
                 card.classList.remove('empty');
