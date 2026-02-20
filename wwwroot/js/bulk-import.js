@@ -692,8 +692,8 @@ async function saveBulkCotacoes() {
     if (sucessos > 0) {
         closeBulkImportModal();
         resetBulkImport();
-        if (typeof loadServices === 'function') {
-            loadServices();
+        if (typeof loadServicos === 'function') {
+            loadServicos();
         } else if (typeof loadInsumos === 'function') {
             loadInsumos();
         }

@@ -421,7 +421,6 @@ async function saveInsumo() {
             confirmButtonColor: '#13d0ff'
         }).then(() => {
             closeCreateModal();
-            loadInsumos();
             form.reset();
             // Limpar anexos pendentes
             if (typeof pendingAttachments !== 'undefined') {
@@ -430,6 +429,8 @@ async function saveInsumo() {
                     renderPendingAttachments('create');
                 }
             }
+            // Recarregar insumos após fechar modal
+            loadInsumos();
         });
     } catch (error) {
         Swal.fire({
@@ -604,11 +605,12 @@ async function updateInsumo() {
             confirmButtonColor: '#13d0ff'
         }).then(() => {
             closeEditModal();
-            loadInsumos();
             // Limpar anexos pendentes
             if (typeof pendingAttachments !== 'undefined') {
                 pendingAttachments = [];
             }
+            // Recarregar insumos após fechar modal
+            loadInsumos();
         });
     } catch (error) {
         Swal.fire({
