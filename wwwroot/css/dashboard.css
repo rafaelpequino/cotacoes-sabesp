@@ -2367,3 +2367,139 @@ body.modal-open {
         background: #fff;
     }
 }
+
+/* =============================================
+   BADGES DE STATUS DE COTAÇÃO
+   ============================================= */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.status-badge.pendente {
+    background: #fff8e1;
+    color: #f57f17;
+    border: 1px solid #ffe082;
+}
+
+.status-badge.concluida {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+
+.status-badge.cancelada {
+    background: #fce4ec;
+    color: #c62828;
+    border: 1px solid #f48fb1;
+}
+
+/* Select inline de status — aparece apenas para o dono */
+.status-select-inline {
+    border: none;
+    background: transparent;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    outline: none;
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+.status-select-inline.pendente {
+    color: #f57f17;
+    background: #fff8e1;
+    border: 1px solid #ffe082;
+}
+
+.status-select-inline.concluida {
+    color: #2e7d32;
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+}
+
+.status-select-inline.cancelada {
+    color: #c62828;
+    background: #fce4ec;
+    border: 1px solid #f48fb1;
+}
+
+/* Checkbox "Cancelar esta cotação" no edit modal */
+.cancelar-check-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.cancelar-check-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+    accent-color: #dc3545;
+    margin: 0;
+}
+
+.cancelar-check-label {
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    margin: 0;
+    line-height: 1.2;
+    user-select: none;
+}
+
+.status-auto-note {
+    display: block;
+    color: #999;
+    font-size: 0.75em;
+    margin-top: 2px;
+}
+
+/* Botão de ação inline de status (cancelar / reativar) */
+.action-btn-status {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    vertical-align: middle;
+    opacity: 0.65;
+    transition: opacity 0.15s, background 0.15s;
+    line-height: 1;
+}
+
+.action-btn-status:hover {
+    opacity: 1;
+    background: rgba(0,0,0,0.06);
+}
+
+/* Botão Nova Intenção de Cotação */
+.btn-nova-intencao {
+    background: transparent;
+    color: #f57f17;
+    border: 2px solid #f57f17;
+    padding: 8px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-nova-intencao:hover {
+    background: #fff8e1;
+}

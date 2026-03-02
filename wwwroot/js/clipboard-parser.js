@@ -36,10 +36,20 @@ function parseClipboardData(text) {
             return (str || '').trim();
         }
 
-        function getValue(index, isMonetary = false) {
+        function cleanTextUpper(str) {
+            return (str || '').trim()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toUpperCase()
+                .replace(/[^A-Z0-9 \-\/]/g, '');
+        }
+
+        function getValue(index, isMonetary = false, isText = false) {
             if (index < valuesLine.length) {
                 const val = valuesLine[index];
-                return isMonetary ? parseMoneyValue(val) : cleanText(val);
+                if (isMonetary) return parseMoneyValue(val);
+                if (isText) return cleanTextUpper(val);
+                return cleanText(val);
             }
             return '';
         }
@@ -47,7 +57,7 @@ function parseClipboardData(text) {
         // Os NOMES DAS EMPRESAS estão nas PRIMEIRAS COLUNAS da LINHA 1
         let companyNames = [];
         for (let i = 0; i < 6; i++) {
-            companyNames[i] = cleanText(headerLine[i] || '');
+            companyNames[i] = cleanTextUpper(headerLine[i] || '');
             console.log(`Empresa ${i + 1}: "${companyNames[i]}"`);
         }
 
@@ -63,9 +73,9 @@ function parseClipboardData(text) {
         console.log('Valores finais:', empresaValues);
 
         return {
-            idOriginal: getValue(0),
-            item: getValue(1),
-            unidade: getValue(2),
+            idOriginal: getValue(0, false, true),
+            item: getValue(1, false, true),
+            unidade: getValue(2, false, true),
             precoFornCorrigido: getValue(3, true),
             precoMontagem: getValue(4, true),
             precoAdotado: getValue(6, true),
@@ -86,7 +96,7 @@ function parseClipboardData(text) {
             empresa4: empresaValues[3],
             empresa5: empresaValues[4],
             empresa6: empresaValues[5],
-            justificativa: getValue(20)
+            justificativa: getValue(20, false, true)
         };
 
     } catch (error) {
@@ -104,12 +114,21 @@ function fillFormWithParsedData(modal, parsedData) {
         const itemInput = modal.querySelector('input[placeholder="Descrição do item"]');
         const unidadeInput = modal.querySelector('input[placeholder="Ex: Un., m², Kg"]');
         
-        if (idOriginalInput) idOriginalInput.value = parsedData.idOriginal;
-        if (itemInput) itemInput.value = parsedData.item;
-        if (unidadeInput) unidadeInput.value = parsedData.unidade;
+        // Função auxiliar para converter texto ao preencher programaticamente
+        function upperVal(str) {
+            return (str || '').trim()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toUpperCase()
+                .replace(/[^A-Z0-9 \-\/]/g, '');
+        }
+
+        if (idOriginalInput) idOriginalInput.value = upperVal(parsedData.idOriginal);
+        if (itemInput) itemInput.value = upperVal(parsedData.item);
+        if (unidadeInput) unidadeInput.value = upperVal(parsedData.unidade);
         
         const textareaInputs = modal.querySelectorAll('textarea');
-        if (textareaInputs[0]) textareaInputs[0].value = parsedData.justificativa;
+        if (textareaInputs[0]) textareaInputs[0].value = upperVal(parsedData.justificativa);
         
         const numberInputs = modal.querySelectorAll('input[type="number"]');
         
@@ -133,7 +152,7 @@ function fillFormWithParsedData(modal, parsedData) {
             const valorInput = numberInputs[idx];
             
             if (nomeInput) {
-                nomeInput.value = parsedData[`nomeEmpresa${i}`] || '';
+                nomeInput.value = upperVal(parsedData[`nomeEmpresa${i}`] || '');
             }
             
             if (valorInput) {

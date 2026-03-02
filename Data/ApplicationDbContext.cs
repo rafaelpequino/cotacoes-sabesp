@@ -40,6 +40,7 @@ namespace CotacoesEPC.Data
                 entity.Property(e => e.OriginalId).IsRequired();
                 entity.Property(e => e.Item).IsRequired();
                 entity.Property(e => e.Unit).IsRequired();
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20).HasDefaultValue("Concluída");
                 entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoMontagem).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoAdotado).HasPrecision(18, 2);
@@ -72,6 +73,7 @@ namespace CotacoesEPC.Data
                 entity.Property(e => e.OriginalId).IsRequired();
                 entity.Property(e => e.Item).IsRequired();
                 entity.Property(e => e.Unit).IsRequired();
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20).HasDefaultValue("Concluída");
                 entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoMontagem).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoAdotado).HasPrecision(18, 2);

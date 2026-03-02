@@ -29,32 +29,27 @@ namespace CotacoesEPC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
-            var userId = GetUserId();
-            // Mostrar todos os serviços (compartilhados entre usuários)
             var query = _context.Services.AsQueryable();
 
-            // Aplicar filtro de texto
             if (!string.IsNullOrEmpty(search))
             {
                 var searchLower = search.ToLower();
-                query = query.Where(s => 
+                query = query.Where(s =>
                     s.Item.ToLower().Contains(searchLower) ||
                     s.OriginalId.ToLower().Contains(searchLower) ||
                     s.Unit.ToLower().Contains(searchLower)
                 );
             }
 
-            // Aplicar ordenação
             query = sort switch
             {
                 "recentes" => query.OrderByDescending(s => s.CreatedAt),
                 "preço_menor" => query.OrderBy(s => s.PrecoAdotado),
                 "preço_maior" => query.OrderByDescending(s => s.PrecoAdotado),
-                _ => query.OrderByDescending(s => s.CreatedAt) // Relevância/padrão
+                _ => query.OrderByDescending(s => s.CreatedAt)
             };
 
             var services = await query.ToListAsync();
-
             return Ok(services);
         }
 
@@ -62,10 +57,7 @@ namespace CotacoesEPC.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            // Permitir visualização de qualquer serviço (todos podem ver, mas só podem editar/deletar os seus)
-            var service = await _context.Services
-                .FirstOrDefaultAsync(s => s.Id == id);
-
+            var service = await _context.Services.FirstOrDefaultAsync(s => s.Id == id);
             if (service == null)
                 return NotFound(new { message = "Serviço não encontrado" });
 
@@ -80,14 +72,15 @@ namespace CotacoesEPC.Controllers
                 return BadRequest(ModelState);
 
             var userId = GetUserId();
+            var status = ValidateStatus(request.Status) ?? "Concluída";
 
             var service = new Service
             {
                 UserId = userId,
                 SectorId = request.SectorId,
-                OriginalId = request.OriginalId,
-                Item = request.Item,
-                Unit = request.Unit,
+                OriginalId = request.OriginalId ?? string.Empty,
+                Item = request.Item ?? string.Empty,
+                Unit = request.Unit ?? string.Empty,
                 PriceFornecedor = request.PriceFornecedor,
                 PrecoMontagem = request.PrecoMontagem,
                 PrecoAdotado = request.PrecoAdotado,
@@ -109,6 +102,7 @@ namespace CotacoesEPC.Controllers
                 NomeEmpresa6 = request.NomeEmpresa6,
                 Empresa6 = request.Empresa6,
                 Justificativa = request.Justificativa,
+                Status = status,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -133,9 +127,9 @@ namespace CotacoesEPC.Controllers
                 return NotFound(new { message = "Serviço não encontrado" });
 
             service.SectorId = request.SectorId;
-            service.OriginalId = request.OriginalId;
-            service.Item = request.Item;
-            service.Unit = request.Unit;
+            service.OriginalId = request.OriginalId ?? string.Empty;
+            service.Item = request.Item ?? string.Empty;
+            service.Unit = request.Unit ?? string.Empty;
             service.PriceFornecedor = request.PriceFornecedor;
             service.PrecoMontagem = request.PrecoMontagem;
             service.PrecoAdotado = request.PrecoAdotado;
@@ -157,6 +151,33 @@ namespace CotacoesEPC.Controllers
             service.NomeEmpresa6 = request.NomeEmpresa6;
             service.Empresa6 = request.Empresa6;
             service.Justificativa = request.Justificativa;
+            // Apenas o dono pode alterar o status
+            if (!string.IsNullOrEmpty(request.Status))
+                service.Status = ValidateStatus(request.Status) ?? service.Status;
+            service.UpdatedAt = DateTime.UtcNow;
+
+            _context.Services.Update(service);
+            await _context.SaveChangesAsync();
+
+            return Ok(service);
+        }
+
+        // PATCH: api/services/{id}/status  — somente o criador pode alterar
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
+        {
+            var novoStatus = ValidateStatus(request.Status);
+            if (novoStatus == null)
+                return BadRequest(new { message = "Status inválido. Use: Pendente, Cancelada ou Concluída." });
+
+            var userId = GetUserId();
+            var service = await _context.Services
+                .FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
+
+            if (service == null)
+                return NotFound(new { message = "Serviço não encontrado ou sem permissão para alterar o status." });
+
+            service.Status = novoStatus;
             service.UpdatedAt = DateTime.UtcNow;
 
             _context.Services.Update(service);
@@ -181,14 +202,25 @@ namespace CotacoesEPC.Controllers
 
             return Ok(new { message = "Serviço deletado com sucesso" });
         }
+
+        private static string? ValidateStatus(string? status)
+        {
+            return status switch
+            {
+                "Pendente" => "Pendente",
+                "Cancelada" => "Cancelada",
+                "Concluída" => "Concluída",
+                _ => null
+            };
+        }
     }
 
     public class CreateServiceRequest
     {
         public int SectorId { get; set; }
-        public string OriginalId { get; set; } = string.Empty;
-        public string Item { get; set; } = string.Empty;
-        public string Unit { get; set; } = string.Empty;
+        public string? OriginalId { get; set; }
+        public string? Item { get; set; }
+        public string? Unit { get; set; }
         public decimal PriceFornecedor { get; set; }
         public decimal PrecoMontagem { get; set; }
         public decimal PrecoAdotado { get; set; }
@@ -210,10 +242,10 @@ namespace CotacoesEPC.Controllers
         public string? NomeEmpresa6 { get; set; }
         public decimal? Empresa6 { get; set; }
         public string? Justificativa { get; set; }
+        public string? Status { get; set; }
     }
 
     public class UpdateServiceRequest : CreateServiceRequest
     {
     }
 }
-

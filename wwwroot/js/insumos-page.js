@@ -7,6 +7,22 @@ let sectorsData = [];
 let usersData = [];
 let currentUserId = null;
 
+/**
+ * Calcula automaticamente o status com base nas informações preenchidas.
+ * - Se statusAtual === 'Cancelada', mantém Cancelada.
+ * - Se todos os campos essenciais preenchidos e precoAdotado > 0 → Concluída
+ * - Caso contrário → Pendente
+ */
+function calcularAutoStatus(dados, statusAtual) {
+    if (statusAtual === 'Cancelada') return 'Cancelada';
+    const completo =
+        dados.originalId && dados.originalId.trim() !== '' &&
+        dados.item && dados.item.trim() !== '' &&
+        dados.unit && dados.unit.trim() !== '' &&
+        parseFloat(dados.precoAdotado || 0) > 0;
+    return completo ? 'Concluída' : 'Pendente';
+}
+
 // Função para humanizar erros
 function humanizeError(errorMessage) {
     const errorMap = {
@@ -36,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadUsers();
     await loadInsumos();
     setupEventListeners();
+    setupIntencaoForm();
 });
 
 async function loadSectors() {
@@ -97,21 +114,42 @@ function renderInsumosTable(insumos) {
         const responsibleName = responsibleUser ? responsibleUser.name : 'N/A';
         const isOwner = currentUserId === insumo.userId;
         const row = document.createElement('tr');
-        
+
+        // Badge de status + botão de ação (apenas para o dono)
+        const statusKey = (insumo.status || 'Concluída').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        const statusLabel = insumo.status || 'Concluída';
+        const isCancelada = statusLabel === 'Cancelada';
+        let statusHtml;
+        if (isOwner) {
+            if (isCancelada) {
+                statusHtml = `<span class="status-badge cancelada">${statusLabel}</span> <button class="action-btn-status" title="Reativar cotação" onclick="changeStatusInsumo(${insumo.id}, 'reativar', this)">↩</button>`;
+            } else {
+                statusHtml = `<span class="status-badge ${statusKey}">${statusLabel}</span> <button class="action-btn-status btn-cancelar-status" title="Cancelar cotação" onclick="changeStatusInsumo(${insumo.id}, 'Cancelada', this)">🚫</button>`;
+            }
+        } else {
+            statusHtml = `<span class="status-badge ${statusKey}">${statusLabel}</span>`;
+        }
+
         // Botões de editar e deletar apenas aparecem se for o dono
         const editDeleteButtons = isOwner ? `
                 <button class="action-btn" title="Editar" onclick="editInsumo(${insumo.id})">✏️</button>
                 <button class="action-btn" title="Excluir" onclick="deleteInsumo(${insumo.id})">🗑</button>
             ` : '';
-        
+
+        // Ocultar preços para itens com status Pendente
+        const isPendente = insumo.status === 'Pendente';
+        const precoMontagemTd = isPendente ? '-' : `R$ ${parseFloat(insumo.precoMontagem || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const precoAdotadoTd  = isPendente ? '-' : `R$ ${parseFloat(insumo.precoAdotado || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
         row.innerHTML = `
-            <td>${insumo.originalId}</td>
+            <td>${insumo.originalId || '-'}</td>
             <td>${sectorName}</td>
             <td>${insumo.item}</td>
-            <td>${insumo.unit}</td>
-            <td>R$ ${parseFloat(insumo.precoMontagem).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td>R$ ${parseFloat(insumo.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>${insumo.unit || '-'}</td>
+            <td>${precoMontagemTd}</td>
+            <td>${precoAdotadoTd}</td>
             <td>${responsibleName}</td>
+            <td>${statusHtml}</td>
             <td class="actions">
                 <button class="action-btn" title="Copiar dados" onclick="copyInsumo(${insumo.id})">📋</button>
                 <button class="action-btn" title="Visualizar" onclick="viewInsumo(${insumo.id})">👁</button>
@@ -398,8 +436,11 @@ async function saveInsumo() {
         empresa5: toNumber(numberInputs[12]?.value),
         nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || ''
+        justificativa: form.querySelector('textarea')?.value || '',
+        status: '' // será preenchido abaixo
     };
+    // Auto-calcular status com base nos dados preenchidos
+    data.status = calcularAutoStatus(data, null);
 
     try {
         const result = await api.createInput(data);
@@ -464,11 +505,13 @@ async function editInsumo(id) {
     const sectorSelect = form.querySelector('select[name="sectorId"]');
     if (sectorSelect) sectorSelect.value = insumo.sectorId;
     
-    // Preencher campos de texto (I0, Item, Unidade)
-    const textInputs = form.querySelectorAll('input[type="text"]:not([name^="nomeEmpresa"])');
-    textInputs[0].value = insumo.originalId;
-    textInputs[1].value = insumo.item;
-    textInputs[2].value = insumo.unit;
+    // Preencher campos de texto (I0, Item, Unidade) — via placeholder para evitar problemas de índice
+    const io0Input = form.querySelector('input[placeholder="Ex: jan/00"]');
+    const itemInput = form.querySelector('input[placeholder="Descrição do item"]');
+    const unitInput = form.querySelector('input[placeholder="Ex: Un., m², Kg"]');
+    if (io0Input) io0Input.value = insumo.originalId || '';
+    if (itemInput) itemInput.value = insumo.item || '';
+    if (unitInput) unitInput.value = insumo.unit || '';
     
     // Preencher nomes das empresas
     form.querySelector('input[name="nomeEmpresa1"]').value = insumo.nomeEmpresa1 || '';
@@ -498,6 +541,17 @@ async function editInsumo(id) {
     // Preencher textarea
     const textarea = form.querySelector('textarea');
     if (textarea) textarea.value = insumo.justificativa || '';
+
+    // Preencher Status (checkbox de cancelar + badge informativo)
+    const cancelarCheck = document.getElementById('editCancelarCheck');
+    const statusDisplay = document.getElementById('editStatusDisplay');
+    if (cancelarCheck) {
+        cancelarCheck.checked = insumo.status === 'Cancelada';
+    }
+    if (statusDisplay) {
+        const sk = (insumo.status || 'Pendente').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        statusDisplay.innerHTML = `<span class="status-badge ${sk}">${insumo.status || 'Pendente'}</span>`;
+    }
 
     // Armazenar ID para update
     modal.dataset.insumoId = id;
@@ -557,6 +611,8 @@ async function updateInsumo() {
         return isNaN(num) ? defaultValue : num;
     };
     
+    const cancelarCheck = document.getElementById('editCancelarCheck');
+    const isCancelar = cancelarCheck?.checked || false;
     const data = {
         sectorId: sectorId,
         originalId: originalId,
@@ -582,8 +638,11 @@ async function updateInsumo() {
         empresa5: toNumber(numberInputs[12]?.value),
         nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || ''
+        justificativa: form.querySelector('textarea')?.value || '',
+        status: '' // será preenchido abaixo
     };
+    // Auto-calcular status; se marcou "cancelar", forçar Cancelada
+    data.status = isCancelar ? 'Cancelada' : calcularAutoStatus(data, null);
 
     try {
         const result = await api.updateInput(insumoId, data);
@@ -840,6 +899,137 @@ function closeEditModal() {
 function closeViewModal() {
     const modal = document.getElementById('viewModal');
     if (modal) modal.style.display = 'none';
+}
+
+// =============================================
+// ALTERAR STATUS — somente o dono pode alterar
+// =============================================
+async function changeStatusInsumo(id, novoStatus, btnEl) {
+    const insumo = insumosPageData.find(i => i.id === id);
+    if (!insumo) return;
+
+    // "reativar" → recalcular automaticamente
+    if (novoStatus === 'reativar') {
+        novoStatus = calcularAutoStatus(insumo, null);
+    }
+
+    try {
+        await api.updateInputStatus(id, novoStatus);
+
+        // Atualizar dado local
+        insumo.status = novoStatus;
+
+        // Atualizar células da linha sem recarregar a página
+        const row = btnEl.closest('tr');
+        if (row) {
+            const statusKey = novoStatus.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            const isCancelada = novoStatus === 'Cancelada';
+            const isPendente = novoStatus === 'Pendente';
+
+            // Atualizar célula de status (coluna 8, índice 7)
+            const cells = row.querySelectorAll('td');
+            if (cells[7]) {
+                if (isCancelada) {
+                    cells[7].innerHTML = `<span class="status-badge cancelada">${novoStatus}</span> <button class="action-btn-status" title="Reativar cotação" onclick="changeStatusInsumo(${id}, 'reativar', this)">↩</button>`;
+                } else {
+                    cells[7].innerHTML = `<span class="status-badge ${statusKey}">${novoStatus}</span> <button class="action-btn-status btn-cancelar-status" title="Cancelar cotação" onclick="changeStatusInsumo(${id}, 'Cancelada', this)">🚫</button>`;
+                }
+            }
+
+            // Atualizar células de preço (colunas 5 e 6, índices 4 e 5)
+            const formatCurrency = v => `R$ ${parseFloat(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            if (cells[4]) cells[4].textContent = isPendente ? '-' : formatCurrency(insumo.precoMontagem);
+            if (cells[5]) cells[5].textContent = isPendente ? '-' : formatCurrency(insumo.precoAdotado);
+        }
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: `Status alterado para "${novoStatus}"`,
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao alterar status',
+            text: error.message || 'Erro desconhecido',
+            confirmButtonColor: '#ff4444'
+        });
+    }
+}
+
+// =============================================
+// INTENÇÃO DE COTAÇÃO
+// =============================================
+function setupIntencaoForm() {
+    const form = document.getElementById('intencaoForm');
+    if (!form) return;
+
+    // Popular setor do modal de intenção
+    const sectorSelect = document.getElementById('intencaoSectorSelect');
+    if (sectorSelect) {
+        while (sectorSelect.options.length > 1) sectorSelect.remove(1);
+        sectorsData.forEach(sector => {
+            const opt = document.createElement('option');
+            opt.value = sector.id;
+            opt.textContent = sector.name;
+            sectorSelect.appendChild(opt);
+        });
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveIntencaoInsumo();
+    });
+}
+
+async function saveIntencaoInsumo() {
+    const sectorId = parseInt(document.getElementById('intencaoSectorSelect')?.value || '0');
+    const item = document.getElementById('intencaoItem')?.value?.trim() || '';
+
+    if (!sectorId || !item) {
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Campos obrigatórios',
+            text: 'Preencha o Setor e a Descrição do item.',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    const data = {
+        sectorId,
+        item,
+        originalId: '',
+        unit: '',
+        priceFornecedor: 0,
+        precoMontagem: 0,
+        precoAdotado: 0,
+        status: 'Pendente'
+    };
+
+    try {
+        await api.createInput(data);
+        Swal.fire({
+            icon: 'success',
+            title: 'Intenção registrada!',
+            text: 'A cotação foi salva com status Pendente.',
+            confirmButtonColor: '#f57f17'
+        }).then(() => {
+            document.getElementById('intencaoModal').style.display = 'none';
+            document.getElementById('intencaoForm').reset();
+            loadInsumos();
+        });
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Erro ao registrar intenção: ' + (error.message || 'Erro desconhecido'),
+            confirmButtonColor: '#ff4444'
+        });
+    }
 }
 
 // Fechar modais ao clicar fora

@@ -25,7 +25,7 @@ class ApiClient {
             headers
         };
 
-        if (body && (method === 'POST' || method === 'PUT')) {
+        if (body && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
             options.body = JSON.stringify(body);
         }
 
@@ -131,6 +131,10 @@ class ApiClient {
         return this.request(`/services/${id}`, 'DELETE');
     }
 
+    async updateServiceStatus(id, status) {
+        return this.request(`/services/${id}/status`, 'PATCH', { status });
+    }
+
     // Inputs endpoints
     async getInputs(search = null, sort = null, filter = null) {
         let endpoint = '/inputs';
@@ -161,6 +165,10 @@ class ApiClient {
 
     async deleteInput(id) {
         return this.request(`/inputs/${id}`, 'DELETE');
+    }
+
+    async updateInputStatus(id, status) {
+        return this.request(`/inputs/${id}/status`, 'PATCH', { status });
     }
 
     // Sectors endpoints

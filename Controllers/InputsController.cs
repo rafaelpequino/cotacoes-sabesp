@@ -29,32 +29,27 @@ namespace CotacoesEPC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
-            var userId = GetUserId();
-            // Mostrar todas as cotações (compartilhadas entre usuários)
             var query = _context.Inputs.AsQueryable();
 
-            // Aplicar filtro de texto
             if (!string.IsNullOrEmpty(search))
             {
                 var searchLower = search.ToLower();
-                query = query.Where(i => 
+                query = query.Where(i =>
                     i.Item.ToLower().Contains(searchLower) ||
                     i.OriginalId.ToLower().Contains(searchLower) ||
                     i.Unit.ToLower().Contains(searchLower)
                 );
             }
 
-            // Aplicar ordenação
             query = sort switch
             {
                 "recentes" => query.OrderByDescending(i => i.CreatedAt),
                 "preço_menor" => query.OrderBy(i => i.PrecoAdotado),
                 "preço_maior" => query.OrderByDescending(i => i.PrecoAdotado),
-                _ => query.OrderByDescending(i => i.CreatedAt) // Relevância/padrão
+                _ => query.OrderByDescending(i => i.CreatedAt)
             };
 
             var inputs = await query.ToListAsync();
-
             return Ok(inputs);
         }
 
@@ -62,10 +57,7 @@ namespace CotacoesEPC.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            // Permitir visualização de qualquer insumo (todos podem ver, mas só podem editar/deletar os seus)
-            var input = await _context.Inputs
-                .FirstOrDefaultAsync(i => i.Id == id);
-
+            var input = await _context.Inputs.FirstOrDefaultAsync(i => i.Id == id);
             if (input == null)
                 return NotFound(new { message = "Insumo não encontrado" });
 
@@ -80,14 +72,15 @@ namespace CotacoesEPC.Controllers
                 return BadRequest(ModelState);
 
             var userId = GetUserId();
+            var status = ValidateStatus(request.Status) ?? "Concluída";
 
             var input = new Input
             {
                 UserId = userId,
                 SectorId = request.SectorId,
-                OriginalId = request.OriginalId,
-                Item = request.Item,
-                Unit = request.Unit,
+                OriginalId = request.OriginalId ?? string.Empty,
+                Item = request.Item ?? string.Empty,
+                Unit = request.Unit ?? string.Empty,
                 PriceFornecedor = request.PriceFornecedor,
                 PrecoMontagem = request.PrecoMontagem,
                 PrecoAdotado = request.PrecoAdotado,
@@ -109,6 +102,7 @@ namespace CotacoesEPC.Controllers
                 NomeEmpresa6 = request.NomeEmpresa6,
                 Empresa6 = request.Empresa6,
                 Justificativa = request.Justificativa,
+                Status = status,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -133,9 +127,9 @@ namespace CotacoesEPC.Controllers
                 return NotFound(new { message = "Insumo não encontrado" });
 
             input.SectorId = request.SectorId;
-            input.OriginalId = request.OriginalId;
-            input.Item = request.Item;
-            input.Unit = request.Unit;
+            input.OriginalId = request.OriginalId ?? string.Empty;
+            input.Item = request.Item ?? string.Empty;
+            input.Unit = request.Unit ?? string.Empty;
             input.PriceFornecedor = request.PriceFornecedor;
             input.PrecoMontagem = request.PrecoMontagem;
             input.PrecoAdotado = request.PrecoAdotado;
@@ -157,6 +151,33 @@ namespace CotacoesEPC.Controllers
             input.NomeEmpresa6 = request.NomeEmpresa6;
             input.Empresa6 = request.Empresa6;
             input.Justificativa = request.Justificativa;
+            // Apenas o dono pode alterar o status
+            if (!string.IsNullOrEmpty(request.Status))
+                input.Status = ValidateStatus(request.Status) ?? input.Status;
+            input.UpdatedAt = DateTime.UtcNow;
+
+            _context.Inputs.Update(input);
+            await _context.SaveChangesAsync();
+
+            return Ok(input);
+        }
+
+        // PATCH: api/inputs/{id}/status  — somente o criador pode alterar
+        [HttpPatch("{id}/status")]
+        public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
+        {
+            var novoStatus = ValidateStatus(request.Status);
+            if (novoStatus == null)
+                return BadRequest(new { message = "Status inválido. Use: Pendente, Cancelada ou Concluída." });
+
+            var userId = GetUserId();
+            var input = await _context.Inputs
+                .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+
+            if (input == null)
+                return NotFound(new { message = "Insumo não encontrado ou sem permissão para alterar o status." });
+
+            input.Status = novoStatus;
             input.UpdatedAt = DateTime.UtcNow;
 
             _context.Inputs.Update(input);
@@ -181,14 +202,25 @@ namespace CotacoesEPC.Controllers
 
             return Ok(new { message = "Insumo deletado com sucesso" });
         }
+
+        private static string? ValidateStatus(string? status)
+        {
+            return status switch
+            {
+                "Pendente" => "Pendente",
+                "Cancelada" => "Cancelada",
+                "Concluída" => "Concluída",
+                _ => null
+            };
+        }
     }
 
     public class CreateInputRequest
     {
         public int SectorId { get; set; }
-        public string OriginalId { get; set; } = string.Empty;
-        public string Item { get; set; } = string.Empty;
-        public string Unit { get; set; } = string.Empty;
+        public string? OriginalId { get; set; }
+        public string? Item { get; set; }
+        public string? Unit { get; set; }
         public decimal PriceFornecedor { get; set; }
         public decimal PrecoMontagem { get; set; }
         public decimal PrecoAdotado { get; set; }
@@ -210,10 +242,15 @@ namespace CotacoesEPC.Controllers
         public string? NomeEmpresa6 { get; set; }
         public decimal? Empresa6 { get; set; }
         public string? Justificativa { get; set; }
+        public string? Status { get; set; }
     }
 
     public class UpdateInputRequest : CreateInputRequest
     {
     }
-}
 
+    public class UpdateStatusRequest
+    {
+        public string Status { get; set; } = string.Empty;
+    }
+}

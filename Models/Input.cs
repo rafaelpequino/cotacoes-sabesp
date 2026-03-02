@@ -80,6 +80,11 @@ namespace CotacoesEPC.Models
         [StringLength(1000)]
         public string? Justificativa { get; set; }
 
+        /// <summary>Status: "Pendente", "Cancelada" ou "Concluída"</summary>
+        [Required]
+        [StringLength(20)]
+        public string Status { get; set; } = "Concluída";
+
         [Required]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 

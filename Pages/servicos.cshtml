@@ -44,6 +44,7 @@
         <div class="header-buttons">
             <button class="btn-nova-cotacao btn-criar-individual" onclick="openCreateModal()">+ Nova Cotação</button>
             <button class="btn-nova-cotacao btn-secondary" onclick="openBulkImportModal()">Adicionar em Lote</button>
+            <button class="btn-nova-intencao" onclick="openIntencaoModal()">+ Intenção de Cotação</button>
         </div>
     </div>
 
@@ -95,8 +96,9 @@
                     <th>Item</th>
                     <th>Unidade</th>
                     <th>Preço instalação</th>
-                    <th>Preço adotado</th>
+                    <th>Preço de Forn. Adotado</th>
                     <th>Responsável</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -129,15 +131,15 @@
             
             <div class="form-row">
                 <div class="form-group full-width">
-                    <label>Item*</label>
-                    <input type="text" placeholder="Descrição do item" required />
+                    <label>Item* <small style="color:#888;font-weight:400;">(máx. 50 caracteres)</small></label>
+                    <input type="text" placeholder="DESCRIÇÃO DO ITEM" maxlength="50" required />
                 </div>
             </div>
             
             <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>I0 Original da Cotação*</label>
-                    <input type="text" placeholder="Ex: jan/00" required />
+                    <input type="text" placeholder="Ex: JAN/00" required />
                 </div>
                 <div class="form-group">
                     <label>Unidade*</label>
@@ -155,7 +157,7 @@
 
             <div class="form-row form-row-4col">
                 <div class="form-group">
-                    <label>Preço adotado*</label>
+                    <label>Preço de Forn. Adotado*</label>
                     <input type="number" placeholder="0,00" step="0.01" required />
                 </div>
                 <div class="form-group">
@@ -188,7 +190,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 1</label>
-                        <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" />
+                        <input type="text" name="nomeEmpresa1" placeholder="Ex: SABESP" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 1</label>
@@ -198,7 +200,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 2</label>
-                        <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" />
+                        <input type="text" name="nomeEmpresa2" placeholder="Ex: VIZCA" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 2</label>
@@ -210,7 +212,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 3</label>
-                        <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" />
+                        <input type="text" name="nomeEmpresa3" placeholder="Ex: FIA" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 3</label>
@@ -220,7 +222,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 4</label>
-                        <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+                        <input type="text" name="nomeEmpresa4" placeholder="Ex: COSTA" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 4</label>
@@ -232,7 +234,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 5</label>
-                        <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+                        <input type="text" name="nomeEmpresa5" placeholder="Ex: PONTE" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 5</label>
@@ -254,7 +256,7 @@
             <div class="form-row">
                 <div class="form-group full-width">
                     <label>Justificativa do preço adotado</label>
-                    <textarea placeholder="Digite a justificativa..." rows="4"></textarea>
+                    <textarea placeholder="DIGITE A JUSTIFICATIVA..." rows="4"></textarea>
                 </div>
             </div>
 
@@ -284,25 +286,39 @@
             <button class="modal-close" onclick="closeEditModal()">&times;</button>
         </div>
         <form class="modal-form">
-            <div class="form-row">
-                <div class="form-group full-width">
+            <div class="form-row form-row-2col">
+                <div class="form-group">
                     <label>Setor*</label>
                     <select name="sectorId" required>
                         <option value="">Selecione um setor</option>
                     </select>
                 </div>
+                <div class="form-group" id="editStatusGroup">
+                    <label>Status</label>
+                    <div id="editStatusDisplay" style="margin-bottom:8px;"></div>
+                    <div class="cancelar-check-row">
+                        <input type="checkbox" id="editCancelarCheck">
+                        <label for="editCancelarCheck" class="cancelar-check-label">Cancelar esta cotação</label>
+                    </div>
+                    <small class="status-auto-note">Pendente/Concluída são definidos automaticamente</small>
+                </div>
             </div>
+
+            <div class="paste-button-container">
+                <button type="button" class="btn-paste" onclick="pasteFromClipboardEdit()">📋 Colar dados da planilha</button>
+            </div>
+
             <div class="form-row">
                 <div class="form-group full-width">
-                    <label>Item*</label>
-                    <input type="text" placeholder="Descrição do item" value="Assentamento de tubo não sei o que la la la..." required />
+                    <label>Item* <small style="color:#888;font-weight:400;">(máx. 50 caracteres)</small></label>
+                    <input type="text" placeholder="DESCRIÇÃO DO ITEM" maxlength="50" value="Assentamento de tubo não sei o que la la la..." required />
                 </div>
             </div>
             
             <div class="form-row form-row-4col">
                 <div class="form-group">
                     <label>I0 Original da Cotação*</label>
-                    <input type="text" placeholder="Ex: jan/00" value="jan/00" required />
+                    <input type="text" placeholder="Ex: JAN/00" value="JAN/00" required />
                 </div>
                 <div class="form-group">
                     <label>Unidade*</label>
@@ -320,7 +336,7 @@
 
             <div class="form-row form-row-4col">
                 <div class="form-group">
-                    <label>Preço adotado*</label>
+                    <label>Preço de Forn. Adotado*</label>
                     <input type="number" placeholder="0,00" step="0.01" value="55000" required />
                 </div>
                 <div class="form-group">
@@ -353,7 +369,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 1</label>
-                        <input type="text" name="nomeEmpresa1" placeholder="Ex: Sabesp" value="Sabesp" />
+                        <input type="text" name="nomeEmpresa1" placeholder="Ex: SABESP" value="SABESP" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 1</label>
@@ -363,7 +379,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 2</label>
-                        <input type="text" name="nomeEmpresa2" placeholder="Ex: Enel" value="Enel" />
+                        <input type="text" name="nomeEmpresa2" placeholder="Ex: VIZCA" value="VIZCA" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 2</label>
@@ -375,7 +391,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 3</label>
-                        <input type="text" name="nomeEmpresa3" placeholder="Ex: Light" value="Light" />
+                        <input type="text" name="nomeEmpresa3" placeholder="Ex: FIA" value="FIA" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 3</label>
@@ -385,7 +401,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 4</label>
-                        <input type="text" name="nomeEmpresa4" placeholder="Ex: Costa" />
+                        <input type="text" name="nomeEmpresa4" placeholder="Ex: COSTA" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 4</label>
@@ -397,7 +413,7 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 5</label>
-                        <input type="text" name="nomeEmpresa5" placeholder="Ex: Ponte" />
+                        <input type="text" name="nomeEmpresa5" placeholder="Ex: PONTE" />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 5</label>
@@ -419,7 +435,7 @@
             <div class="form-row">
                 <div class="form-group full-width">
                     <label>Justificativa do preço adotado</label>
-                    <textarea placeholder="Digite a justificativa..." rows="4">Preço adotado conforme análise de mercado</textarea>
+                    <textarea placeholder="DIGITE A JUSTIFICATIVA..." rows="4">Preço de Forn. Adotado conforme análise de mercado</textarea>
                 </div>
             </div>
 
@@ -576,6 +592,40 @@
     </div>
 </div>
 
+<!-- MODAL INTENÇÃO DE COTAÇÃO -->
+<div id="intencaoModal" class="modal">
+    <div class="modal-content" style="max-width: 500px; width: 95%;">
+        <div class="modal-header">
+            <h2>🟡 Intenção de Cotação</h2>
+            <button class="modal-close" onclick="closeIntencaoModal()">&times;</button>
+        </div>
+        <form class="modal-form" id="intencaoForm">
+            <p style="color:#666; margin-bottom:16px; font-size:14px;">
+                Registre uma cotação ainda pendente. Apenas <strong>Setor</strong> e <strong>Descrição</strong> são obrigatórios.
+                O status ficará como <span style="color:#f57f17;font-weight:600;">Pendente</span>.
+            </p>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Setor*</label>
+                    <select name="sectorId" id="intencaoSectorSelect" required>
+                        <option value="">Selecione um setor</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group full-width">
+                    <label>Descrição do Item* <small style="color:#888;font-weight:400;">(máx. 50 caracteres)</small></label>
+                    <input type="text" id="intencaoItem" placeholder="DESCRIÇÃO DO ITEM" maxlength="50" required />
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancel" onclick="closeIntencaoModal()">Cancelar</button>
+                <button type="submit" class="btn-submit" style="background:#f57f17;">Registrar Intenção</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <!-- ========================================
      MODAIS DE IMPORTAÇÃO EM MASSA
      ======================================== -->
@@ -684,6 +734,15 @@
         document.getElementById('createModal').style.display = 'none';
     }
 
+    // MODAL INTENÇÃO DE COTAÇÃO
+    function openIntencaoModal() {
+        document.getElementById('intencaoModal').style.display = 'flex';
+    }
+
+    function closeIntencaoModal() {
+        document.getElementById('intencaoModal').style.display = 'none';
+    }
+
     // MODAL EDITAR
     const editModal = document.getElementById('editModal');
 
@@ -735,12 +794,23 @@
     function pasteFromClipboard() {
         navigator.clipboard.readText().then((text) => {
             try {
-                // Usar o parser para processar os dados
                 const parsedData = parseClipboardData(text);
-                
-                // Preencher o formulário com os dados parseados
                 fillFormWithParsedData(document.getElementById('createModal'), parsedData);
-                
+                showPasteNotification();
+            } catch (error) {
+                alert('Erro ao processar dados da planilha: ' + error.message);
+                console.error('Erro completo:', error);
+            }
+        }).catch(() => {
+            alert('Não foi possível acessar a área de transferência. Verifique as permissões do navegador.');
+        });
+    }
+
+    function pasteFromClipboardEdit() {
+        navigator.clipboard.readText().then((text) => {
+            try {
+                const parsedData = parseClipboardData(text);
+                fillFormWithParsedData(document.getElementById('editModal'), parsedData);
                 showPasteNotification();
             } catch (error) {
                 alert('Erro ao processar dados da planilha: ' + error.message);
@@ -782,6 +852,7 @@
         const createModal = document.getElementById('createModal');
         const editModal = document.getElementById('editModal');
         const viewModal = document.getElementById('viewModal');
+        const intencaoModal = document.getElementById('intencaoModal');
         const bulkImportModal = document.getElementById('bulkImportModal');
         const bulkCompaniesModal = document.getElementById('bulkCompaniesModal');
         const bulkPricesModal = document.getElementById('bulkPricesModal');
@@ -796,6 +867,9 @@
         }
         if (event.target === viewModal) {
             closeViewModal();
+        }
+        if (event.target === intencaoModal) {
+            closeIntencaoModal();
         }
         if (event.target === bulkImportModal) {
             closeBulkImportModal();
@@ -884,7 +958,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-<script src="~/js/api.js"></script>
+<script src="~/js/api.js" asp-append-version="true"></script>
 <script src="~/js/bulk-import.js"></script>
 <script src="~/js/attachments-manager.js"></script>
 <script src="~/js/clipboard-parser.js"></script>

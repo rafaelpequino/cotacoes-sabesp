@@ -20,3 +20,22 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* =============================================
+   Forçar MAIÚSCULAS em todos os campos de texto
+   dos modais de criar e editar cotação
+   ============================================= */
+#createModal input[type="text"],
+#createModal textarea,
+#editModal input[type="text"],
+#editModal textarea {
+    text-transform: uppercase;
+}
+
+/* Manter placeholder em caixa normal */
+#createModal input[type="text"]::placeholder,
+#createModal textarea::placeholder,
+#editModal input[type="text"]::placeholder,
+#editModal textarea::placeholder {
+    text-transform: none;
+}

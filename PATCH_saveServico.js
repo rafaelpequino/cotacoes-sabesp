@@ -10,8 +10,8 @@ async function saveServico() {
     const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
     
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
-    const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: JAN/00"]')?.value || '';
+    const item = form.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica

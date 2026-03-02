@@ -6,6 +6,22 @@ let sectorsData = [];
 let usersData = [];
 let currentUserId = null;
 
+/**
+ * Calcula automaticamente o status com base nas informações preenchidas.
+ * - Se statusAtual === 'Cancelada', mantém Cancelada.
+ * - Se todos os campos essenciais preenchidos e precoAdotado > 0 → Concluída
+ * - Caso contrário → Pendente
+ */
+function calcularAutoStatus(dados, statusAtual) {
+    if (statusAtual === 'Cancelada') return 'Cancelada';
+    const completo =
+        dados.originalId && dados.originalId.trim() !== '' &&
+        dados.item && dados.item.trim() !== '' &&
+        dados.unit && dados.unit.trim() !== '' &&
+        parseFloat(dados.precoAdotado || 0) > 0;
+    return completo ? 'Concluída' : 'Pendente';
+}
+
 // Função para humanizar erros
 function humanizeError(errorMessage) {
     const errorMap = {
@@ -36,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadUsers();
     await loadServicos();
     setupEventListeners();
+    setupIntencaoServicoForm();
 });
 
 async function loadSectors() {
@@ -98,20 +115,41 @@ function renderServicosTable(servicos) {
         const isOwner = currentUserId === servico.userId;
         const row = document.createElement('tr');
         
+        // Badge de status + botão de ação (apenas para o dono)
+        const statusKey = (servico.status || 'Concluída').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        const statusLabel = servico.status || 'Concluída';
+        const isCancelada = statusLabel === 'Cancelada';
+        let statusHtml;
+        if (isOwner) {
+            if (isCancelada) {
+                statusHtml = `<span class="status-badge cancelada">${statusLabel}</span> <button class="action-btn-status" title="Reativar cotação" onclick="changeStatusServico(${servico.id}, 'reativar', this)">↩</button>`;
+            } else {
+                statusHtml = `<span class="status-badge ${statusKey}">${statusLabel}</span> <button class="action-btn-status btn-cancelar-status" title="Cancelar cotação" onclick="changeStatusServico(${servico.id}, 'Cancelada', this)">🚫</button>`;
+            }
+        } else {
+            statusHtml = `<span class="status-badge ${statusKey}">${statusLabel}</span>`;
+        }
+
         // Botões de editar e deletar apenas aparecem se for o dono
         const editDeleteButtons = isOwner ? `
                 <button class="action-btn" title="Editar" onclick="editServico(${servico.id})">✏️</button>
                 <button class="action-btn" title="Excluir" onclick="deleteServico(${servico.id})">🗑</button>
             ` : '';
-        
+
+        // Ocultar preços para itens com status Pendente
+        const isPendente = servico.status === 'Pendente';
+        const precoMontagemTd = isPendente ? '-' : `R$ ${parseFloat(servico.precoMontagem || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        const precoAdotadoTd  = isPendente ? '-' : `R$ ${parseFloat(servico.precoAdotado || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
         row.innerHTML = `
-            <td>${servico.originalId}</td>
+            <td>${servico.originalId || '-'}</td>
             <td>${sectorName}</td>
             <td>${servico.item}</td>
-            <td>${servico.unit}</td>
-            <td>R$ ${parseFloat(servico.precoMontagem).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-            <td>R$ ${parseFloat(servico.precoAdotado).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>${servico.unit || '-'}</td>
+            <td>${precoMontagemTd}</td>
+            <td>${precoAdotadoTd}</td>
             <td>${responsibleName}</td>
+            <td>${statusHtml}</td>
             <td class="actions">
                 <button class="action-btn" title="Copiar dados" onclick="copyServico(${servico.id})">📋</button>
                 <button class="action-btn" title="Visualizar" onclick="viewServico(${servico.id})">👁</button>
@@ -348,8 +386,8 @@ async function saveServico() {
     const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
     
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
-    const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: JAN/00"]')?.value || '';
+    const item = form.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica
@@ -398,8 +436,11 @@ async function saveServico() {
         empresa5: toNumber(numberInputs[12]?.value),
         nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || ''
+        justificativa: form.querySelector('textarea')?.value || '',
+        status: '' // será preenchido abaixo
     };
+    // Auto-calcular status com base nos dados preenchidos
+    data.status = calcularAutoStatus(data, null);
 
     try {
         const result = await api.createService(data);
@@ -456,11 +497,13 @@ function editServico(id) {
     const sectorSelect = form.querySelector('select[name="sectorId"]');
     if (sectorSelect) sectorSelect.value = servico.sectorId;
 
-    // Preencher campos de texto (I0, Item, Unidade)
-    const textInputs = form.querySelectorAll('input[type="text"]:not([name^="nomeEmpresa"])');
-    textInputs[0].value = servico.originalId;
-    textInputs[1].value = servico.item;
-    textInputs[2].value = servico.unit;
+    // Preencher campos de texto (I0, Item, Unidade) — via placeholder para evitar problemas de índice
+    const io0Input = form.querySelector('input[placeholder="Ex: JAN/00"]');
+    const itemInput = form.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]');
+    const unitInput = form.querySelector('input[placeholder="Ex: Un., m², Kg"]');
+    if (io0Input) io0Input.value = servico.originalId || '';
+    if (itemInput) itemInput.value = servico.item || '';
+    if (unitInput) unitInput.value = servico.unit || '';
     
     // Preencher nomes das empresas
     form.querySelector('input[name="nomeEmpresa1"]').value = servico.nomeEmpresa1 || '';
@@ -490,6 +533,17 @@ function editServico(id) {
     // Preencher textarea
     const textarea = form.querySelector('textarea');
     if (textarea) textarea.value = servico.justificativa || '';
+
+    // Preencher Status (checkbox de cancelar + badge informativo)
+    const cancelarCheck = document.getElementById('editCancelarCheck');
+    const statusDisplay = document.getElementById('editStatusDisplay');
+    if (cancelarCheck) {
+        cancelarCheck.checked = servico.status === 'Cancelada';
+    }
+    if (statusDisplay) {
+        const sk = (servico.status || 'Pendente').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+        statusDisplay.innerHTML = `<span class="status-badge ${sk}">${servico.status || 'Pendente'}</span>`;
+    }
 
     // Armazenar ID para update
     modal.dataset.servicoId = id;
@@ -524,8 +578,8 @@ async function updateServico() {
     const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
     
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
-    const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: JAN/00"]')?.value || '';
+    const item = form.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica
@@ -549,6 +603,8 @@ async function updateServico() {
         return isNaN(num) ? defaultValue : num;
     };
     
+    const cancelarCheck = document.getElementById('editCancelarCheck');
+    const isCancelar = cancelarCheck?.checked || false;
     const data = {
         sectorId: sectorId,
         originalId: originalId,
@@ -574,8 +630,11 @@ async function updateServico() {
         empresa5: toNumber(numberInputs[12]?.value),
         nomeEmpresa6: form.querySelector('input[name="nomeEmpresa6"]')?.value || null,
         empresa6: toNumber(numberInputs[13]?.value),
-        justificativa: form.querySelector('textarea')?.value || ''
+        justificativa: form.querySelector('textarea')?.value || '',
+        status: '' // será preenchido abaixo
     };
+    // Auto-calcular status; se marcou "cancelar", forçar Cancelada
+    data.status = isCancelar ? 'Cancelada' : calcularAutoStatus(data, null);
 
     try {
         const result = await api.updateService(servicoId, data);
@@ -650,7 +709,7 @@ async function copyServico(id) {
         
         // SEGUNDA LINHA: Valores
         const valuesLine = [
-            servico.originalId,                    // 0. I0 Original (jan/00)
+            servico.originalId,                    // 0. I0 Original (JAN/00)
             servico.item,                          // 1. ITEM
             servico.unit,                          // 2. Unidade
             servico.priceFornecedor || '',         // 3. Preço Fornecedor
@@ -832,6 +891,136 @@ function closeEditModal() {
 function closeViewModal() {
     const modal = document.getElementById('viewModal');
     if (modal) modal.style.display = 'none';
+}
+
+// =============================================
+// ALTERAR STATUS — somente o dono pode alterar
+// =============================================
+async function changeStatusServico(id, novoStatus, btnEl) {
+    const servico = servicosPageData.find(s => s.id === id);
+    if (!servico) return;
+
+    // "reativar" → recalcular automaticamente
+    if (novoStatus === 'reativar') {
+        novoStatus = calcularAutoStatus(servico, null);
+    }
+
+    try {
+        await api.updateServiceStatus(id, novoStatus);
+
+        // Atualizar dado local
+        servico.status = novoStatus;
+
+        // Atualizar células da linha sem recarregar a página
+        const row = btnEl.closest('tr');
+        if (row) {
+            const statusKey = novoStatus.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            const isCancelada = novoStatus === 'Cancelada';
+            const isPendente = novoStatus === 'Pendente';
+
+            // Atualizar célula de status (índice 7)
+            const cells = row.querySelectorAll('td');
+            if (cells[7]) {
+                if (isCancelada) {
+                    cells[7].innerHTML = `<span class="status-badge cancelada">${novoStatus}</span> <button class="action-btn-status" title="Reativar cotação" onclick="changeStatusServico(${id}, 'reativar', this)">↩</button>`;
+                } else {
+                    cells[7].innerHTML = `<span class="status-badge ${statusKey}">${novoStatus}</span> <button class="action-btn-status btn-cancelar-status" title="Cancelar cotação" onclick="changeStatusServico(${id}, 'Cancelada', this)">🚫</button>`;
+                }
+            }
+
+            // Atualizar células de preço (índices 4 e 5)
+            const formatCurrency = v => `R$ ${parseFloat(v || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+            if (cells[4]) cells[4].textContent = isPendente ? '-' : formatCurrency(servico.precoMontagem);
+            if (cells[5]) cells[5].textContent = isPendente ? '-' : formatCurrency(servico.precoAdotado);
+        }
+
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: `Status alterado para "${novoStatus}"`,
+            showConfirmButton: false,
+            timer: 2000
+        });
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro ao alterar status',
+            text: error.message || 'Erro desconhecido',
+            confirmButtonColor: '#ff4444'
+        });
+    }
+}
+
+// =============================================
+// INTENÇÃO DE COTAÇÃO
+// =============================================
+function setupIntencaoServicoForm() {
+    const form = document.getElementById('intencaoForm');
+    if (!form) return;
+
+    const sectorSelect = document.getElementById('intencaoSectorSelect');
+    if (sectorSelect) {
+        while (sectorSelect.options.length > 1) sectorSelect.remove(1);
+        sectorsData.forEach(sector => {
+            const opt = document.createElement('option');
+            opt.value = sector.id;
+            opt.textContent = sector.name;
+            sectorSelect.appendChild(opt);
+        });
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await saveIntencaoServico();
+    });
+}
+
+async function saveIntencaoServico() {
+    const sectorId = parseInt(document.getElementById('intencaoSectorSelect')?.value || '0');
+    const item = document.getElementById('intencaoItem')?.value?.trim() || '';
+
+    if (!sectorId || !item) {
+        Swal.fire({
+            icon: 'warning',
+            title: '⚠️ Campos obrigatórios',
+            text: 'Preencha o Setor e a DESCRIÇÃO DO ITEM.',
+            confirmButtonText: 'OK'
+        });
+        return;
+    }
+
+    const data = {
+        sectorId,
+        item,
+        originalId: '',
+        unit: '',
+        priceFornecedor: 0,
+        precoMontagem: 0,
+        precoAdotado: 0,
+        status: 'Pendente'
+    };
+
+    try {
+        await api.createService(data);
+        Swal.fire({
+            icon: 'success',
+            title: 'Intenção registrada!',
+            text: 'A cotação foi salva com status Pendente.',
+            confirmButtonColor: '#f57f17'
+        }).then(() => {
+            document.getElementById('intencaoModal').style.display = 'none';
+            document.getElementById('intencaoForm').reset();
+            loadServicos();
+        });
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro!',
+            text: 'Erro ao registrar intenção: ' + (error.message || 'Erro desconhecido'),
+            confirmButtonColor: '#ff4444'
+        });
+    }
 }
 
 // Fechar modais ao clicar fora
