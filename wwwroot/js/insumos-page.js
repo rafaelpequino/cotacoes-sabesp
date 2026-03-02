@@ -386,8 +386,8 @@ async function saveInsumo() {
     const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
     
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
-    const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: JAN/00"]')?.value || '';
+    const item = form.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica
@@ -506,8 +506,8 @@ async function editInsumo(id) {
     if (sectorSelect) sectorSelect.value = insumo.sectorId;
     
     // Preencher campos de texto (I0, Item, Unidade) — via placeholder para evitar problemas de índice
-    const io0Input = form.querySelector('input[placeholder="Ex: jan/00"]');
-    const itemInput = form.querySelector('input[placeholder="Descrição do item"]');
+    const io0Input = form.querySelector('input[placeholder="Ex: JAN/00"]');
+    const itemInput = form.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]');
     const unitInput = form.querySelector('input[placeholder="Ex: Un., m², Kg"]');
     if (io0Input) io0Input.value = insumo.originalId || '';
     if (itemInput) itemInput.value = insumo.item || '';
@@ -586,8 +586,8 @@ async function updateInsumo() {
     const sectorId = sectorSelect ? parseInt(sectorSelect.value) : null;
     
     // Obter valores de forma mais precisa baseado na estrutura do HTML
-    const originalId = form.querySelector('input[placeholder="Ex: jan/00"]')?.value || '';
-    const item = form.querySelector('input[placeholder="Descrição do item"]')?.value || '';
+    const originalId = form.querySelector('input[placeholder="Ex: JAN/00"]')?.value || '';
+    const item = form.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]')?.value || '';
     const unit = form.querySelector('input[placeholder="Ex: Un., m², Kg"]')?.value || '';
     
     // Validação básica

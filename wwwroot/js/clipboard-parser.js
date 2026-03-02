@@ -110,8 +110,11 @@ function parseClipboardData(text) {
  */
 function fillFormWithParsedData(modal, parsedData) {
     try {
-        const idOriginalInput = modal.querySelector('input[placeholder="Ex: jan/00"]');
-        const itemInput = modal.querySelector('input[placeholder="Descrição do item"]');
+        // Busca por placeholder novo (maiúsculo) com fallback para o antigo (minúsculo)
+        const idOriginalInput = modal.querySelector('input[placeholder="Ex: JAN/00"]')
+                             || modal.querySelector('input[placeholder="Ex: jan/00"]');
+        const itemInput = modal.querySelector('input[placeholder="DESCRIÇÃO DO ITEM"]')
+                       || modal.querySelector('input[placeholder="Descrição do item"]');
         const unidadeInput = modal.querySelector('input[placeholder="Ex: Un., m², Kg"]');
         
         // Função auxiliar para converter texto ao preencher programaticamente
