@@ -33,12 +33,18 @@ namespace CotacoesEPC.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                var searchLower = search.ToLower();
-                query = query.Where(s =>
-                    s.Item.ToLower().Contains(searchLower) ||
-                    s.OriginalId.ToLower().Contains(searchLower) ||
-                    s.Unit.ToLower().Contains(searchLower)
-                );
+                var words = search.ToLower()
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+
+                foreach (var word in words)
+                {
+                    var w = word;
+                    query = query.Where(s =>
+                        s.Item.ToLower().Contains(w) ||
+                        s.OriginalId.ToLower().Contains(w) ||
+                        s.Unit.ToLower().Contains(w)
+                    );
+                }
             }
 
             query = sort switch
