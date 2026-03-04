@@ -834,12 +834,15 @@ function viewServico(id) {
             valueLabel.textContent = formatCurrency(companyValue);
         }
         
-        // Marcar como vazio se não houver valor ou se for 0
+        // Marcar como vazio se não houver nome de empresa (desativada)
         if (card) {
-            if (!companyValue || companyValue === 0 || companyValue === '0') {
+            const detailBtn = card.querySelector('.btn-company-detail');
+            if (!companyName) {
                 card.classList.add('empty');
+                if (detailBtn) detailBtn.style.display = 'none';
             } else {
                 card.classList.remove('empty');
+                if (detailBtn) detailBtn.style.display = '';
             }
         }
     }
@@ -1023,20 +1026,309 @@ async function saveIntencaoServico() {
     }
 }
 
+// =============================================
+// DETALHES DA EMPRESA
+// =============================================
+
+let _cdEntityType = 'Service';
+let _cdEntityId = null;
+let _cdEmpresaIndex = null;
+let _cdDetailId = null; // ID do CompanyDetail já salvo (null se ainda não existir)
+let _cdIsOwner = false;  // se o usuário logado é dono da cotação
+
+async function openCompanyDetailModal(entityType, empresaIndex) {
+    const viewModal = document.getElementById('viewModal');
+    const entityId = viewModal ? parseInt(viewModal.dataset.servicoId) : null;
+    if (!entityId) return;
+
+    _cdEntityType = entityType;
+    _cdEntityId = entityId;
+    _cdEmpresaIndex = empresaIndex;
+
+    // Verificar se o usuário logado é o dono da cotação
+    const servico = servicosPageData.find(s => s.id === entityId);
+    _cdIsOwner = servico ? currentUserId === servico.userId : false;
+
+    // Nome da empresa para o título
+    const companyName = servico ? (servico[`nomeEmpresa${empresaIndex}`] || `Empresa ${empresaIndex}`) : `Empresa ${empresaIndex}`;
+    document.getElementById('companyDetailModalTitle').textContent = `🏢 ${companyName}`;
+
+    // Mostrar/ocultar botão editar dados cadastrais conforme permissão
+    const btnEdit = document.getElementById('btnEditCompanyData');
+    if (btnEdit) btnEdit.style.display = _cdIsOwner ? '' : 'none';
+
+    // Carregar dados do servidor
+    try {
+        const detail = await api.getCompanyDetail(entityType, entityId, empresaIndex);
+        renderCompanyDetailView(detail);
+    } catch (err) {
+        renderCompanyDetailView(null);
+    }
+
+    document.getElementById('companyDetailModal').style.display = 'flex';
+}
+
+function closeCompanyDetailModal() {
+    const modal = document.getElementById('companyDetailModal');
+    if (modal) modal.style.display = 'none';
+    // Resetar estados
+    _cdDetailId = null;
+    document.getElementById('companyDataEdit').style.display = 'none';
+    document.getElementById('companyDataView').style.display = '';
+    document.getElementById('logForm').style.display = 'none';
+    document.getElementById('logEditId').value = '';
+}
+
+function renderCompanyDetailView(detail) {
+    _cdDetailId = detail ? detail.id : null;
+
+    const fmt = v => v || '-';
+    const fmtDate = v => {
+        if (!v) return '-';
+        try { return new Date(v + 'T00:00:00').toLocaleDateString('pt-BR'); } catch { return v; }
+    };
+
+    document.getElementById('cdvCNPJ').textContent = fmt(detail?.cnpj);
+    document.getElementById('cdvTelefone').textContent = fmt(detail?.telefone);
+    document.getElementById('cdvDataCotacao').textContent = fmtDate(detail?.dataCotacao);
+    document.getElementById('cdvPessoaContatada').textContent = fmt(detail?.pessoaContatada);
+    document.getElementById('cdvEndereco').textContent = fmt(detail?.endereco);
+
+    renderContactLogs(detail?.contactLogs || []);
+}
+
+function toggleEditCompanyData() {
+    const view = document.getElementById('companyDataView');
+    const edit = document.getElementById('companyDataEdit');
+    if (edit.style.display === 'none') {
+        // Preencher formulário com valores atuais
+        document.getElementById('cdeInputCNPJ').value = document.getElementById('cdvCNPJ').textContent.replace('-', '').trim();
+        document.getElementById('cdeInputTelefone').value = document.getElementById('cdvTelefone').textContent.replace('-', '').trim();
+        // Data
+        const rawDate = document.getElementById('cdvDataCotacao').textContent;
+        if (rawDate && rawDate !== '-') {
+            // Converter dd/mm/yyyy → yyyy-mm-dd
+            const parts = rawDate.split('/');
+            if (parts.length === 3) {
+                document.getElementById('cdeInputDataCotacao').value = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            } else {
+                document.getElementById('cdeInputDataCotacao').value = '';
+            }
+        } else {
+            document.getElementById('cdeInputDataCotacao').value = '';
+        }
+        document.getElementById('cdeInputPessoaContatada').value = document.getElementById('cdvPessoaContatada').textContent.replace('-', '').trim();
+        document.getElementById('cdeInputEndereco').value = document.getElementById('cdvEndereco').textContent.replace('-', '').trim();
+
+        view.style.display = 'none';
+        edit.style.display = '';
+    } else {
+        view.style.display = '';
+        edit.style.display = 'none';
+    }
+}
+
+async function saveCompanyData() {
+    const payload = {
+        entityType: _cdEntityType,
+        entityId: _cdEntityId,
+        empresaIndex: _cdEmpresaIndex,
+        cnpj: document.getElementById('cdeInputCNPJ').value.trim() || null,
+        telefone: document.getElementById('cdeInputTelefone').value.trim() || null,
+        dataCotacao: document.getElementById('cdeInputDataCotacao').value || null,
+        pessoaContatada: document.getElementById('cdeInputPessoaContatada').value.trim() || null,
+        endereco: document.getElementById('cdeInputEndereco').value.trim() || null
+    };
+
+    try {
+        const result = await api.upsertCompanyDetail(payload);
+        renderCompanyDetailView(result);
+        document.getElementById('companyDataEdit').style.display = 'none';
+        document.getElementById('companyDataView').style.display = '';
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Dados salvos!', showConfirmButton: false, timer: 2000 });
+    } catch (err) {
+        Swal.fire({ icon: 'error', title: 'Erro ao salvar', text: err.message });
+    }
+}
+
+function renderContactLogs(logs) {
+    const container = document.getElementById('contactLogsList');
+    if (!logs || logs.length === 0) {
+        container.innerHTML = '<p style="color:#999; text-align:center; padding:20px 0;">Nenhum contato registrado.</p>';
+        return;
+    }
+
+    container.innerHTML = logs.map(log => {
+        const isLogOwner = log.responsavelId === currentUserId;
+        const editBtn = isLogOwner
+            ? `<button class="btn-log-action btn-log-edit" onclick="editLog(${log.id}, '${escapeJs(log.data)}', '${escapeJs(log.assunto)}', '${escapeJs(log.resposta || '')}', '${escapeJs(log.proximosPassos || '')}')">✏️</button>`
+            : '';
+        const delBtn = isLogOwner
+            ? `<button class="btn-log-action btn-log-delete" onclick="deleteLog(${log.id})">🗑</button>`
+            : '';
+
+        return `
+        <div class="contact-log-card" id="log-card-${log.id}">
+            <div class="log-header">
+                <span class="log-date">📅 ${formatLogDate(log.data)}</span>
+                <span class="log-author">👤 ${log.responsavelNome}</span>
+                <div class="log-actions">${editBtn}${delBtn}</div>
+            </div>
+            <div class="log-field"><strong>Assunto:</strong> ${escapeHtml(log.assunto)}</div>
+            ${log.resposta ? `<div class="log-field"><strong>Resposta:</strong> ${escapeHtml(log.resposta)}</div>` : ''}
+            ${log.proximosPassos ? `<div class="log-field"><strong>Próximos passos:</strong> ${escapeHtml(log.proximosPassos)}</div>` : ''}
+        </div>`;
+    }).join('');
+}
+
+function formatLogDate(dateStr) {
+    if (!dateStr) return '-';
+    try { return new Date(dateStr + 'T00:00:00').toLocaleDateString('pt-BR'); } catch { return dateStr; }
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function escapeJs(str) {
+    if (!str) return '';
+    return str.replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/\n/g,'\\n');
+}
+
+function toggleAddLogForm() {
+    const form = document.getElementById('logForm');
+    if (form.style.display === 'none') {
+        // Novo log — limpar campos e garantir que temos um CompanyDetail
+        if (!_cdDetailId) {
+            // Criar o CompanyDetail vazio automaticamente antes de registrar log
+            api.upsertCompanyDetail({
+                entityType: _cdEntityType,
+                entityId: _cdEntityId,
+                empresaIndex: _cdEmpresaIndex
+            }).then(detail => {
+                _cdDetailId = detail.id;
+                renderCompanyDetailView(detail);
+            }).catch(err => {
+                Swal.fire({ icon: 'error', title: 'Erro', text: err.message });
+                return;
+            });
+        }
+        document.getElementById('logEditId').value = '';
+        document.getElementById('logFormTitle').textContent = 'Novo Contato';
+        document.getElementById('logInputData').value = new Date().toISOString().split('T')[0];
+        document.getElementById('logInputAssunto').value = '';
+        document.getElementById('logInputResposta').value = '';
+        document.getElementById('logInputProximosPassos').value = '';
+        form.style.display = '';
+    } else {
+        form.style.display = 'none';
+    }
+}
+
+function cancelLogForm() {
+    document.getElementById('logForm').style.display = 'none';
+    document.getElementById('logEditId').value = '';
+}
+
+function editLog(id, data, assunto, resposta, proximosPassos) {
+    document.getElementById('logEditId').value = id;
+    document.getElementById('logFormTitle').textContent = 'Editar Contato';
+    document.getElementById('logInputData').value = data;
+    document.getElementById('logInputAssunto').value = assunto;
+    document.getElementById('logInputResposta').value = resposta;
+    document.getElementById('logInputProximosPassos').value = proximosPassos;
+    document.getElementById('logForm').style.display = '';
+    document.getElementById('logForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+async function saveLog() {
+    const assunto = document.getElementById('logInputAssunto').value.trim();
+    const data = document.getElementById('logInputData').value;
+    if (!assunto || !data) {
+        Swal.fire({ icon: 'warning', title: 'Campos obrigatórios', text: 'Preencha a data e o assunto.', confirmButtonText: 'OK' });
+        return;
+    }
+
+    const payload = {
+        data: data,
+        assunto: assunto,
+        resposta: document.getElementById('logInputResposta').value.trim() || null,
+        proximosPassos: document.getElementById('logInputProximosPassos').value.trim() || null
+    };
+
+    const editId = document.getElementById('logEditId').value;
+
+    try {
+        let updatedDetail;
+        if (editId) {
+            await api.updateCompanyContactLog(parseInt(editId), payload);
+        } else {
+            if (!_cdDetailId) {
+                Swal.fire({ icon: 'error', title: 'Erro', text: 'Dados da empresa ainda não foram inicializados.' });
+                return;
+            }
+            await api.addCompanyContactLog(_cdDetailId, payload);
+        }
+        // Recarregar tudo
+        const detail = await api.getCompanyDetail(_cdEntityType, _cdEntityId, _cdEmpresaIndex);
+        renderCompanyDetailView(detail);
+        cancelLogForm();
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Contato salvo!', showConfirmButton: false, timer: 2000 });
+    } catch (err) {
+        Swal.fire({ icon: 'error', title: 'Erro ao salvar contato', text: err.message });
+    }
+}
+
+async function deleteLog(logId) {
+    const result = await Swal.fire({
+        title: 'Excluir este contato?',
+        text: 'Esta ação não pode ser desfeita.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d32f2f',
+        cancelButtonColor: '#757575',
+        confirmButtonText: 'Sim, excluir',
+        cancelButtonText: 'Cancelar'
+    });
+    if (!result.isConfirmed) return;
+
+    try {
+        await api.deleteCompanyContactLog(logId);
+        const detail = await api.getCompanyDetail(_cdEntityType, _cdEntityId, _cdEmpresaIndex);
+        renderCompanyDetailView(detail);
+        Swal.fire({ toast: true, position: 'top-end', icon: 'success', title: 'Contato excluído!', showConfirmButton: false, timer: 2000 });
+    } catch (err) {
+        Swal.fire({ icon: 'error', title: 'Erro ao excluir', text: err.message });
+    }
+}
+
 // Fechar modais ao clicar fora
 window.addEventListener('click', function(event) {
     const createModal = document.getElementById('createModal');
     const editModal = document.getElementById('editModal');
     const viewModal = document.getElementById('viewModal');
+    const companyDetailModal = document.getElementById('companyDetailModal');
 
     if (event.target === createModal) closeCreateModal();
     if (event.target === editModal) closeEditModal();
     if (event.target === viewModal) closeViewModal();
+    if (event.target === companyDetailModal) closeCompanyDetailModal();
 });
 
 // Fechar com ESC
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
+        const addEditLogModal = document.getElementById('addEditContactLogModal');
+        if (addEditLogModal && addEditLogModal.style.display === 'flex') {
+            closeAddEditContactLogModal();
+            return;
+        }
+        const companyDetailModal = document.getElementById('companyDetailModal');
+        if (companyDetailModal && companyDetailModal.style.display === 'flex') {
+            closeCompanyDetailModal();
+            return;
+        }
         closeCreateModal();
         closeEditModal();
         closeViewModal();

@@ -544,26 +544,32 @@
                     <div class="company-card" id="company-card-1">
                         <span class="company-label" id="company-name-1">Empresa 1</span>
                         <span class="company-value" id="company-value-1">-</span>
+                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Input', 1)">ℹ️ Detalhes</button>
                     </div>
                     <div class="company-card" id="company-card-2">
                         <span class="company-label" id="company-name-2">Empresa 2</span>
                         <span class="company-value" id="company-value-2">-</span>
+                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Input', 2)">ℹ️ Detalhes</button>
                     </div>
                     <div class="company-card" id="company-card-3">
                         <span class="company-label" id="company-name-3">Empresa 3</span>
                         <span class="company-value" id="company-value-3">-</span>
+                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Input', 3)">ℹ️ Detalhes</button>
                     </div>
                     <div class="company-card" id="company-card-4">
                         <span class="company-label" id="company-name-4">Empresa 4</span>
                         <span class="company-value" id="company-value-4">-</span>
+                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Input', 4)">ℹ️ Detalhes</button>
                     </div>
                     <div class="company-card" id="company-card-5">
                         <span class="company-label" id="company-name-5">Empresa 5</span>
                         <span class="company-value" id="company-value-5">-</span>
+                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Input', 5)">ℹ️ Detalhes</button>
                     </div>
                     <div class="company-card" id="company-card-6">
                         <span class="company-label" id="company-name-6">Empresa 6</span>
                         <span class="company-value" id="company-value-6">-</span>
+                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Input', 6)">ℹ️ Detalhes</button>
                     </div>
                 </div>
             </div>
@@ -724,6 +730,122 @@
     </div>
 </div>
 
+<!-- ================================================
+     MODAL: DETALHES DA EMPRESA (insumos)
+     ================================================ -->
+<div id="companyDetailModal" class="modal">
+    <div class="modal-content company-detail-modal-content">
+        <div class="modal-header">
+            <h2 id="companyDetailModalTitle">Detalhes da Empresa</h2>
+            <button class="modal-close" onclick="closeCompanyDetailModal()">&times;</button>
+        </div>
+        <div class="modal-form" style="padding: 0 24px 24px;">
+
+            <div class="company-detail-section">
+                <div class="company-detail-section-header">
+                    <h3>🏢 Dados Cadastrais</h3>
+                    <button type="button" id="btnEditCompanyData" class="btn-edit-section" onclick="toggleEditCompanyData()">✏️ Editar</button>
+                </div>
+                <div id="companyDataView">
+                    <div class="company-info-grid">
+                        <div class="company-info-item">
+                            <span class="company-info-label">CNPJ</span>
+                            <span class="company-info-value" id="cdvCNPJ">-</span>
+                        </div>
+                        <div class="company-info-item">
+                            <span class="company-info-label">Telefone</span>
+                            <span class="company-info-value" id="cdvTelefone">-</span>
+                        </div>
+                        <div class="company-info-item">
+                            <span class="company-info-label">Data da Cotação</span>
+                            <span class="company-info-value" id="cdvDataCotacao">-</span>
+                        </div>
+                        <div class="company-info-item">
+                            <span class="company-info-label">Pessoa Contatada</span>
+                            <span class="company-info-value" id="cdvPessoaContatada">-</span>
+                        </div>
+                        <div class="company-info-item full-span">
+                            <span class="company-info-label">Endereço</span>
+                            <span class="company-info-value" id="cdvEndereco">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div id="companyDataEdit" style="display:none;">
+                    <div class="form-row form-row-4col">
+                        <div class="form-group">
+                            <label>CNPJ</label>
+                            <input type="text" id="cdeInputCNPJ" placeholder="00.000.000/0001-00" maxlength="18" />
+                        </div>
+                        <div class="form-group">
+                            <label>Telefone</label>
+                            <input type="text" id="cdeInputTelefone" placeholder="(00) 00000-0000" maxlength="20" />
+                        </div>
+                        <div class="form-group">
+                            <label>Data da Cotação</label>
+                            <input type="date" id="cdeInputDataCotacao" />
+                        </div>
+                        <div class="form-group">
+                            <label>Pessoa Contatada</label>
+                            <input type="text" id="cdeInputPessoaContatada" placeholder="Nome do contato" maxlength="200" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Endereço</label>
+                            <input type="text" id="cdeInputEndereco" placeholder="Rua, número, cidade..." maxlength="500" />
+                        </div>
+                    </div>
+                    <div class="modal-actions" style="margin-top:8px; padding-top:8px; border-top:1px solid #eee;">
+                        <button type="button" class="btn-cancel" onclick="toggleEditCompanyData()">Cancelar</button>
+                        <button type="button" class="btn-submit" onclick="saveCompanyData()">Salvar Dados</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="company-detail-section" style="margin-top:24px;">
+                <div class="company-detail-section-header">
+                    <h3>📋 Histórico de Contatos</h3>
+                    <button type="button" class="btn-edit-section" onclick="toggleAddLogForm()">➕ Novo Contato</button>
+                </div>
+                <div id="logForm" style="display:none; background:#f8f9fa; padding:16px; border-radius:8px; margin-bottom:16px; border:1px solid #e0e0e0;">
+                    <h4 id="logFormTitle" style="margin:0 0 12px; font-size:14px; color:#555;">Novo Contato</h4>
+                    <input type="hidden" id="logEditId" value="" />
+                    <div class="form-row form-row-4col">
+                        <div class="form-group">
+                            <label>Data*</label>
+                            <input type="date" id="logInputData" />
+                        </div>
+                        <div class="form-group" style="grid-column: span 3;">
+                            <label>Assunto*</label>
+                            <input type="text" id="logInputAssunto" placeholder="O que foi tratado..." maxlength="500" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Resposta / Resultado</label>
+                            <textarea id="logInputResposta" rows="2" placeholder="Qual foi a resposta ou resultado..." style="resize:vertical;"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group full-width">
+                            <label>Próximos Passos</label>
+                            <input type="text" id="logInputProximosPassos" placeholder="O que fazer a seguir..." maxlength="500" />
+                        </div>
+                    </div>
+                    <div class="modal-actions" style="margin-top:8px; padding-top:8px; border-top:1px solid #e0e0e0;">
+                        <button type="button" class="btn-cancel" onclick="cancelLogForm()">Cancelar</button>
+                        <button type="button" class="btn-submit" onclick="saveLog()">Salvar Contato</button>
+                    </div>
+                </div>
+                <div id="contactLogsList">
+                    <p style="color:#999; text-align:center; padding:20px 0;">Nenhum contato registrado.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 <script>
     // MODAL CRIAR
     function openCreateModal() {
@@ -858,6 +980,7 @@
         const bulkPricesModal = document.getElementById('bulkPricesModal');
         const bulkViewAttachmentsModal = document.getElementById('bulkViewAttachmentsModal');
         const bulkAttachmentDescriptionModal = document.getElementById('bulkAttachmentDescriptionModal');
+        const companyDetailModal = document.getElementById('companyDetailModal');
 
         if (event.target === createModal) {
             closeCreateModal();
@@ -867,6 +990,9 @@
         }
         if (event.target === viewModal) {
             closeViewModal();
+        }
+        if (event.target === companyDetailModal) {
+            closeCompanyDetailModal();
         }
         if (event.target === intencaoModal) {
             closeIntencaoModal();
@@ -939,6 +1065,20 @@
                     closeBulkImportModal();
                     escPressCount = 0;
                 }
+                return;
+            }
+
+            // Modal de log de contato tem prioridade sobre o modal de empresa
+            const addEditLogModal = document.getElementById('addEditContactLogModal');
+            if (addEditLogModal && addEditLogModal.style.display === 'flex') {
+                closeAddEditContactLogModal();
+                return;
+            }
+
+            // Modal de empresa tem prioridade sobre o viewModal
+            const companyDetailModal = document.getElementById('companyDetailModal');
+            if (companyDetailModal && companyDetailModal.style.display === 'flex') {
+                closeCompanyDetailModal();
                 return;
             }
 

@@ -16,6 +16,8 @@ namespace CotacoesEPC.Data
         public DbSet<Sector> Sectors { get; set; }
         public DbSet<AllowedRegistration> AllowedRegistrations { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<CompanyDetail> CompanyDetails { get; set; }
+        public DbSet<CompanyContactLog> CompanyContactLogs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -133,6 +135,32 @@ namespace CotacoesEPC.Data
                     .WithMany()
                     .HasForeignKey(e => e.UsedByUserId)
                     .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // CompanyDetail configuration
+            modelBuilder.Entity<CompanyDetail>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.EntityType).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.EmpresaIndex).IsRequired();
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasIndex(e => new { e.EntityType, e.EntityId, e.EmpresaIndex }).IsUnique();
+            });
+
+            // CompanyContactLog configuration
+            modelBuilder.Entity<CompanyContactLog>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Assunto).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("GETUTCDATE()");
+                entity.HasOne(e => e.CompanyDetail)
+                    .WithMany(c => c.ContactLogs)
+                    .HasForeignKey(e => e.CompanyDetailId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Responsavel)
+                    .WithMany()
+                    .HasForeignKey(e => e.ResponsavelId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
 
             // Attachment configuration

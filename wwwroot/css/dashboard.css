@@ -1039,11 +1039,14 @@ body.modal-open {
 }
 
 .company-card.empty {
-    opacity: 0.5;
+    opacity: 0.6;
     background: #f5f5f5;
-    cursor: not-allowed;
-    pointer-events: none;
     border-color: #d0d0d0;
+}
+
+.company-card.empty .btn-company-detail {
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .company-card.empty .company-label,
@@ -1063,6 +1066,176 @@ body.modal-open {
     font-size: 17px;
     color: #212529;
     font-weight: 700;
+}
+
+/* Botão de detalhes da empresa nos cards */
+.btn-company-detail {
+    margin-top: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    background: transparent;
+    border: 1px solid #19d6ff;
+    border-radius: 6px;
+    color: #0097b2;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+    align-self: flex-start;
+}
+
+.btn-company-detail:hover {
+    background: #19d6ff;
+    color: #fff;
+}
+
+/* Modal de detalhes da empresa — sobreposto ao modal principal */
+#companyDetailModal {
+    background: rgba(0, 0, 0, 0.25); /* backdrop mais leve para ver o modal atrás */
+    z-index: 1100;                    /* acima dos outros modais (z-index 1000) */
+    align-items: center;
+    justify-content: flex-end;        /* aparece encostado à direita */
+    padding: 20px 28px 20px 20px;
+}
+
+.company-detail-modal-content {
+    max-width: 560px;
+    width: 92%;
+    max-height: 82vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+    border-left: 4px solid #19d6ff;
+}
+
+.company-detail-section {
+    border: 1px solid #e9ecef;
+    border-radius: 10px;
+    padding: 16px 20px;
+    background: #fff;
+}
+
+.company-detail-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.company-detail-section-header h3 {
+    margin: 0;
+    font-size: 15px;
+    color: #333;
+}
+
+.btn-edit-section {
+    padding: 5px 14px;
+    font-size: 12px;
+    background: #f0f9ff;
+    border: 1px solid #19d6ff;
+    border-radius: 6px;
+    color: #0097b2;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
+}
+
+.btn-edit-section:hover {
+    background: #19d6ff;
+    color: #fff;
+}
+
+.company-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.company-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.company-info-item.full-span {
+    grid-column: 1 / -1;
+}
+
+.company-info-label {
+    font-size: 11px;
+    color: #6c757d;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.company-info-value {
+    font-size: 14px;
+    color: #212529;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+/* Cards de log de contato */
+.contact-log-card {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+}
+
+.contact-log-card:last-child {
+    margin-bottom: 0;
+}
+
+.log-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.log-date {
+    font-size: 13px;
+    font-weight: 600;
+    color: #0097b2;
+}
+
+.log-author {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.log-actions {
+    margin-left: auto;
+    display: flex;
+    gap: 6px;
+}
+
+.btn-log-action {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.btn-log-action:hover {
+    background: #e9ecef;
+}
+
+.log-field {
+    font-size: 13px;
+    color: #444;
+    margin-bottom: 4px;
+    line-height: 1.5;
+}
+
+.log-field:last-child {
+    margin-bottom: 0;
 }
 
 /* Box de Justificativa */

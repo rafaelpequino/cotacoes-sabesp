@@ -425,6 +425,27 @@ class ApiClient {
         }
     }
 
+    // ── Company Details endpoints ──────────────────────────────────────────
+    async getCompanyDetail(entityType, entityId, empresaIndex) {
+        return this.request(`/company-details?entityType=${entityType}&entityId=${entityId}&empresaIndex=${empresaIndex}`);
+    }
+
+    async upsertCompanyDetail(data) {
+        return this.request('/company-details', 'POST', data);
+    }
+
+    async addCompanyContactLog(companyDetailId, data) {
+        return this.request(`/company-details/${companyDetailId}/logs`, 'POST', data);
+    }
+
+    async updateCompanyContactLog(logId, data) {
+        return this.request(`/company-details/logs/${logId}`, 'PUT', data);
+    }
+
+    async deleteCompanyContactLog(logId) {
+        return this.request(`/company-details/logs/${logId}`, 'DELETE');
+    }
+
     // Traduzir erros para português
     translateError(error) {
         if (!error) return 'Erro desconhecido';

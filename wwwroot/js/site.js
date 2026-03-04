@@ -52,6 +52,62 @@ document.addEventListener('input', function (e) {
     }
 });
 
+// =============================================
+// Máscaras de entrada: CNPJ e Telefone
+// =============================================
+
+/**
+ * Formata CNPJ enquanto o usuário digita.
+ * Aceita somente dígitos e aplica o padrão 00.000.000/0000-00.
+ */
+function maskCNPJ(campo) {
+    let v = campo.value.replace(/\D/g, '').substring(0, 14);
+    if (v.length > 12) {
+        v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{1,2})$/, '$1.$2.$3/$4-$5');
+    } else if (v.length > 8) {
+        v = v.replace(/^(\d{2})(\d{3})(\d{3})(\d{0,4})$/, '$1.$2.$3/$4');
+    } else if (v.length > 5) {
+        v = v.replace(/^(\d{2})(\d{3})(\d{0,3})$/, '$1.$2.$3');
+    } else if (v.length > 2) {
+        v = v.replace(/^(\d{2})(\d{0,3})$/, '$1.$2');
+    }
+    campo.value = v;
+}
+
+/**
+ * Formata telefone enquanto o usuário digita.
+ * Detecta automaticamente se é fixo (8 dígitos) ou celular (9 dígitos):
+ *   Fixo:   (00) 0000-0000
+ *   Celular:(00) 00000-0000
+ */
+function maskTelefone(campo) {
+    let v = campo.value.replace(/\D/g, '').substring(0, 11);
+    if (v.length > 10) {
+        // celular: (00) 00000-0000
+        v = v.replace(/^(\d{2})(\d{5})(\d{0,4})$/, '($1) $2-$3');
+    } else if (v.length > 6) {
+        // fixo intermediário ou celular ainda sendo digitado
+        v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})$/, '($1) $2-$3');
+    } else if (v.length > 2) {
+        v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+    } else if (v.length > 0) {
+        v = v.replace(/^(\d{0,2})$/, '($1');
+    }
+    campo.value = v;
+}
+
+// Aplica as máscaras via event delegation para os campos do modal de empresa
+document.addEventListener('input', function (e) {
+    const target = e.target;
+    if (!target.closest('#companyDetailModal')) return;
+
+    if (target.id === 'cdeInputCNPJ') {
+        maskCNPJ(target);
+    } else if (target.id === 'cdeInputTelefone') {
+        maskTelefone(target);
+    }
+});
+
 // Fechar dropdown ao clicar fora
 document.addEventListener('click', function(event) {
     const userMenuBtn = document.getElementById('userMenuBtn');
