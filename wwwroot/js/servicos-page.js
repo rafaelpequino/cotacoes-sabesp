@@ -1316,22 +1316,3 @@ window.addEventListener('click', function(event) {
     if (event.target === companyDetailModal) closeCompanyDetailModal();
 });
 
-// Fechar com ESC
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        const addEditLogModal = document.getElementById('addEditContactLogModal');
-        if (addEditLogModal && addEditLogModal.style.display === 'flex') {
-            closeAddEditContactLogModal();
-            return;
-        }
-        const companyDetailModal = document.getElementById('companyDetailModal');
-        if (companyDetailModal && companyDetailModal.style.display === 'flex') {
-            closeCompanyDetailModal();
-            return;
-        }
-        closeCreateModal();
-        closeEditModal();
-        closeViewModal();
-    }
-});
-
