@@ -219,6 +219,13 @@ function setupFilterListeners() {
         responsibleFilterSelect.addEventListener('change', applyFilters);
     }
 
+    // Normalizar texto de busca (regras iguais às dos campos de inserção)
+    if (searchInput && typeof aplicarMaiuscula === 'function') {
+        searchInput.addEventListener('input', () => {
+            aplicarMaiuscula(searchInput);
+        });
+    }
+
     // Permitir busca ao digitar (Enter)
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -288,7 +295,10 @@ async function populateResponsibleFilter() {
 }
 
 async function applyFilters() {
-    const search = document.getElementById('searchInput')?.value || '';
+    const rawSearch = document.getElementById('searchInput')?.value || '';
+    const search = typeof converterMaiuscula === 'function'
+        ? converterMaiuscula(rawSearch)
+        : rawSearch;
     const sort = document.getElementById('sortSelect')?.value || '';
     const sectorId = document.getElementById('sectorFilterSelect')?.value || '';
     const responsibleId = document.getElementById('responsibleFilterSelect')?.value || '';
