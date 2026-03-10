@@ -249,6 +249,10 @@ function openUploadModal() {
         // Resetar para modo de criação
         modal.dataset.isEditing = 'false';
         delete modal.dataset.planilhaId;
+        const title = document.getElementById('uploadModalTitle');
+        const submitButton = document.getElementById('uploadModalSubmitButton');
+        if (title) title.textContent = 'Nova Planilha';
+        if (submitButton) submitButton.textContent = 'Enviar Planilha';
         const form = modal.querySelector('form');
         if (form) form.reset();
         modal.style.display = 'flex';
@@ -277,14 +281,17 @@ async function savePlanilha() {
     const isEditing = modal.dataset.isEditing === 'true';
     const planilhaId = modal.dataset.planilhaId;
     
-    // Buscar input pelo placeholder ou label
-    const nameInput = form.querySelector('input[type="text"]');
-    const name = nameInput?.value?.trim() || '';
+    // Buscar input de nome da planilha
+    const nameInput = document.getElementById('planilhaNameInput') || form.querySelector('input[type="text"]');
+    let name = nameInput?.value?.trim() || '';
+    // Aplicar mesma padronização de texto usada nas cotações (maiúsculas, sem acentos/caracteres especiais)
+    if (typeof converterMaiuscula === 'function') {
+        name = converterMaiuscula(name);
+        if (nameInput) nameInput.value = name;
+    }
     const sectorSelect = document.getElementById('sectorSelect');
     const sector = sectorSelect?.value || '';
     const description = form.querySelector('textarea')?.value || '';
-    const isSharedCheckbox = form.querySelector('input[name="isShared"]');
-    const isShared = isSharedCheckbox?.checked || false;
     const fileInput = form.querySelector('input[type="file"]');
     
     if (!name) {
@@ -362,7 +369,8 @@ async function savePlanilha() {
                 name: name,
                 sectorId: parseInt(sector),
                 description: description || null,
-                isShared: isShared
+                // Todas as planilhas são compartilhadas
+                isShared: true
             };
 
             // Adicionar dados do arquivo apenas se houver novo arquivo
@@ -395,7 +403,8 @@ async function savePlanilha() {
                 filePath: filePath,
                 fileType: fileType,
                 fileSize: fileSize,
-                isShared: true  // Compartilhada por padrão
+                // Todas as planilhas são compartilhadas
+                isShared: true
             };
 
             await api.createSpreadsheet(data);
@@ -496,25 +505,31 @@ async function editPlanilha(id) {
         return;
     }
 
-    // Abrir modal de edição
+    // Abrir modal de edição (reutilizando o modal de upload)
     const modal = document.getElementById('uploadModal');
     const form = modal.querySelector('form');
-    
+
+    // Ajustar título e botão
+    const title = document.getElementById('uploadModalTitle');
+    const submitButton = document.getElementById('uploadModalSubmitButton');
+    if (title) title.textContent = 'Editar Planilha';
+    if (submitButton) submitButton.textContent = 'Atualizar';
+
     // Popular campos
-    const nameInput = form.querySelector('input[name="name"]');
-    const descriptionInput = form.querySelector('textarea[name="description"]');
-    const sectorSelect = form.querySelector('select[name="sectorId"]');
-    const isSharedCheckbox = form.querySelector('input[name="isShared"]');
-    
+    const nameInput = document.getElementById('planilhaNameInput');
+    const descriptionInput = document.getElementById('planilhaDescriptionInput');
+    const sectorSelect = document.getElementById('sectorSelect');
+    const isSharedCheckbox = document.getElementById('isSharedCheckbox');
+
     if (nameInput) nameInput.value = planilha.name || '';
     if (descriptionInput) descriptionInput.value = planilha.description || '';
     if (sectorSelect) sectorSelect.value = planilha.sectorId || '';
     if (isSharedCheckbox) isSharedCheckbox.checked = planilha.isShared || false;
-    
+
     // Armazenar ID para update
     modal.dataset.planilhaId = id;
     modal.dataset.isEditing = 'true';
-    
+
     modal.style.display = 'flex';
 }
 

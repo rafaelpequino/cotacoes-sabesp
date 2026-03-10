@@ -46,7 +46,8 @@ document.addEventListener('input', function (e) {
         (target.tagName === 'INPUT' && target.type === 'text') ||
         target.tagName === 'TEXTAREA'
     ) {
-        if (target.closest('#createModal, #editModal, #intencaoModal')) {
+        // Aplicar regras de maiúscula nos campos de texto dos modais relevantes
+        if (target.closest('#createModal, #editModal, #intencaoModal, #uploadModal')) {
             aplicarMaiuscula(target);
         }
     }

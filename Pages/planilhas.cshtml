@@ -96,14 +96,14 @@
 <div id="uploadModal" class="modal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>Nova Planilha</h2>
+            <h2 id="uploadModalTitle">Nova Planilha</h2>
             <button class="modal-close" onclick="closeUploadModal()">&times;</button>
         </div>
         <form class="modal-form" id="uploadForm">
             <div class="form-row">
                 <div class="form-group full-width">
                     <label>Nome da Planilha*</label>
-                    <input type="text" placeholder="Ex: Planilha Padrão Elétrica" required />
+                    <input id="planilhaNameInput" name="name" type="text" placeholder="Ex: Planilha Padrão Elétrica" required />
                 </div>
             </div>
 
@@ -117,7 +117,7 @@
                 <div class="form-group full-width">
                     <label>Arquivo Excel*</label>
                     <div class="file-upload-area" id="fileUploadArea">
-                        <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls,.csv" required style="display: none;" />
+                        <input type="file" id="fileInput" accept=".xlsx,.xlsm,.xls,.csv" style="display: none;" />
                         <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
                             <polyline points="17 8 12 3 7 8"></polyline>
@@ -133,13 +133,13 @@
             <div class="form-row">
                 <div class="form-group full-width">
                     <label>Descrição (opcional)</label>
-                    <textarea placeholder="Adicione uma descrição sobre esta planilha..." rows="3"></textarea>
+                    <textarea id="planilhaDescriptionInput" name="description" placeholder="Adicione uma descrição sobre esta planilha..." rows="3"></textarea>
                 </div>
             </div>
 
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeUploadModal()">Cancelar</button>
-                <button type="submit" class="btn-submit">Enviar Planilha</button>
+                <button type="submit" class="btn-submit" id="uploadModalSubmitButton">Enviar Planilha</button>
             </div>
         </form>
     </div>
