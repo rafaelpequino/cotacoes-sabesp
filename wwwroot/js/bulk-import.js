@@ -70,6 +70,15 @@ function parseMoneyValue(value) {
     return isNaN(parsed) ? 0 : parsed;
 }
 
+// Normaliza texto: maiúscula, sem acentos, ç → c
+function normalizeTextForCotacao(value) {
+    return (value || '').toString().trim()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/ç/gi, 'c')
+        .toUpperCase();
+}
+
 // Processar dados colados
 function processBulkData(text) {
     const lines = text.split('\n').filter(l => l.trim() !== '');
@@ -98,7 +107,8 @@ function processBulkData(text) {
             // Coletar apenas empresas que existem (posições 14-18 para NOMES e VALORES)
             const empresasTemp = [];
             for (let j = 14; j <= 18; j++) {
-                const nome = (lineNomes[j] || '').trim();
+                const nomeBruto = (lineNomes[j] || '').trim();
+                const nome = normalizeTextForCotacao(nomeBruto);
                 const valor = parseMoneyValue(lineDados[j]);
                 if (nome || valor > 0) {
                     empresasTemp.push({ nome, valor });
@@ -108,9 +118,9 @@ function processBulkData(text) {
             const cotacao = {
                 id: `bulk_${Date.now()}_${i}`,
                 sectorId: '',
-                i0Original: (lineDados[0] || '').trim(),
-                item: (lineDados[1] || '').trim(),
-                unidade: (lineDados[2] || '').trim(),
+                i0Original: normalizeTextForCotacao(lineDados[0]),
+                item: normalizeTextForCotacao(lineDados[1]),
+                unidade: normalizeTextForCotacao(lineDados[2]),
                 adotada: parseMoneyValue(lineDados[3]),
                 precoMontagem: parseMoneyValue(lineDados[4]),
                 precoAdotado: parseMoneyValue(lineDados[6]),
@@ -131,7 +141,7 @@ function processBulkData(text) {
                 nomeEmpresa4: empresasTemp[3]?.nome || '',
                 nomeEmpresa5: empresasTemp[4]?.nome || '',
                 nomeEmpresa6: empresasTemp[5]?.nome || '',
-                justificativa: (lineDados[20] || '').trim().replace(/\r/g, ''),
+                justificativa: normalizeTextForCotacao((lineDados[20] || '').replace(/\r/g, '').trim()),
                 attachments: []
             };
 

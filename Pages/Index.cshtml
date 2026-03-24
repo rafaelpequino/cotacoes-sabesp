@@ -291,22 +291,55 @@
                     // Redirecionar direto para dashboard
                     window.location.href = '/dashboard';
                 } else {
-                    const errorMessage = result?.message || 'Email ou senha incorretos';
+                    const errorMessage = result?.message || 'Erro desconhecido';
+                    
+                    // Determinar tipo de erro baseado na mensagem
+                    let errorTitle = 'Login Inválido';
+                    let errorIcon = 'warning';
+                    let confirmButtonColor = '#13d0ff';
+                    
+                    if (errorMessage.includes('Não encontrado') || errorMessage.includes('Credenciais inválidas')) {
+                        errorTitle = 'Credenciais inválidas';
+                        errorIcon = 'warning';
+                    } else if (errorMessage.includes('desativada')) {
+                        errorTitle = 'Conta Desativada';
+                        errorIcon = 'error';
+                        confirmButtonColor = '#ff6b6b';
+                    } else if (errorMessage.includes('Erro interno') || errorMessage.includes('servidor')) {
+                        errorTitle = 'Erro do Servidor';
+                        errorIcon = 'error';
+                        confirmButtonColor = '#ff6b6b';
+                    }
                     
                     await Swal.fire({
-                        icon: 'warning',
-                        title: 'Login Inválido',
+                        icon: errorIcon,
+                        title: errorTitle,
                         text: errorMessage,
                         confirmButtonText: 'Tentar Novamente',
-                        confirmButtonColor: '#13d0ff'
+                        confirmButtonColor: confirmButtonColor
                     });
                 }
             } catch (error) {
                 console.error('Erro na requisição:', error);
+                
+                let errorTitle = 'Erro de Conexão';
+                let errorMessage = 'Ocorreu um erro ao conectar ao servidor. Verifique sua conexão e tente novamente.';
+                let errorIcon = 'error';
+                
+                // Verificar se é erro de rede
+                if (!navigator.onLine) {
+                    errorTitle = 'Sem Conexão';
+                    errorMessage = 'Você está offline. Verifique sua conexão com a internet.';
+                    errorIcon = 'warning';
+                } else if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorTitle = 'Servidor Indisponível';
+                    errorMessage = 'Não foi possível conectar ao servidor. O serviço pode estar temporariamente indisponível.';
+                }
+                
                 await Swal.fire({
-                    icon: 'error',
-                    title: 'Erro de Conexão',
-                    text: 'Ocorreu um erro ao conectar ao servidor. Verifique sua conexão e tente novamente.',
+                    icon: errorIcon,
+                    title: errorTitle,
+                    text: errorMessage,
                     confirmButtonText: 'OK',
                     confirmButtonColor: '#13d0ff'
                 });

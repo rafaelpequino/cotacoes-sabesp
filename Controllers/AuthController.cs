@@ -79,7 +79,14 @@ namespace CotacoesEPC.Controllers
                 request.Email, request.Password);
 
             if (!success)
+            {
+                if (message.StartsWith("Erro interno do servidor", StringComparison.OrdinalIgnoreCase))
+                {
+                    return StatusCode(500, new { message });
+                }
+
                 return Unauthorized(new { message });
+            }
 
             // Salvar token em cookie seguro
             Response.Cookies.Append("authToken", token ?? string.Empty, new Microsoft.AspNetCore.Http.CookieOptions

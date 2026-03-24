@@ -40,8 +40,9 @@ function parseClipboardData(text) {
             return (str || '').trim()
                 .normalize('NFD')
                 .replace(/[\u0300-\u036f]/g, '')
+                .replace(/ç/gi, 'c')
                 .toUpperCase()
-                .replace(/[^A-Z0-9 \-\/]/g, '');
+                .replace(/Ç/g, 'C');
         }
 
         function getValue(index, isMonetary = false, isText = false) {
@@ -122,6 +123,7 @@ function fillFormWithParsedData(modal, parsedData) {
             return (str || '').trim()
                 .normalize('NFD')
                 .replace(/[\u0300-\u036f]/g, '')
+                .replace(/ç/gi, 'c')
                 .toUpperCase()
                 .replace(/[^A-Z0-9 \-\/]/g, '');
         }

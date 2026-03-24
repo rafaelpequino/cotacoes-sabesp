@@ -107,17 +107,17 @@ namespace CotacoesEPC.Services
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
                 if (user == null)
                 {
-                    return (false, "Email ou senha incorretos", null, null);
+                    return (false, "Credenciais inválidas", null, null);
                 }
 
                 if (!VerifyPassword(password, user.PasswordHash))
                 {
-                    return (false, "Email ou senha incorretos", null, null);
+                    return (false, "Credenciais inválidas", null, null);
                 }
 
                 if (!user.IsActive)
                 {
-                    return (false, "Sua conta foi desativada", null, null);
+                    return (false, "Sua conta foi desativada. Entre em contato com o administrador", null, null);
                 }
 
                 var token = _jwtService.GenerateToken(user.Id, user.Email, user.Name);
@@ -127,7 +127,8 @@ namespace CotacoesEPC.Services
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Erro ao fazer login: {ex.Message}");
-                return (false, "Erro ao fazer login. Tente novamente mais tarde", null, null);
+                System.Diagnostics.Debug.WriteLine($"Stack trace: {ex.StackTrace}");
+                return (false, $"Erro interno do servidor: {ex.Message}", null, null);
             }
         }
 

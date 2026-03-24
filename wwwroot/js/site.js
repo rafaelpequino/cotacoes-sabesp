@@ -15,8 +15,9 @@ function converterMaiuscula(valor) {
     return valor
         .normalize('NFD')                 // decompõe: "ç" → "c" + cedilha, "á" → "a" + acento
         .replace(/[\u0300-\u036f]/g, '')  // remove todos os diacríticos (acentos, cedilha, til, etc.)
+        .replace(/ç/gi, 'c')
         .toUpperCase()                    // maiúsculas
-        .replace(/[^A-Z0-9 \-\/]/g, '');  // remove tudo que NÃO for letra, número, espaço, hífen ou barra
+        .replace(/Ç/g, 'C');              // trata ç maiúsculo
 }
 
 /**
@@ -49,6 +50,19 @@ document.addEventListener('input', function (e) {
         // Aplicar regras de maiúscula nos campos de texto dos modais relevantes
         if (target.closest('#createModal, #editModal, #intencaoModal, #uploadModal')) {
             aplicarMaiuscula(target);
+        }
+    }
+});
+
+document.addEventListener('paste', function (e) {
+    const target = e.target;
+    if (
+        (target.tagName === 'INPUT' && target.type === 'text') ||
+        target.tagName === 'TEXTAREA'
+    ) {
+        // Aplicar regras de maiúscula nos campos de texto dos modais relevantes após paste
+        if (target.closest('#createModal, #editModal, #intencaoModal, #uploadModal')) {
+            setTimeout(() => aplicarMaiuscula(target), 0);
         }
     }
 });

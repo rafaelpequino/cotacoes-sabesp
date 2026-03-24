@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "wT2n6RHQxAY=",
+  "dgSpecHash": "SVYLCO6hwN4=",
   "success": true,
-  "projectFilePath": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\CotacoesEPC\\CotacoesEPC.csproj",
+  "projectFilePath": "C:\\Users\\rafae\\OneDrive\\Documentos\\Sabesp\\Sistemas\\cotacoes-sabesp\\CotacoesEPC.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\rafae\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\rafae\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
