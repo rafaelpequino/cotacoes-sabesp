@@ -80,7 +80,7 @@ function parseClipboardData(text) {
             precoFornCorrigido: getValue(3, true),
             precoMontagem: getValue(4, true),
             precoAdotado: getValue(6, true),
-            mediaAdotada: getValue(8, true),
+            mediaAdotada: getValue(8, false, true),
             mediaSaneada: getValue(9, true),
             menorValor: getValue(10, true),
             mediaAritmetica: getValue(11, true),
@@ -111,6 +111,19 @@ function parseClipboardData(text) {
  */
 function fillFormWithParsedData(modal, parsedData) {
     try {
+        // Preencher select de Setor (se obrigatório)
+        const sectorSelect = modal.querySelector('select[name="sectorId"]');
+        if (sectorSelect && !sectorSelect.value) {
+            // Selecionar a primeira opção válida (não vazia)
+            const options = sectorSelect.querySelectorAll('option');
+            for (let option of options) {
+                if (option.value && option.value !== '') {
+                    sectorSelect.value = option.value;
+                    break;
+                }
+            }
+        }
+        
         // Busca por placeholder novo (maiúsculo) com fallback para o antigo (minúsculo)
         const idOriginalInput = modal.querySelector('input[placeholder="Ex: JAN/00"]')
                              || modal.querySelector('input[placeholder="Ex: jan/00"]');
@@ -135,10 +148,21 @@ function fillFormWithParsedData(modal, parsedData) {
         const textareaInputs = modal.querySelectorAll('textarea');
         if (textareaInputs[0]) textareaInputs[0].value = upperVal(parsedData.justificativa);
         
+        // Busca inputs de texto para Média Adotada
+        const allInputs = modal.querySelectorAll('input');
+        let mediaAdotadaInput = null;
+        
+        for (let input of allInputs) {
+            const label = input.parentElement?.querySelector('label')?.textContent || '';
+            if (label.includes('Média adotada') && input.type === 'text') {
+                mediaAdotadaInput = input;
+            }
+        }
+        
         const numberInputs = modal.querySelectorAll('input[type="number"]');
         
-        if (numberInputs.length < 14) {
-            throw new Error(`Campos insuficientes. Esperado: 14, encontrado: ${numberInputs.length}`);
+        if (numberInputs.length < 13) {
+            throw new Error(`Campos numéricos insuficientes. Esperado: 13, encontrado: ${numberInputs.length}`);
         }
         
         let idx = 0;
@@ -146,7 +170,11 @@ function fillFormWithParsedData(modal, parsedData) {
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.precoFornCorrigido;  // Preço de Fornecedor (corrigido)
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.precoMontagem;      // Preço de montagem/instalação
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.precoAdotado;       // Preço adotado
-        if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.mediaAdotada;
+        
+        // Preencher campo de texto para Média Adotada
+        if (mediaAdotadaInput) mediaAdotadaInput.value = upperVal(parsedData.mediaAdotada);
+        
+        // Preencher campos de número (Média Saneada em diante)
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.mediaSaneada;
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.menorValor;
         if (idx < numberInputs.length) numberInputs[idx++].value = parsedData.mediaAritmetica;

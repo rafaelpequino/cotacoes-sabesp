@@ -429,7 +429,7 @@ async function saveInsumo() {
         priceFornecedor: toNumber(numberInputs[0]?.value, 0),
         precoMontagem: toNumber(numberInputs[1]?.value, 0),
         precoAdotado: toNumber(numberInputs[2]?.value, 0),
-        mediaAdotada: toNumber(numberInputs[3]?.value),
+        mediaAdotada: numberInputs[3]?.value || '',
         mediaSaneada: toNumber(numberInputs[4]?.value),
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),
@@ -536,17 +536,25 @@ async function editInsumo(id) {
     numberInputs[0].value = insumo.priceFornecedor || '';
     numberInputs[1].value = insumo.precoMontagem || '';
     numberInputs[2].value = insumo.precoAdotado || '';
-    numberInputs[3].value = insumo.mediaAdotada || '';
-    numberInputs[4].value = insumo.mediaSaneada || '';
-    numberInputs[5].value = insumo.menorValor || '';
-    numberInputs[6].value = insumo.mediaAritmetica || '';
-    numberInputs[7].value = insumo.mediana || '';
-    numberInputs[8].value = insumo.empresa1 || '';
-    numberInputs[9].value = insumo.empresa2 || '';
-    numberInputs[10].value = insumo.empresa3 || '';
-    numberInputs[11].value = insumo.empresa4 || '';
-    numberInputs[12].value = insumo.empresa5 || '';
-    numberInputs[13].value = insumo.empresa6 || '';
+    numberInputs[3].value = insumo.mediaSaneada || '';
+    numberInputs[4].value = insumo.menorValor || '';
+    numberInputs[5].value = insumo.mediaAritmetica || '';
+    numberInputs[6].value = insumo.mediana || '';
+    numberInputs[7].value = insumo.empresa1 || '';
+    numberInputs[8].value = insumo.empresa2 || '';
+    numberInputs[9].value = insumo.empresa3 || '';
+    numberInputs[10].value = insumo.empresa4 || '';
+    numberInputs[11].value = insumo.empresa5 || '';
+    numberInputs[12].value = insumo.empresa6 || '';
+    
+    // Preencher campo de texto: Média Adotada
+    const textInputs = form.querySelectorAll('input[type="text"]');
+    for (let input of textInputs) {
+        const label = input.parentElement?.querySelector('label')?.textContent || '';
+        if (label.includes('Média adotada')) {
+            input.value = insumo.mediaAdotada || '';
+        }
+    }
     
     // Preencher textarea
     const textarea = form.querySelector('textarea');
@@ -631,7 +639,7 @@ async function updateInsumo() {
         priceFornecedor: toNumber(numberInputs[0]?.value, 0),
         precoMontagem: toNumber(numberInputs[1]?.value, 0),
         precoAdotado: toNumber(numberInputs[2]?.value, 0),
-        mediaAdotada: toNumber(numberInputs[3]?.value),
+        mediaAdotada: numberInputs[3]?.value || '',
         mediaSaneada: toNumber(numberInputs[4]?.value),
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),

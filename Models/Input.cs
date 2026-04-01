@@ -37,7 +37,8 @@ namespace CotacoesEPC.Models
         [Required]
         public decimal PrecoAdotado { get; set; }
 
-        public decimal? MediaAdotada { get; set; }
+        [StringLength(500)]
+        public string? MediaAdotada { get; set; }
 
         public decimal? MediaSaneada { get; set; }
 

@@ -46,7 +46,7 @@ namespace CotacoesEPC.Data
                 entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoMontagem).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoAdotado).HasPrecision(18, 2);
-                entity.Property(e => e.MediaAdotada).HasPrecision(18, 2);
+                entity.Property(e => e.MediaAdotada).HasMaxLength(500);
                 entity.Property(e => e.MediaSaneada).HasPrecision(18, 2);
                 entity.Property(e => e.MenorValor).HasPrecision(18, 2);
                 entity.Property(e => e.MediaAritmetica).HasPrecision(18, 2);
@@ -79,7 +79,7 @@ namespace CotacoesEPC.Data
                 entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoMontagem).HasPrecision(18, 2);
                 entity.Property(e => e.PrecoAdotado).HasPrecision(18, 2);
-                entity.Property(e => e.MediaAdotada).HasPrecision(18, 2);
+                entity.Property(e => e.MediaAdotada).HasMaxLength(500);
                 entity.Property(e => e.MediaSaneada).HasPrecision(18, 2);
                 entity.Property(e => e.MenorValor).HasPrecision(18, 2);
                 entity.Property(e => e.MediaAritmetica).HasPrecision(18, 2);

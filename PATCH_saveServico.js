@@ -55,7 +55,7 @@ async function saveServico() {
         priceFornecedor: toNumber(numberInputs[0]?.value, 0),
         precoMontagem: toNumber(numberInputs[1]?.value, 0),
         precoAdotado: toNumber(numberInputs[2]?.value, 0),
-        mediaAdotada: toNumber(numberInputs[3]?.value),
+        mediaAdotada: numberInputs[3]?.value || '',
         mediaSaneada: toNumber(numberInputs[4]?.value),
         menorValor: toNumber(numberInputs[5]?.value),
         mediaAritmetica: toNumber(numberInputs[6]?.value),

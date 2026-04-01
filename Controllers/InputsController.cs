@@ -230,7 +230,7 @@ namespace CotacoesEPC.Controllers
         public decimal PriceFornecedor { get; set; }
         public decimal PrecoMontagem { get; set; }
         public decimal PrecoAdotado { get; set; }
-        public decimal? MediaAdotada { get; set; }
+        public string? MediaAdotada { get; set; }
         public decimal? MediaSaneada { get; set; }
         public decimal? MenorValor { get; set; }
         public decimal? MediaAritmetica { get; set; }
