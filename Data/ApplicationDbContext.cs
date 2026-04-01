@@ -14,6 +14,7 @@ namespace CotacoesEPC.Data
         public DbSet<Input> Inputs { get; set; }
         public DbSet<Spreadsheet> Spreadsheets { get; set; }
         public DbSet<Sector> Sectors { get; set; }
+        public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<AllowedRegistration> AllowedRegistrations { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<CompanyDetail> CompanyDetails { get; set; }
@@ -122,6 +123,17 @@ namespace CotacoesEPC.Data
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).IsRequired();
+            });
+
+            // Supplier configuration
+            modelBuilder.Entity<Supplier>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.NomeFantasia).IsRequired().HasMaxLength(200);
+                entity.Property(e => e.CNPJ).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Telefone).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.Endereco).IsRequired().HasMaxLength(500);
+                entity.Property(e => e.DataCadastro).HasDefaultValueSql("GETUTCDATE()");
             });
 
             // AllowedRegistration configuration

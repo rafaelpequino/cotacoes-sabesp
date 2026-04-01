@@ -180,6 +180,37 @@ class ApiClient {
         return this.request(`/sectors/${id}`);
     }
 
+    // Suppliers endpoints
+    async getSuppliers(search = null, sort = null) {
+        let endpoint = '/suppliers';
+        const params = new URLSearchParams();
+        
+        if (search) params.append('search', search);
+        if (sort) params.append('sort', sort);
+        
+        if (params.toString()) {
+            endpoint += '?' + params.toString();
+        }
+        
+        return this.request(endpoint);
+    }
+
+    async getSupplier(id) {
+        return this.request(`/suppliers/${id}`);
+    }
+
+    async createSupplier(data) {
+        return this.request('/suppliers', 'POST', data);
+    }
+
+    async updateSupplier(id, data) {
+        return this.request(`/suppliers/${id}`, 'PUT', data);
+    }
+
+    async deleteSupplier(id) {
+        return this.request(`/suppliers/${id}`, 'DELETE');
+    }
+
     // Users endpoints
     async getUsers() {
         return this.request('/users');

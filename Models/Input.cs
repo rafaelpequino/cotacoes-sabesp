@@ -78,6 +78,18 @@ namespace CotacoesEPC.Models
 
         public decimal? Empresa6 { get; set; }
 
+        public int? Supplier1Id { get; set; }
+
+        public int? Supplier2Id { get; set; }
+
+        public int? Supplier3Id { get; set; }
+
+        public int? Supplier4Id { get; set; }
+
+        public int? Supplier5Id { get; set; }
+
+        public int? Supplier6Id { get; set; }
+
         [StringLength(1000)]
         public string? Justificativa { get; set; }
 

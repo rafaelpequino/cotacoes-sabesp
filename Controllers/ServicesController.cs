@@ -97,16 +97,22 @@ namespace CotacoesEPC.Controllers
                 Mediana = request.Mediana,
                 NomeEmpresa1 = request.NomeEmpresa1,
                 Empresa1 = request.Empresa1,
+                Supplier1Id = request.Supplier1Id,
                 NomeEmpresa2 = request.NomeEmpresa2,
                 Empresa2 = request.Empresa2,
+                Supplier2Id = request.Supplier2Id,
                 NomeEmpresa3 = request.NomeEmpresa3,
                 Empresa3 = request.Empresa3,
+                Supplier3Id = request.Supplier3Id,
                 NomeEmpresa4 = request.NomeEmpresa4,
                 Empresa4 = request.Empresa4,
+                Supplier4Id = request.Supplier4Id,
                 NomeEmpresa5 = request.NomeEmpresa5,
                 Empresa5 = request.Empresa5,
+                Supplier5Id = request.Supplier5Id,
                 NomeEmpresa6 = request.NomeEmpresa6,
                 Empresa6 = request.Empresa6,
+                Supplier6Id = request.Supplier6Id,
                 Justificativa = request.Justificativa,
                 Status = status,
                 CreatedAt = DateTime.UtcNow
@@ -146,16 +152,22 @@ namespace CotacoesEPC.Controllers
             service.Mediana = request.Mediana;
             service.NomeEmpresa1 = request.NomeEmpresa1;
             service.Empresa1 = request.Empresa1;
+            service.Supplier1Id = request.Supplier1Id;
             service.NomeEmpresa2 = request.NomeEmpresa2;
             service.Empresa2 = request.Empresa2;
+            service.Supplier2Id = request.Supplier2Id;
             service.NomeEmpresa3 = request.NomeEmpresa3;
             service.Empresa3 = request.Empresa3;
+            service.Supplier3Id = request.Supplier3Id;
             service.NomeEmpresa4 = request.NomeEmpresa4;
             service.Empresa4 = request.Empresa4;
+            service.Supplier4Id = request.Supplier4Id;
             service.NomeEmpresa5 = request.NomeEmpresa5;
             service.Empresa5 = request.Empresa5;
+            service.Supplier5Id = request.Supplier5Id;
             service.NomeEmpresa6 = request.NomeEmpresa6;
             service.Empresa6 = request.Empresa6;
+            service.Supplier6Id = request.Supplier6Id;
             service.Justificativa = request.Justificativa;
             // Apenas o dono pode alterar o status
             if (!string.IsNullOrEmpty(request.Status))
@@ -237,16 +249,22 @@ namespace CotacoesEPC.Controllers
         public decimal? Mediana { get; set; }
         public string? NomeEmpresa1 { get; set; }
         public decimal? Empresa1 { get; set; }
+        public int? Supplier1Id { get; set; }
         public string? NomeEmpresa2 { get; set; }
         public decimal? Empresa2 { get; set; }
+        public int? Supplier2Id { get; set; }
         public string? NomeEmpresa3 { get; set; }
         public decimal? Empresa3 { get; set; }
+        public int? Supplier3Id { get; set; }
         public string? NomeEmpresa4 { get; set; }
         public decimal? Empresa4 { get; set; }
+        public int? Supplier4Id { get; set; }
         public string? NomeEmpresa5 { get; set; }
         public decimal? Empresa5 { get; set; }
+        public int? Supplier5Id { get; set; }
         public string? NomeEmpresa6 { get; set; }
         public decimal? Empresa6 { get; set; }
+        public int? Supplier6Id { get; set; }
         public string? Justificativa { get; set; }
         public string? Status { get; set; }
     }

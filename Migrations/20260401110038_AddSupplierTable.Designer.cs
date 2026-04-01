@@ -4,6 +4,7 @@ using CotacoesEPC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CotacoesEPC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260401110038_AddSupplierTable")]
+    partial class AddSupplierTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -336,24 +339,6 @@ namespace CotacoesEPC.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasDefaultValue("Concluída");
 
-                    b.Property<int?>("Supplier1Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier2Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier3Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier4Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier5Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier6Id")
-                        .HasColumnType("int");
-
                     b.Property<int?>("SupplierId")
                         .HasColumnType("int");
 
@@ -516,24 +501,6 @@ namespace CotacoesEPC.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)")
                         .HasDefaultValue("Concluída");
-
-                    b.Property<int?>("Supplier1Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier2Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier3Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier4Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier5Id")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Supplier6Id")
-                        .HasColumnType("int");
 
                     b.Property<int?>("SupplierId")
                         .HasColumnType("int");

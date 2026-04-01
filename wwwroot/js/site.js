@@ -91,23 +91,28 @@ function maskCNPJ(campo) {
 
 /**
  * Formata telefone enquanto o usuário digita.
- * Detecta automaticamente se é fixo (8 dígitos) ou celular (9 dígitos):
+ * Detecta automaticamente se é fixo (10 dígitos) ou celular (11 dígitos):
  *   Fixo:   (00) 0000-0000
  *   Celular:(00) 00000-0000
  */
 function maskTelefone(campo) {
     let v = campo.value.replace(/\D/g, '').substring(0, 11);
-    if (v.length > 10) {
-        // celular: (00) 00000-0000
-        v = v.replace(/^(\d{2})(\d{5})(\d{0,4})$/, '($1) $2-$3');
+    
+    if (v.length === 11) {
+        // Celular: (XX) XXXXX-XXXX
+        v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    } else if (v.length === 10) {
+        // Fixo: (XX) XXXX-XXXX
+        v = v.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
     } else if (v.length > 6) {
-        // fixo intermediário ou celular ainda sendo digitado
-        v = v.replace(/^(\d{2})(\d{4,5})(\d{0,4})$/, '($1) $2-$3');
+        // Intermediário: 7-9 dígitos
+        v = v.replace(/^(\d{2})(\d{0,5})(\d{0,4})$/, '($1) $2-$3');
     } else if (v.length > 2) {
         v = v.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
     } else if (v.length > 0) {
         v = v.replace(/^(\d{0,2})$/, '($1');
     }
+    
     campo.value = v;
 }
 
