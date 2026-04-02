@@ -540,7 +540,8 @@
         white-space: normal;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-height: 60px;
+        max-height: 90px;
+        line-height: 1.4;
     }
 
     .servicos-table tbody tr {
@@ -554,6 +555,13 @@
 
     .servicos-table tbody tr:last-child td {
         border-bottom: none;
+    }
+
+    /* Alinhar ícones/ações verticalmente no meio */
+    .servicos-table td:last-child {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     /* Indicador de scroll em mobile */
