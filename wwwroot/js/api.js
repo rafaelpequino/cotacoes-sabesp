@@ -171,7 +171,41 @@ class ApiClient {
         return this.request(`/inputs/${id}/status`, 'PATCH', { status });
     }
 
-    // Sectors endpoints
+    // Quotations endpoints (consolidação de Services e Inputs)
+    async getQuotations(search = null, sort = null, filter = null) {
+        let endpoint = '/quotations';
+        const params = new URLSearchParams();
+        
+        if (search) params.append('search', search);
+        if (sort) params.append('sort', sort);
+        if (filter) params.append('filter', filter);
+        
+        if (params.toString()) {
+            endpoint += '?' + params.toString();
+        }
+        
+        return this.request(endpoint);
+    }
+
+    async getQuotation(id) {
+        return this.request(`/quotations/${id}`);
+    }
+
+    async createQuotation(data) {
+        return this.request('/quotations', 'POST', data);
+    }
+
+    async updateQuotation(id, data) {
+        return this.request(`/quotations/${id}`, 'PUT', data);
+    }
+
+    async deleteQuotation(id) {
+        return this.request(`/quotations/${id}`, 'DELETE');
+    }
+
+    async updateQuotationStatus(id, status) {
+        return this.request(`/quotations/${id}/status`, 'PATCH', { status });
+    }
     async getSectors() {
         return this.request('/sectors');
     }

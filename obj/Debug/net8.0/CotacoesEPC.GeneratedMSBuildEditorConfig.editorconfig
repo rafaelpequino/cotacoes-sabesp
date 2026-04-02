@@ -26,6 +26,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQ2FkYXN0cm8uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/rafae/OneDrive/Documentos/Sabesp/Sistemas/cotacoes-sabesp/Pages/cotacoes.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcY290YWNvZXMuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/rafae/OneDrive/Documentos/Sabesp/Sistemas/cotacoes-sabesp/Pages/dashboard.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcZGFzaGJvYXJkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -42,20 +46,12 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/rafae/OneDrive/Documentos/Sabesp/Sistemas/cotacoes-sabesp/Pages/insumos.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcaW5zdW1vcy5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/rafae/OneDrive/Documentos/Sabesp/Sistemas/cotacoes-sabesp/Pages/planilhas.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNccGxhbmlsaGFzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/rafae/OneDrive/Documentos/Sabesp/Sistemas/cotacoes-sabesp/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/rafae/OneDrive/Documentos/Sabesp/Sistemas/cotacoes-sabesp/Pages/servicos.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcc2Vydmljb3MuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/rafae/OneDrive/Documentos/Sabesp/Sistemas/cotacoes-sabesp/Pages/Shared/_ValidationScriptsPartial.cshtml]

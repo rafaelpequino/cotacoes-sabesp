@@ -10,11 +10,11 @@ namespace CotacoesEPC.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
-    public class InputsController : ControllerBase
+    public class QuotationsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public InputsController(ApplicationDbContext context)
+        public QuotationsController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -25,11 +25,11 @@ namespace CotacoesEPC.Controllers
             return int.Parse(userId ?? "0");
         }
 
-        // GET: api/inputs
+        // GET: api/quotations
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
         {
-            var query = _context.Inputs.AsQueryable();
+            var query = _context.Quotations.AsQueryable();
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -39,40 +39,40 @@ namespace CotacoesEPC.Controllers
                 foreach (var word in words)
                 {
                     var w = word;
-                    query = query.Where(i =>
-                        i.Item.ToLower().Contains(w) ||
-                        i.OriginalId.ToLower().Contains(w) ||
-                        i.Unit.ToLower().Contains(w)
+                    query = query.Where(q =>
+                        q.Item.ToLower().Contains(w) ||
+                        q.OriginalId.ToLower().Contains(w) ||
+                        q.Unit.ToLower().Contains(w)
                     );
                 }
             }
 
             query = sort switch
             {
-                "recentes" => query.OrderByDescending(i => i.CreatedAt),
-                "preço_menor" => query.OrderBy(i => i.PrecoAdotado),
-                "preço_maior" => query.OrderByDescending(i => i.PrecoAdotado),
-                _ => query.OrderByDescending(i => i.CreatedAt)
+                "recentes" => query.OrderByDescending(q => q.CreatedAt),
+                "preço_menor" => query.OrderBy(q => q.PrecoAdotado),
+                "preço_maior" => query.OrderByDescending(q => q.PrecoAdotado),
+                _ => query.OrderByDescending(q => q.CreatedAt)
             };
 
-            var inputs = await query.ToListAsync();
-            return Ok(inputs);
+            var quotations = await query.ToListAsync();
+            return Ok(quotations);
         }
 
-        // GET: api/inputs/{id}
+        // GET: api/quotations/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var input = await _context.Inputs.FirstOrDefaultAsync(i => i.Id == id);
-            if (input == null)
-                return NotFound(new { message = "Insumo não encontrado" });
+            var quotation = await _context.Quotations.FirstOrDefaultAsync(q => q.Id == id);
+            if (quotation == null)
+                return NotFound(new { message = "Cotação não encontrada" });
 
-            return Ok(input);
+            return Ok(quotation);
         }
 
-        // POST: api/inputs
+        // POST: api/quotations
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateInputRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateQuotationRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -80,7 +80,7 @@ namespace CotacoesEPC.Controllers
             var userId = GetUserId();
             var status = ValidateStatus(request.Status) ?? "Concluída";
 
-            var input = new Input
+            var quotation = new Quotation
             {
                 UserId = userId,
                 SectorId = request.SectorId,
@@ -118,69 +118,69 @@ namespace CotacoesEPC.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.Inputs.Add(input);
+            _context.Quotations.Add(quotation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetById), new { id = input.Id }, input);
+            return CreatedAtAction(nameof(GetById), new { id = quotation.Id }, quotation);
         }
 
-        // PUT: api/inputs/{id}
+        // PUT: api/quotations/{id}
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateInputRequest request)
+        public async Task<IActionResult> Update(int id, [FromBody] UpdateQuotationRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             var userId = GetUserId();
-            var input = await _context.Inputs
-                .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+            var quotation = await _context.Quotations
+                .FirstOrDefaultAsync(q => q.Id == id && q.UserId == userId);
 
-            if (input == null)
-                return NotFound(new { message = "Insumo não encontrado" });
+            if (quotation == null)
+                return NotFound(new { message = "Cotação não encontrada" });
 
-            input.SectorId = request.SectorId;
-            input.OriginalId = request.OriginalId ?? string.Empty;
-            input.Item = request.Item ?? string.Empty;
-            input.Unit = request.Unit ?? string.Empty;
-            input.PriceFornecedor = request.PriceFornecedor;
-            input.PrecoMontagem = request.PrecoMontagem;
-            input.PrecoAdotado = request.PrecoAdotado;
-            input.MediaAdotada = request.MediaAdotada;
-            input.MediaSaneada = request.MediaSaneada;
-            input.MenorValor = request.MenorValor;
-            input.MediaAritmetica = request.MediaAritmetica;
-            input.Mediana = request.Mediana;
-            input.NomeEmpresa1 = request.NomeEmpresa1;
-            input.Empresa1 = request.Empresa1;
-            input.Supplier1Id = request.Supplier1Id;
-            input.NomeEmpresa2 = request.NomeEmpresa2;
-            input.Empresa2 = request.Empresa2;
-            input.Supplier2Id = request.Supplier2Id;
-            input.NomeEmpresa3 = request.NomeEmpresa3;
-            input.Empresa3 = request.Empresa3;
-            input.Supplier3Id = request.Supplier3Id;
-            input.NomeEmpresa4 = request.NomeEmpresa4;
-            input.Empresa4 = request.Empresa4;
-            input.Supplier4Id = request.Supplier4Id;
-            input.NomeEmpresa5 = request.NomeEmpresa5;
-            input.Empresa5 = request.Empresa5;
-            input.Supplier5Id = request.Supplier5Id;
-            input.NomeEmpresa6 = request.NomeEmpresa6;
-            input.Empresa6 = request.Empresa6;
-            input.Supplier6Id = request.Supplier6Id;
-            input.Justificativa = request.Justificativa;
+            quotation.SectorId = request.SectorId;
+            quotation.OriginalId = request.OriginalId ?? string.Empty;
+            quotation.Item = request.Item ?? string.Empty;
+            quotation.Unit = request.Unit ?? string.Empty;
+            quotation.PriceFornecedor = request.PriceFornecedor;
+            quotation.PrecoMontagem = request.PrecoMontagem;
+            quotation.PrecoAdotado = request.PrecoAdotado;
+            quotation.MediaAdotada = request.MediaAdotada;
+            quotation.MediaSaneada = request.MediaSaneada;
+            quotation.MenorValor = request.MenorValor;
+            quotation.MediaAritmetica = request.MediaAritmetica;
+            quotation.Mediana = request.Mediana;
+            quotation.NomeEmpresa1 = request.NomeEmpresa1;
+            quotation.Empresa1 = request.Empresa1;
+            quotation.Supplier1Id = request.Supplier1Id;
+            quotation.NomeEmpresa2 = request.NomeEmpresa2;
+            quotation.Empresa2 = request.Empresa2;
+            quotation.Supplier2Id = request.Supplier2Id;
+            quotation.NomeEmpresa3 = request.NomeEmpresa3;
+            quotation.Empresa3 = request.Empresa3;
+            quotation.Supplier3Id = request.Supplier3Id;
+            quotation.NomeEmpresa4 = request.NomeEmpresa4;
+            quotation.Empresa4 = request.Empresa4;
+            quotation.Supplier4Id = request.Supplier4Id;
+            quotation.NomeEmpresa5 = request.NomeEmpresa5;
+            quotation.Empresa5 = request.Empresa5;
+            quotation.Supplier5Id = request.Supplier5Id;
+            quotation.NomeEmpresa6 = request.NomeEmpresa6;
+            quotation.Empresa6 = request.Empresa6;
+            quotation.Supplier6Id = request.Supplier6Id;
+            quotation.Justificativa = request.Justificativa;
             // Apenas o dono pode alterar o status
             if (!string.IsNullOrEmpty(request.Status))
-                input.Status = ValidateStatus(request.Status) ?? input.Status;
-            input.UpdatedAt = DateTime.UtcNow;
+                quotation.Status = ValidateStatus(request.Status) ?? quotation.Status;
+            quotation.UpdatedAt = DateTime.UtcNow;
 
-            _context.Inputs.Update(input);
+            _context.Quotations.Update(quotation);
             await _context.SaveChangesAsync();
 
-            return Ok(input);
+            return Ok(quotation);
         }
 
-        // PATCH: api/inputs/{id}/status  — somente o criador pode alterar
+        // PATCH: api/quotations/{id}/status  — somente o criador pode alterar
         [HttpPatch("{id}/status")]
         public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateStatusRequest request)
         {
@@ -189,36 +189,36 @@ namespace CotacoesEPC.Controllers
                 return BadRequest(new { message = "Status inválido. Use: Pendente, Cancelada ou Concluída." });
 
             var userId = GetUserId();
-            var input = await _context.Inputs
-                .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+            var quotation = await _context.Quotations
+                .FirstOrDefaultAsync(q => q.Id == id && q.UserId == userId);
 
-            if (input == null)
-                return NotFound(new { message = "Insumo não encontrado ou sem permissão para alterar o status." });
+            if (quotation == null)
+                return NotFound(new { message = "Cotação não encontrada ou sem permissão para alterar o status." });
 
-            input.Status = novoStatus;
-            input.UpdatedAt = DateTime.UtcNow;
+            quotation.Status = novoStatus;
+            quotation.UpdatedAt = DateTime.UtcNow;
 
-            _context.Inputs.Update(input);
+            _context.Quotations.Update(quotation);
             await _context.SaveChangesAsync();
 
-            return Ok(input);
+            return Ok(quotation);
         }
 
-        // DELETE: api/inputs/{id}
+        // DELETE: api/quotations/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var userId = GetUserId();
-            var input = await _context.Inputs
-                .FirstOrDefaultAsync(i => i.Id == id && i.UserId == userId);
+            var quotation = await _context.Quotations
+                .FirstOrDefaultAsync(q => q.Id == id && q.UserId == userId);
 
-            if (input == null)
-                return NotFound(new { message = "Insumo não encontrado" });
+            if (quotation == null)
+                return NotFound(new { message = "Cotação não encontrada" });
 
-            _context.Inputs.Remove(input);
+            _context.Quotations.Remove(quotation);
             await _context.SaveChangesAsync();
 
-            return Ok(new { message = "Insumo deletado com sucesso" });
+            return Ok(new { message = "Cotação deletada com sucesso" });
         }
 
         private static string? ValidateStatus(string? status)
@@ -233,7 +233,7 @@ namespace CotacoesEPC.Controllers
         }
     }
 
-    public class CreateInputRequest
+    public class CreateQuotationRequest
     {
         public int SectorId { get; set; }
         public string? OriginalId { get; set; }
@@ -269,7 +269,7 @@ namespace CotacoesEPC.Controllers
         public string? Status { get; set; }
     }
 
-    public class UpdateInputRequest : CreateInputRequest
+    public class UpdateQuotationRequest : CreateQuotationRequest
     {
     }
 

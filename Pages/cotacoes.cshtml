@@ -1,8 +1,8 @@
-@page
-@model CotacoesEPC.Pages.insumosModel
+@page "/cotacoes"
+@model CotacoesEPC.Pages.cotacoesModel
 @{
     Layout = null;
-    ViewData["Title"] = "Insumos";
+    ViewData["Title"] = "Cotações";
 }
 
 <meta charset="utf-8" />
@@ -20,8 +20,7 @@
 
     <nav class="menu">
         <a class="menu-item" href="/dashboard">Dashboard</a>
-        <a class="menu-item" href="/servicos">Serviços</a>
-        <a class="menu-item active" href="/insumos">Insumos</a>
+        <a class="menu-item active" href="/cotacoes">Cotações</a>
         <a class="menu-item" href="/fornecedores">Fornecedores</a>
         <a class="menu-item" href="/planilhas">Planilhas</a>
     </nav>
@@ -89,7 +88,7 @@
         <div id="emptyMessage" style="display: none; text-align: center; color: #999; padding: 60px 20px; font-size: 18px;">
             Nenhum insumo cadastrado. Crie um novo!
         </div>
-        <table id="insumosTableElement">
+        <table id="quotationsTableElement">
             <thead>
                 <tr>
                     <th>I0 original</th>
@@ -1110,7 +1109,7 @@
 <script src="~/js/site.js"></script>
 <script src="~/js/crud.js"></script>
 <script src="~/js/suppliers-selector.js"></script>
-<script src="~/js/insumos-page.js"></script>
+<script src="~/js/cotacoes-page.js"></script>
 
 <script>
     // Inicializar handlers de anexos após o DOM carregar

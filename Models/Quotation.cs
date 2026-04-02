@@ -1,0 +1,114 @@
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CotacoesEPC.Models
+{
+    public class Quotation
+    {
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(User))]
+        public int UserId { get; set; }
+
+        [Required]
+        [ForeignKey(nameof(Sector))]
+        public int SectorId { get; set; }
+
+        [Required]
+        [StringLength(50)]
+        public string OriginalId { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(500)]
+        public string Item { get; set; } = string.Empty;
+
+        [Required]
+        [StringLength(50)]
+        public string Unit { get; set; } = string.Empty;
+
+        [Required]
+        public decimal PriceFornecedor { get; set; }
+
+        [Required]
+        public decimal PrecoMontagem { get; set; }
+
+        [Required]
+        public decimal PrecoAdotado { get; set; }
+
+        [StringLength(500)]
+        public string? MediaAdotada { get; set; }
+
+        public decimal? MediaSaneada { get; set; }
+
+        public decimal? MenorValor { get; set; }
+
+        public decimal? MediaAritmetica { get; set; }
+
+        public decimal? Mediana { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa1 { get; set; }
+
+        public decimal? Empresa1 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa2 { get; set; }
+
+        public decimal? Empresa2 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa3 { get; set; }
+
+        public decimal? Empresa3 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa4 { get; set; }
+
+        public decimal? Empresa4 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa5 { get; set; }
+
+        public decimal? Empresa5 { get; set; }
+
+        [StringLength(200)]
+        public string? NomeEmpresa6 { get; set; }
+
+        public decimal? Empresa6 { get; set; }
+
+        public int? Supplier1Id { get; set; }
+
+        public int? Supplier2Id { get; set; }
+
+        public int? Supplier3Id { get; set; }
+
+        public int? Supplier4Id { get; set; }
+
+        public int? Supplier5Id { get; set; }
+
+        public int? Supplier6Id { get; set; }
+
+        [StringLength(1000)]
+        public string? Justificativa { get; set; }
+
+        /// <summary>Status: "Pendente", "Cancelada" ou "Concluída"</summary>
+        [Required]
+        [StringLength(20)]
+        public string Status { get; set; } = "Concluída";
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime? UpdatedAt { get; set; }
+
+        // Navigation properties
+        public virtual User? User { get; set; }
+
+        public virtual Sector? Sector { get; set; }
+
+        public virtual ICollection<Attachment>? Attachments { get; set; }
+
+        public virtual ICollection<CompanyContactLog>? ContactLogs { get; set; }
+    }
+}

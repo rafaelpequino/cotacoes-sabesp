@@ -4,7 +4,7 @@ using CotacoesEPC.Helpers;
 
 namespace CotacoesEPC.Pages
 {
-    public class insumosModel : PageModel
+    public class cotacoesModel : PageModel
     {
         public string? UserName { get; set; }
         public int UserId { get; set; }

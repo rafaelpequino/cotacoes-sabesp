@@ -114,18 +114,13 @@ namespace CotacoesEPC.Controllers
             if (supplier == null)
                 return NotFound(new { message = "Fornecedor não encontrado" });
 
-            // Check if supplier is being used in services or inputs
-            var serviceCount = await _context.Services
-                .Where(s => s.Supplier1Id == id || s.Supplier2Id == id || s.Supplier3Id == id || 
-                           s.Supplier4Id == id || s.Supplier5Id == id || s.Supplier6Id == id)
-                .CountAsync();
-            
-            var inputCount = await _context.Inputs
-                .Where(i => i.Supplier1Id == id || i.Supplier2Id == id || i.Supplier3Id == id || 
-                           i.Supplier4Id == id || i.Supplier5Id == id || i.Supplier6Id == id)
+            // Check if supplier is being used in quotations
+            var quotationCount = await _context.Quotations
+                .Where(q => q.Supplier1Id == id || q.Supplier2Id == id || q.Supplier3Id == id || 
+                           q.Supplier4Id == id || q.Supplier5Id == id || q.Supplier6Id == id)
                 .CountAsync();
 
-            if (serviceCount > 0 || inputCount > 0)
+            if (quotationCount > 0)
                 return BadRequest(new { message = "Não é possível deletar fornecedor que está em uso" });
 
             _context.Suppliers.Remove(supplier);

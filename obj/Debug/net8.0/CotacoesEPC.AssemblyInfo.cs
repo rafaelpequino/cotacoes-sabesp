@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CotacoesEPC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+45fe3b1c0a165f145b0f27fa0ff687d33150b01f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+35ca1cf2f0b53ecd7e8da8264da4003194c1be8f")]
 [assembly: System.Reflection.AssemblyProductAttribute("CotacoesEPC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CotacoesEPC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

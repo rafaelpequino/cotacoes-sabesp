@@ -33,8 +33,7 @@ namespace CotacoesEPC.Models
         public bool IsActive { get; set; } = true;
 
         // Navigation properties
-        public ICollection<Service> Services { get; set; } = new List<Service>();
-        public ICollection<Input> Inputs { get; set; } = new List<Input>();
+        public ICollection<Quotation> Quotations { get; set; } = new List<Quotation>();
         public ICollection<Spreadsheet> Spreadsheets { get; set; } = new List<Spreadsheet>();
     }
 }

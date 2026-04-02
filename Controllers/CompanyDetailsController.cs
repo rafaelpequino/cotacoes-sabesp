@@ -64,7 +64,7 @@ namespace CotacoesEPC.Controllers
                 return BadRequest(ModelState);
 
             if (!IsValidEntityType(request.EntityType))
-                return BadRequest(new { message = "EntityType inválido. Use 'Service' ou 'Input'." });
+                return BadRequest(new { message = "EntityType inválido. Use 'Quotation'." });
 
             var detail = await _context.CompanyDetails
                 .FirstOrDefaultAsync(d =>
@@ -189,7 +189,7 @@ namespace CotacoesEPC.Controllers
         // Helpers
         // ──────────────────────────────────────────────────────────────────
         private static bool IsValidEntityType(string? entityType) =>
-            entityType == "Service" || entityType == "Input";
+            entityType == "Quotation";
 
         private static object MapToDto(CompanyDetail d) => new
         {

@@ -42,8 +42,7 @@ namespace CotacoesEPC.Controllers
             // Verificar se o usuário tem permissão para ver os anexos desta entidade
             bool hasAccess = entityType.ToLower() switch
             {
-                "service" => await _context.Services.AnyAsync(s => s.Id == entityId && s.UserId == userId),
-                "input" => await _context.Inputs.AnyAsync(i => i.Id == entityId && i.UserId == userId),
+                "quotation" => await _context.Quotations.AnyAsync(q => q.Id == entityId && q.UserId == userId),
                 _ => false
             };
 
@@ -95,8 +94,7 @@ namespace CotacoesEPC.Controllers
                 // Verificar se o usuário tem permissão para adicionar anexos a esta entidade
                 bool hasAccess = entityType.ToLower() switch
                 {
-                    "service" => await _context.Services.AnyAsync(s => s.Id == entityId && s.UserId == userId),
-                    "input" => await _context.Inputs.AnyAsync(i => i.Id == entityId && i.UserId == userId),
+                    "quotation" => await _context.Quotations.AnyAsync(q => q.Id == entityId && q.UserId == userId),
                     _ => false
                 };
 
@@ -217,8 +215,7 @@ namespace CotacoesEPC.Controllers
                 // Verificar se o usuário tem acesso à entidade deste anexo
                 bool hasAccess = attachment.EntityType.ToLower() switch
                 {
-                    "service" => await _context.Services.AnyAsync(s => s.Id == attachment.EntityId && s.UserId == userId),
-                    "input" => await _context.Inputs.AnyAsync(i => i.Id == attachment.EntityId && i.UserId == userId),
+                    "quotation" => await _context.Quotations.AnyAsync(q => q.Id == attachment.EntityId && q.UserId == userId),
                     _ => false
                 };
 
@@ -257,8 +254,7 @@ namespace CotacoesEPC.Controllers
                 // Verificar se o usuário tem permissão para acessar esta entidade
                 bool hasAccess = entityType.ToLower() switch
                 {
-                    "service" => await _context.Services.AnyAsync(s => s.Id == entityId && s.UserId == userId),
-                    "input" => await _context.Inputs.AnyAsync(i => i.Id == entityId && i.UserId == userId),
+                    "quotation" => await _context.Quotations.AnyAsync(q => q.Id == entityId && q.UserId == userId),
                     _ => false
                 };
 

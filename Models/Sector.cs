@@ -16,8 +16,7 @@ namespace CotacoesEPC.Models
 
         // Navigation properties
         public ICollection<Spreadsheet> Spreadsheets { get; set; } = new List<Spreadsheet>();
-        public ICollection<Input> Inputs { get; set; } = new List<Input>();
-        public ICollection<Service> Services { get; set; } = new List<Service>();
+        public ICollection<Quotation> Quotations { get; set; } = new List<Quotation>();
     }
 }
 
