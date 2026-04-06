@@ -7,3 +7,5 @@
 wwwroot/*
 bin
 bin/*
+obj
+obj/*
