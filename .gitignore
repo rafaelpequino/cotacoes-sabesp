@@ -1,11 +1,16 @@
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+
+# Env
 .env
 .env.*
 
-.vs/
-
-.pdf
+# Static files (se quiser ignorar tudo)
 wwwroot/*
-bin
-bin/*
-obj
-obj/*
+
+# Arquivos específicos
+*.pdf
