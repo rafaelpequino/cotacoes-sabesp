@@ -189,8 +189,30 @@
             <div class="form-row form-row-4col">
                 <div class="form-group-pair">
                     <div class="form-group">
-                        <label>Nome da Empresa 1</label>
-                        <input type="text" name="nomeEmpresa1" placeholder="Ex: SABESP" />
+                        <label>Nome da Empresa 1*</label>
+                        <div class="searchable-supplier-select" data-company-index="1">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="🔍 Selecione ou procure..." 
+                                autocomplete="off"
+                                required
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa1" 
+                            class="hidden-supplier-name"
+                            value=""
+                            required
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier1Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 1</label>
@@ -200,7 +222,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 2</label>
-                        <input type="text" name="nomeEmpresa2" placeholder="Ex: VIZCA" />
+                        <div class="searchable-supplier-select" data-company-index="2">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="🔍 Selecione ou procure..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa2" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier2Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 2</label>
@@ -212,7 +254,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 3</label>
-                        <input type="text" name="nomeEmpresa3" placeholder="Ex: FIA" />
+                        <div class="searchable-supplier-select" data-company-index="3">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="🔍 Selecione ou procure..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa3" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier3Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 3</label>
@@ -222,7 +284,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 4</label>
-                        <input type="text" name="nomeEmpresa4" placeholder="Ex: COSTA" />
+                        <div class="searchable-supplier-select" data-company-index="4">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa4" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier4Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 4</label>
@@ -234,7 +316,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 5</label>
-                        <input type="text" name="nomeEmpresa5" placeholder="Ex: PONTE" />
+                        <div class="searchable-supplier-select" data-company-index="5">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa5" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier5Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 5</label>
@@ -244,7 +346,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 6</label>
-                        <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
+                        <div class="searchable-supplier-select" data-company-index="6">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa6" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier6Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 6</label>
@@ -369,7 +491,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 1</label>
-                        <input type="text" name="nomeEmpresa1" placeholder="Ex: SABESP" value="SABESP" />
+                        <div class="searchable-supplier-select" data-company-index="1">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa1" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier1Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 1</label>
@@ -379,7 +521,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 2</label>
-                        <input type="text" name="nomeEmpresa2" placeholder="Ex: VIZCA" value="VIZCA" />
+                        <div class="searchable-supplier-select" data-company-index="2">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa2" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier2Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 2</label>
@@ -391,7 +553,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 3</label>
-                        <input type="text" name="nomeEmpresa3" placeholder="Ex: FIA" value="FIA" />
+                        <div class="searchable-supplier-select" data-company-index="3">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa3" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier3Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 3</label>
@@ -401,7 +583,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 4</label>
-                        <input type="text" name="nomeEmpresa4" placeholder="Ex: COSTA" />
+                        <div class="searchable-supplier-select" data-company-index="4">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa4" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier4Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 4</label>
@@ -413,7 +615,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 5</label>
-                        <input type="text" name="nomeEmpresa5" placeholder="Ex: PONTE" />
+                        <div class="searchable-supplier-select" data-company-index="5">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa5" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier5Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 5</label>
@@ -423,7 +645,27 @@
                 <div class="form-group-pair">
                     <div class="form-group">
                         <label>Nome da Empresa 6</label>
-                        <input type="text" name="nomeEmpresa6" placeholder="Ex: Exemplo" />
+                        <div class="searchable-supplier-select" data-company-index="6">
+                            <input 
+                                type="text" 
+                                class="supplier-search-input" 
+                                placeholder="Buscar fornecedor ou digitar nome..." 
+                                autocomplete="off"
+                            />
+                            <div class="supplier-dropdown" style="display: none;"></div>
+                        </div>
+                        <input 
+                            type="hidden" 
+                            name="nomeEmpresa6" 
+                            class="hidden-supplier-name"
+                            value=""
+                        />
+                        <input 
+                            type="hidden" 
+                            name="supplier6Id" 
+                            class="hidden-supplier-id"
+                            value=""
+                        />
                     </div>
                     <div class="form-group">
                         <label>Valor Empresa 6</label>
@@ -544,32 +786,50 @@
                     <div class="company-card" id="company-card-1">
                         <span class="company-label" id="company-name-1">Empresa 1</span>
                         <span class="company-value" id="company-value-1">-</span>
-                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 1)">ℹ️ Detalhes</button>
+                        <div class="company-buttons">
+                            <button class="btn-supplier-details" id="btn-supplier-details-1" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(1)">📋 Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 1)">ℹ️ Contatos</button>
+                        </div>
                     </div>
                     <div class="company-card" id="company-card-2">
                         <span class="company-label" id="company-name-2">Empresa 2</span>
                         <span class="company-value" id="company-value-2">-</span>
-                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 2)">ℹ️ Detalhes</button>
+                        <div class="company-buttons">
+                            <button class="btn-supplier-details" id="btn-supplier-details-2" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(2)">📋 Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 2)">ℹ️ Contatos</button>
+                        </div>
                     </div>
                     <div class="company-card" id="company-card-3">
                         <span class="company-label" id="company-name-3">Empresa 3</span>
                         <span class="company-value" id="company-value-3">-</span>
-                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 3)">ℹ️ Detalhes</button>
+                        <div class="company-buttons">
+                            <button class="btn-supplier-details" id="btn-supplier-details-3" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(3)">📋 Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 3)">ℹ️ Contatos</button>
+                        </div>
                     </div>
                     <div class="company-card" id="company-card-4">
                         <span class="company-label" id="company-name-4">Empresa 4</span>
                         <span class="company-value" id="company-value-4">-</span>
-                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 4)">ℹ️ Detalhes</button>
+                        <div class="company-buttons">
+                            <button class="btn-supplier-details" id="btn-supplier-details-4" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(4)">📋 Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 4)">ℹ️ Contatos</button>
+                        </div>
                     </div>
                     <div class="company-card" id="company-card-5">
                         <span class="company-label" id="company-name-5">Empresa 5</span>
                         <span class="company-value" id="company-value-5">-</span>
-                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 5)">ℹ️ Detalhes</button>
+                        <div class="company-buttons">
+                            <button class="btn-supplier-details" id="btn-supplier-details-5" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(5)">📋 Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 5)">ℹ️ Contatos</button>
+                        </div>
                     </div>
                     <div class="company-card" id="company-card-6">
                         <span class="company-label" id="company-name-6">Empresa 6</span>
                         <span class="company-value" id="company-value-6">-</span>
-                        <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 6)">ℹ️ Detalhes</button>
+                        <div class="company-buttons">
+                            <button class="btn-supplier-details" id="btn-supplier-details-6" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(6)">📋 Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 6)">ℹ️ Contatos</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1110,12 +1370,20 @@
 <script src="~/js/site.js"></script>
 <script src="~/js/crud.js"></script>
 <script src="~/js/suppliers-selector.js"></script>
+<script src="~/js/searchable-supplier-select.js"></script>
 <script src="~/js/company-details-modal.js"></script>
 <script src="~/js/cotacoes-page.js"></script>
 
 <script>
     // Inicializar handlers de anexos após o DOM carregar
     document.addEventListener('DOMContentLoaded', () => {
+        // Atualizar placeholders de todos os supplier selects
+        document.querySelectorAll('.supplier-search-input').forEach(input => {
+            if (input.placeholder.includes('Buscar')) {
+                input.placeholder = '🔍 Selecione ou procure...';
+            }
+        });
+        
         if (typeof setupAttachmentHandlers !== 'undefined') {
             setupAttachmentHandlers();
         }

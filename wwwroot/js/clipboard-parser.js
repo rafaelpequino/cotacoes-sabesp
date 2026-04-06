@@ -107,6 +107,40 @@ function parseClipboardData(text) {
 }
 
 /**
+ * Integra SupplierSelect com dados colados
+ * Tenta encontrar fornecedor similar e pré-seleciona
+ */
+function selectSupplierIfAvailable(modal, companyIndex, companyName) {
+    try {
+        // Aguardar para garantir que SupplierSelect está inicializado
+        setTimeout(() => {
+            const container = modal.querySelector(`.searchable-supplier-select[data-company-index="${companyIndex}"]`);
+            if (!container) return;
+            
+            // Se houver instância de SupplierSelect, usar ela
+            let instance = container._supplierSelectInstance;
+            if (!instance || !instance.suppliers || instance.suppliers.length === 0) {
+                console.log(`SupplierSelect ${companyIndex} não está pronto ainda`);
+                return;
+            }
+            
+            // Tentar encontrar fornecedor similar
+            const similarSupplier = findSimilarSupplier(companyName, instance.suppliers);
+            if (similarSupplier) {
+                console.log(`Fornecedor similar encontrado para "${companyName}": ${similarSupplier.nomeFantasia}`);
+                instance.select(similarSupplier);
+            } else {
+                // Se não encontrar, usar como texto livre
+                console.log(`Nenhum fornecedor similar para "${companyName}", usando texto livre`);
+                instance.selectCustom(companyName);
+            }
+        }, 150);
+    } catch (error) {
+        console.error(`Erro ao selecionar fornecedor para empresa ${companyIndex}:`, error);
+    }
+}
+
+/**
  * Preenche os inputs do modal com os dados parseados
  */
 function fillFormWithParsedData(modal, parsedData) {
@@ -184,12 +218,20 @@ function fillFormWithParsedData(modal, parsedData) {
             const nomeInput = modal.querySelector(`input[name="nomeEmpresa${i}"]`);
             const valorInput = numberInputs[idx];
             
+            const companyName = parsedData[`nomeEmpresa${i}`] || '';
+            
             if (nomeInput) {
-                nomeInput.value = upperVal(parsedData[`nomeEmpresa${i}`] || '');
+                // NÃO transformar em maiúscula, manter como foi digitado/colado
+                nomeInput.value = (companyName || '').trim();
             }
             
             if (valorInput) {
                 valorInput.value = parsedData[`empresa${i}`] || '';
+            }
+            
+            // Integrar com SupplierSelect - tentar pré-selecionar fornecedor
+            if (companyName) {
+                selectSupplierIfAvailable(modal, i, companyName);
             }
             
             idx++;

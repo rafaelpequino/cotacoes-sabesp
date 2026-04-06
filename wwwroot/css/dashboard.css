@@ -2717,3 +2717,228 @@ body.modal-open {
 .btn-nova-intencao:hover {
     background: #fff8e1;
 }
+
+/* ========================================
+   COMPONENTE: SEARCHABLE SUPPLIER SELECT
+   ======================================== */
+
+.searchable-supplier-select {
+    position: relative;
+    width: 100%;
+}
+
+.supplier-search-input {
+    width: 100%;
+    padding: 12px 35px 12px 12px;
+    border: 2px solid #b0b0b0;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+    transition: all 0.2s;
+    appearance: none;
+}
+
+.supplier-search-input:hover {
+    border-color: #19d6ff;
+    background: #f9fafb;
+}
+
+.supplier-search-input:focus {
+    outline: none;
+    border-color: #19d6ff;
+    box-shadow: 0 0 0 3px rgba(25, 214, 255, 0.15);
+    background: #fff;
+}
+
+.supplier-search-input::placeholder {
+    color: #888;
+    font-weight: 500;
+}
+
+/* Estados do input após seleção */
+.supplier-search-input.has-selection {
+    background: #f0f7ff;
+    border-color: #19d6ff;
+}
+
+.supplier-search-input.has-custom {
+    background: #fff8e1;
+    border-color: #ff9800;
+}
+
+/* Ícone de dropdown (pseudo-elemento) */
+.searchable-supplier-select::after {
+    content: '▼';
+    position: absolute;
+    right: 10px;
+    top: 51%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #19d6ff;
+    pointer-events: none;
+    font-weight: bold;
+    line-height: 0;
+}
+
+/* Badge de status de seleção */
+.supplier-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 6px;
+    white-space: nowrap;
+}
+
+.supplier-status-badge.selected {
+    background: #c8e6c9;
+    color: #2e7d32;
+}
+
+.supplier-status-badge.custom {
+    background: #ffe0b2;
+    color: #e65100;
+}
+
+.supplier-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 2px solid #19d6ff;
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    max-height: 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    z-index: 1000;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    margin-top: -2px;
+}
+
+.supplier-option {
+    padding: 12px 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #333;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.supplier-option::before {
+    content: '○';
+    font-size: 16px;
+    min-width: 16px;
+    color: #aaa;
+    transition: all 0.15s;
+}
+
+.supplier-option:last-child {
+    border-bottom: none;
+}
+
+.supplier-option:hover {
+    background-color: #f0f7ff;
+    color: #19d6ff;
+    font-weight: 500;
+    padding-left: 16px;
+}
+
+.supplier-option:hover::before {
+    color: #19d6ff;
+    content: '◉';
+    font-weight: bold;
+}
+
+.supplier-option.selected {
+    background-color: #e8f5ff;
+    color: #19d6ff;
+    font-weight: 500;
+}
+
+.supplier-option.selected::before {
+    content: '✓';
+    color: #19d6ff;
+    font-weight: bold;
+}
+
+.supplier-option.outro-option {
+    border-top: 2px solid #e0e0e0;
+    padding-top: 12px;
+    margin-top: 8px;
+    background-color: #fafafa;
+    color: #666;
+    font-style: italic;
+}
+
+.supplier-option.outro-option::before {
+    content: '➕';
+    font-size: 14px;
+}
+
+.supplier-option.outro-option:hover {
+    background-color: #f5f5f5;
+    color: #333;
+    font-weight: normal;
+}
+
+.supplier-option.outro-option:hover::before {
+    content: '➕';
+    color: #ff9800;
+}
+
+.supplier-option.no-results {
+    padding: 16px;
+    text-align: center;
+    color: #999;
+    cursor: default;
+    border-bottom: none;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+}
+
+.supplier-option.no-results:hover {
+    background-color: transparent;
+    color: #999;
+}
+
+/* Hidden inputs para armazenar values */
+.hidden-supplier-name,
+.hidden-supplier-id {
+    display: none;
+}
+
+/* Layout para múltiplos botões nas company cards */
+.company-buttons {
+    display: flex;
+    gap: 6px;
+}
+
+.btn-supplier-details {
+    background: #e8f5ff;
+    color: #0288d1;
+    border: 1px solid #81d4fa;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 80px;
+}
+
+.btn-supplier-details:hover {
+    background: #b3e5fc;
+    border-color: #4fc3f7;
+}

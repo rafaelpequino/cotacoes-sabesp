@@ -15,9 +15,8 @@ function converterMaiuscula(valor) {
     return valor
         .normalize('NFD')                 // decompõe: "ç" → "c" + cedilha, "á" → "a" + acento
         .replace(/[\u0300-\u036f]/g, '')  // remove todos os diacríticos (acentos, cedilha, til, etc.)
-        .replace(/ç/gi, 'c')
-        .toUpperCase()                    // maiúsculas
-        .replace(/Ç/g, 'C');              // trata ç maiúsculo
+        .toUpperCase()                    // maiúsculas (deve ser ANTES de tratar ç)
+        .replace(/ç/gi, 'C');             // trata ç minúsculo convertendo para C maiúsculo
 }
 
 /**
