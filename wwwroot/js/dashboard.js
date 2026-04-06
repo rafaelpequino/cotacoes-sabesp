@@ -9,8 +9,8 @@ async function loadDashboardData() {
             // Atualizar contadores
             updateCardNumbers(summary);
             // Atualizar tabelas recentes
-            updateRecentServices(summary.recentServices);
-            updateRecentInputs(summary.recentInputs);
+            updateRecentQuotations(summary.recentQuotations);
+            updateRecentSuppliers(summary.recentSuppliers);
             updateRecentSpreadsheets(summary.recentSpreadsheets);
         }
 
@@ -23,16 +23,16 @@ async function loadDashboardData() {
 }
 
 function updateCardNumbers(summary) {
-    // Atualizar contadores de Serviços
-    const servicesCount = document.getElementById('servicesCount');
-    if (servicesCount) {
-        servicesCount.textContent = summary.servicesCount || 0;
+    // Atualizar contadores de Cotações
+    const quotationsCount = document.getElementById('quotationsCount');
+    if (quotationsCount) {
+        quotationsCount.textContent = summary.quotationsCount || 0;
     }
 
-    // Atualizar contadores de Insumos
-    const inputsCount = document.getElementById('inputsCount');
-    if (inputsCount) {
-        inputsCount.textContent = summary.inputsCount || 0;
+    // Atualizar contadores de Fornecedores
+    const suppliersCount = document.getElementById('suppliersCount');
+    if (suppliersCount) {
+        suppliersCount.textContent = summary.suppliersCount || 0;
     }
 
     // Atualizar contadores de Planilhas
@@ -42,50 +42,51 @@ function updateCardNumbers(summary) {
     }
 }
 
-function updateRecentServices(services) {
-    const tbody = document.querySelector('#servicesTable tbody');
+function updateRecentQuotations(quotations) {
+    const tbody = document.querySelector('#quotationsTable tbody');
     if (!tbody) return;
 
     tbody.innerHTML = '';
 
-    if (services && services.length > 0) {
-        services.forEach(service => {
+    if (quotations && quotations.length > 0) {
+        quotations.forEach(quotation => {
             const row = document.createElement('tr');
-            const date = new Date(service.createdAt).toLocaleDateString('pt-BR');
+            const date = new Date(quotation.createdAt).toLocaleDateString('pt-BR');
             row.innerHTML = `
                 <td>${date}</td>
-                <td>${service.item || 'N/A'}</td>
-                <td>${service.responsibleName || 'Desconhecido'}</td>
+                <td>${quotation.item || 'N/A'}</td>
+                <td>R$ ${quotation.precoAdotado ? quotation.precoAdotado.toFixed(2).replace('.', ',') : '0,00'}</td>
+                <td>${quotation.responsibleName || 'Desconhecido'}</td>
             `;
             tbody.appendChild(row);
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">Nenhuma cotação ainda</td>';
+        row.innerHTML = '<td colspan="4" style="text-align: center; color: #999;">Nenhuma cotação ainda</td>';
         tbody.appendChild(row);
     }
 }
 
-function updateRecentInputs(inputs) {
-    const tbody = document.querySelector('#inputsTable tbody');
+function updateRecentSuppliers(suppliers) {
+    const tbody = document.querySelector('#suppliersTable tbody');
     if (!tbody) return;
 
     tbody.innerHTML = '';
 
-    if (inputs && inputs.length > 0) {
-        inputs.forEach(input => {
+    if (suppliers && suppliers.length > 0) {
+        suppliers.forEach(supplier => {
             const row = document.createElement('tr');
-            const date = new Date(input.createdAt).toLocaleDateString('pt-BR');
+            const date = new Date(supplier.createdAt).toLocaleDateString('pt-BR');
             row.innerHTML = `
                 <td>${date}</td>
-                <td>${input.item || 'N/A'}</td>
-                <td>${input.responsibleName || 'Desconhecido'}</td>
+                <td>${supplier.name || 'N/A'}</td>
+                <td>${supplier.responsibleName || 'Desconhecido'}</td>
             `;
             tbody.appendChild(row);
         });
     } else {
         const row = document.createElement('tr');
-        row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">Nenhuma cotação ainda</td>';
+        row.innerHTML = '<td colspan="3" style="text-align: center; color: #999;">Nenhum fornecedor ainda</td>';
         tbody.appendChild(row);
     }
 }

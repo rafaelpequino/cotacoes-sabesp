@@ -30,9 +30,9 @@ namespace CotacoesEPC.Controllers
         {
             var userId = GetUserId();
 
-            // Contar TODAS as cotações e spreadsheets (compartilhadas)
+            // Contar TODAS as cotações, fornecedores e spreadsheets (compartilhadas)
             var quotationsCount = await _context.Quotations.CountAsync();
-
+            var suppliersCount = await _context.Suppliers.CountAsync();
             var spreadsheetsCount = await _context.Spreadsheets.CountAsync();
 
             var recentQuotations = await _context.Quotations
@@ -46,6 +46,17 @@ namespace CotacoesEPC.Controllers
                     q.PrecoAdotado,
                     q.CreatedAt,
                     ResponsibleName = q.User!.Name
+                })
+                .ToListAsync();
+
+            var recentSuppliers = await _context.Suppliers
+                .OrderByDescending(s => s.DataCadastro)
+                .Take(3)
+                .Select(s => new
+                {
+                    s.Id,
+                    s.NomeFantasia,
+                    s.DataCadastro
                 })
                 .ToListAsync();
 
@@ -65,8 +76,10 @@ namespace CotacoesEPC.Controllers
             return Ok(new
             {
                 quotationsCount,
+                suppliersCount,
                 spreadsheetsCount,
                 recentQuotations,
+                recentSuppliers,
                 recentSpreadsheets
             });
         }
