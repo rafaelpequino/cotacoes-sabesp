@@ -11,6 +11,8 @@ namespace CotacoesEPC.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<Quotation> Quotations { get; set; }
+        public DbSet<Input> Inputs { get; set; }
+        public DbSet<Service> Services { get; set; }
         public DbSet<Spreadsheet> Spreadsheets { get; set; }
         public DbSet<Sector> Sectors { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
@@ -138,6 +140,72 @@ namespace CotacoesEPC.Data
                 entity.HasOne(e => e.Responsavel)
                     .WithMany()
                     .HasForeignKey(e => e.ResponsavelId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Input configuration
+            modelBuilder.Entity<Input>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.OriginalId).IsRequired();
+                entity.Property(e => e.Item).IsRequired();
+                entity.Property(e => e.Unit).IsRequired();
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20).HasDefaultValue("Concluída");
+                entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
+                entity.Property(e => e.PrecoMontagem).HasPrecision(18, 2);
+                entity.Property(e => e.PrecoAdotado).HasPrecision(18, 2);
+                entity.Property(e => e.MediaAdotada).HasMaxLength(500);
+                entity.Property(e => e.MediaSaneada).HasPrecision(18, 2);
+                entity.Property(e => e.MenorValor).HasPrecision(18, 2);
+                entity.Property(e => e.MediaAritmetica).HasPrecision(18, 2);
+                entity.Property(e => e.Mediana).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa1).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa2).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa3).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa4).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa5).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa6).HasPrecision(18, 2);
+                entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Sector)
+                    .WithMany()
+                    .HasForeignKey(e => e.SectorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // Service configuration
+            modelBuilder.Entity<Service>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.OriginalId).IsRequired();
+                entity.Property(e => e.Item).IsRequired();
+                entity.Property(e => e.Unit).IsRequired();
+                entity.Property(e => e.Status).IsRequired().HasMaxLength(20).HasDefaultValue("Concluída");
+                entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
+                entity.Property(e => e.PrecoMontagem).HasPrecision(18, 2);
+                entity.Property(e => e.PrecoAdotado).HasPrecision(18, 2);
+                entity.Property(e => e.MediaAdotada).HasMaxLength(500);
+                entity.Property(e => e.MediaSaneada).HasPrecision(18, 2);
+                entity.Property(e => e.MenorValor).HasPrecision(18, 2);
+                entity.Property(e => e.MediaAritmetica).HasPrecision(18, 2);
+                entity.Property(e => e.Mediana).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa1).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa2).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa3).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa4).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa5).HasPrecision(18, 2);
+                entity.Property(e => e.Empresa6).HasPrecision(18, 2);
+                entity.Property(e => e.PriceFornecedor).HasPrecision(18, 2);
+                entity.HasOne(e => e.User)
+                    .WithMany()
+                    .HasForeignKey(e => e.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+                entity.HasOne(e => e.Sector)
+                    .WithMany()
+                    .HasForeignKey(e => e.SectorId)
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
