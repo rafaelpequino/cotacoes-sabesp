@@ -141,6 +141,12 @@ function processBulkData(text) {
                 nomeEmpresa4: empresasTemp[3]?.nome || '',
                 nomeEmpresa5: empresasTemp[4]?.nome || '',
                 nomeEmpresa6: empresasTemp[5]?.nome || '',
+                supplier1Id: null,
+                supplier2Id: null,
+                supplier3Id: null,
+                supplier4Id: null,
+                supplier5Id: null,
+                supplier6Id: null,
                 justificativa: normalizeTextForCotacao((lineDados[20] || '').replace(/\r/g, '').trim()),
                 attachments: []
             };
@@ -158,8 +164,41 @@ function processBulkData(text) {
         return;
     }
 
-    displayBulkPreview();
-    loadSectorsForBulk();
+    // Auto-match dos fornecedores ANTES de exibir preview
+    autoMatchSuppliersForBulkData().then(() => {
+        displayBulkPreview();
+        loadSectorsForBulk();
+    });
+}
+
+// Auto-match automático para todos os fornecedores colados
+async function autoMatchSuppliersForBulkData() {
+    try {
+        const suppliers = await SupplierSelect.loadSuppliersGlobal();
+        
+        // Para cada cotação colada
+        bulkCotacoesData.forEach((cotacao, cotacaoIndex) => {
+            // Para cada empresa (1-6)
+            for (let i = 1; i <= 6; i++) {
+                const nomeField = `nomeEmpresa${i}`;
+                const idField = `supplier${i}Id`;
+                const nomeValue = cotacao[nomeField];
+                
+                // Se existe nome e ainda não tem supplier selecionado
+                if (nomeValue && nomeValue.trim() && !cotacao[idField]) {
+                    // Tentar encontrar fornecedor correspondente
+                    const matchedSupplier = findSimilarSupplier(nomeValue, suppliers);
+                    if (matchedSupplier) {
+                        // Salvar automaticamente o supplier ID
+                        cotacao[idField] = matchedSupplier.id;
+                        console.log(`✓ Auto-match: "${nomeValue}" → ID ${matchedSupplier.id} (${matchedSupplier.nomeFantasia})`);
+                    }
+                }
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao fazer auto-match de fornecedores:', error);
+    }
 }
 
 // Exibir pré-visualização
@@ -355,41 +394,178 @@ function applyBulkSectorToAll() {
 // ========================================
 // MODAL: VER EMPRESAS
 // ========================================
+let currentBulkCompaniesIndex = null;
+
 function openBulkCompaniesModal(index) {
     const cotacao = bulkCotacoesData[index];
     const modal = document.getElementById('bulkCompaniesModal');
     const content = document.getElementById('bulkCompaniesContent');
+    
+    currentBulkCompaniesIndex = index;
 
-    const empresas = [
-        { nome: cotacao.nomeEmpresa1, valor: cotacao.empresa1 },
-        { nome: cotacao.nomeEmpresa2, valor: cotacao.empresa2 },
-        { nome: cotacao.nomeEmpresa3, valor: cotacao.empresa3 },
-        { nome: cotacao.nomeEmpresa4, valor: cotacao.empresa4 },
-        { nome: cotacao.nomeEmpresa5, valor: cotacao.empresa5 },
-        { nome: cotacao.nomeEmpresa6, valor: cotacao.empresa6 }
-    ];
-
-    let html = '<h3>📊 Cotações das Empresas</h3><div class="bulk-companies-grid">';
-
-    empresas.forEach((emp, i) => {
-        const temValor = emp.nome && emp.nome.trim() !== '' && emp.valor > 0;
-        const opacity = temValor ? '' : 'style="opacity: 0.4; pointer-events: none;"';
+    // Gerar HTML com 6 inputs (um por linha, full-width: 50% nome + 50% valor)
+    let html = '<h3>📊 Empresas e Valores</h3>';
+    
+    // Empresas 1-6 (uma por linha, ocupando 100% da largura)
+    for (let i = 1; i <= 6; i++) {
+        const nomeField = `nomeEmpresa${i}`;
+        const valorField = `empresa${i}`;
+        const nomeValue = cotacao[nomeField] || '';
+        const valorValue = cotacao[valorField] || 0;
+        const uniqueId = `bulk-${index}-${i}`;
+        
         html += `
-            <div class="bulk-company-item" ${opacity}>
-                <strong>${emp.nome || `EMPRESA ${i+1}`}</strong>
-                <span>R$ ${emp.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+                <div class="form-group" style="flex: 1 1 50%; min-width: 0;">
+                    <label>Nome da Empresa ${i}</label>
+                    <div class="searchable-supplier-select bulk-supplier" data-company-index="${i}" data-bulk-index="${index}">
+                        <input 
+                            type="text" 
+                            class="supplier-search-input bulk-supplier-input" 
+                            placeholder="🔍 Selecione ou procure..." 
+                            autocomplete="off"
+                            value="${nomeValue}"
+                        />
+                        <div class="supplier-dropdown" style="display: none;"></div>
+                    </div>
+                    <input 
+                        type="hidden" 
+                        id="bulkNomeEmpresa${uniqueId}"
+                        name="${nomeField}" 
+                        class="hidden-supplier-name bulk-hidden-supplier-name"
+                        value="${nomeValue}"
+                    />
+                    <input 
+                        type="hidden" 
+                        id="bulkSupplier${uniqueId}Id"
+                        name="supplier${i}Id" 
+                        class="hidden-supplier-id bulk-hidden-supplier-id"
+                        value=""
+                    />
+                </div>
+                <div class="form-group" style="flex: 1 1 50%; min-width: 0;">
+                    <label>Valor Empresa ${i}</label>
+                    <input type="number" id="bulkValor${uniqueId}" name="${valorField}" class="bulk-supplier-value" placeholder="0,00" step="0.01" value="${valorValue || ''}" />
+                </div>
             </div>
         `;
-    });
+    }
+    
+    html += `
+        <div style="margin-top: 20px; text-align: right;">
+            <button type="button" class="btn-cancel" onclick="closeBulkCompaniesModal()">Cancelar</button>
+            <button type="button" class="btn-submit" onclick="saveBulkCompaniesData()">Salvar Dados</button>
+        </div>
+    `;
 
-    html += '</div>';
     content.innerHTML = html;
     modal.style.display = 'block';
+    
+    // Inicializar SupplierSelect após renderizar o HTML
+    setTimeout(() => {
+        initializeSupplierSelectForBulkCompanies(index);
+    }, 100);
 }
 
 function closeBulkCompaniesModal() {
     document.getElementById('bulkCompaniesModal').style.display = 'none';
+    currentBulkCompaniesIndex = null;
 }
+
+// Inicializar SupplierSelect para o modal de empresas em bulk
+async function initializeSupplierSelectForBulkCompanies(bulkIndex) {
+    const suppliers = await SupplierSelect.loadSuppliersGlobal();
+    
+    for (let i = 1; i <= 6; i++) {
+        const container = document.querySelector(`.searchable-supplier-select.bulk-supplier[data-company-index="${i}"][data-bulk-index="${bulkIndex}"]`);
+        if (container) {
+            const instance = new SupplierSelect(container, i);
+            instance.setSuppliers(suppliers);
+            
+            // Armazenar a instância
+            if (!window.bulkCompaniesSupplierInstances) {
+                window.bulkCompaniesSupplierInstances = {};
+            }
+            window.bulkCompaniesSupplierInstances[`${bulkIndex}-${i}`] = instance;
+            container._supplierSelectInstance = instance;
+            
+            // Restaurar valores salvos anteriormente ou fazer auto-match se for primeira vez
+            const nomeValue = bulkCotacoesData[bulkIndex][`nomeEmpresa${i}`];
+            const supplierIdValue = bulkCotacoesData[bulkIndex][`supplier${i}Id`];
+            
+            if (nomeValue && nomeValue.trim()) {
+                if (supplierIdValue && supplierIdValue > 0) {
+                    // Fornecedor já foi selecionado antes, restaurar exatamente
+                    await instance.restore(nomeValue, supplierIdValue);
+                } else {
+                    // Primeira vez abrindo modal após colar dados, tentar auto-match
+                    const matchedSupplier = findSimilarSupplier(nomeValue, suppliers);
+                    if (matchedSupplier) {
+                        // Pré-selecionar fornecedor encontrado
+                        instance.select(matchedSupplier);
+                        // IMPORTANTE: Salvar automaticamente em bulkCotacoesData mesmo sem clicar "Salvar Dados"
+                        bulkCotacoesData[bulkIndex][`supplier${i}Id`] = matchedSupplier.id;
+                    } else {
+                        // Se não encontrar match no DB, marcar como texto customizado (avulso)
+                        instance.selectCustom(nomeValue);
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Salvar dados das empresas editadas
+function saveBulkCompaniesData() {
+    if (currentBulkCompaniesIndex === null) return;
+    
+    const cotacao = bulkCotacoesData[currentBulkCompaniesIndex];
+    const modal = document.getElementById('bulkCompaniesModal');
+    
+    // Salvar valores dos inputs - usar getValue() do SupplierSelect como em saveQuotation()
+    for (let i = 1; i <= 6; i++) {
+        const uniqueId = `bulk-${currentBulkCompaniesIndex}-${i}`;
+        const valorInput = modal.querySelector(`#bulkValor${uniqueId}`);
+        let nomeEmpresa = '';
+        let supplierIdValue = null;
+        
+        // Primeiro, tentar obter dados da instância do SupplierSelect
+        if (window.bulkCompaniesSupplierInstances && window.bulkCompaniesSupplierInstances[`${currentBulkCompaniesIndex}-${i}`]) {
+            const instance = window.bulkCompaniesSupplierInstances[`${currentBulkCompaniesIndex}-${i}`];
+            const value = instance.getValue();
+            nomeEmpresa = value.nomeEmpresa || '';
+            supplierIdValue = value.supplierId;
+        }
+        
+        // Se não conseguiu dos hidden inputs diretos, tentar fallback
+        if (!nomeEmpresa) {
+            const nomeInput = modal.querySelector(`#bulkNomeEmpresa${uniqueId}`);
+            if (nomeInput) {
+                nomeEmpresa = nomeInput.value || '';
+            }
+        }
+        
+        if (!supplierIdValue) {
+            const supplierIdInput = modal.querySelector(`#bulkSupplier${uniqueId}Id`);
+            if (supplierIdInput && supplierIdInput.value) {
+                supplierIdValue = parseInt(supplierIdInput.value);
+            }
+        }
+        
+        // Salvar sempre os dados capturados
+        cotacao[`nomeEmpresa${i}`] = nomeEmpresa;
+        cotacao[`supplier${i}Id`] = supplierIdValue || null;
+        
+        // Salvar valor numérico da empresa
+        if (valorInput) {
+            cotacao[`empresa${i}`] = parseFloat(valorInput.value || 0);
+        }
+    }
+    
+    closeBulkCompaniesModal();
+}
+
+
 
 // ========================================
 // MODAL: VER PREÇOS
@@ -609,10 +785,8 @@ async function saveBulkCotacoes() {
         return;
     }
 
-    // Detectar se é serviço ou insumo
-    const isInsumo = typeof loadInsumos === 'function';
-    const entityType = isInsumo ? 'Input' : 'Service';
-    const apiMethod = isInsumo ? api.createInput : api.createService;
+    // Usar sempre o endpoint de cotações (Quotation)
+    const entityType = 'Quotation';
 
     // Loading
     if (typeof Swal !== 'undefined') {
@@ -629,39 +803,52 @@ async function saveBulkCotacoes() {
     let sucessos = 0;
     let erros = 0;
 
+    const toNumber = (val, def = null) => {
+        if (!val || val === '') return def;
+        const num = parseFloat(val);
+        return isNaN(num) ? def : num;
+    };
+
     for (const cotacao of bulkCotacoesData) {
         try {
-            // Preparar dados para API
+            // Preparar dados para API - usando exatamente a mesma lógica do saveQuotation()
             const data = {
                 sectorId: parseInt(cotacao.sectorId),
-                originalId: cotacao.i0Original,
-                item: cotacao.item,
-                unit: cotacao.unidade,
-                priceFornecedor: cotacao.adotada,
-                precoMontagem: cotacao.precoMontagem,
-                precoAdotado: cotacao.precoAdotado,
-                mediaAdotada: cotacao.mediaAdotada,
-                mediaSaneada: cotacao.mediaSaneada,
-                menorValor: cotacao.menorValor,
-                mediaAritmetica: cotacao.mediaAritmetica,
-                mediana: cotacao.mediana,
-                empresa1: cotacao.empresa1,
-                empresa2: cotacao.empresa2,
-                empresa3: cotacao.empresa3,
-                empresa4: cotacao.empresa4,
-                empresa5: cotacao.empresa5,
-                empresa6: cotacao.empresa6,
-                nomeEmpresa1: cotacao.nomeEmpresa1,
-                nomeEmpresa2: cotacao.nomeEmpresa2,
-                nomeEmpresa3: cotacao.nomeEmpresa3,
-                nomeEmpresa4: cotacao.nomeEmpresa4,
-                nomeEmpresa5: cotacao.nomeEmpresa5,
-                nomeEmpresa6: cotacao.nomeEmpresa6,
-                justificativa: cotacao.justificativa
+                originalId: cotacao.i0Original || '',
+                item: cotacao.item || '',
+                unit: cotacao.unidade || '',
+                priceFornecedor: toNumber(cotacao.adotada, 0),
+                precoMontagem: toNumber(cotacao.precoMontagem, 0),
+                precoAdotado: toNumber(cotacao.precoAdotado, 0),
+                mediaAdotada: cotacao.mediaAdotada || '',
+                mediaSaneada: toNumber(cotacao.mediaSaneada),
+                menorValor: toNumber(cotacao.menorValor),
+                mediaAritmetica: toNumber(cotacao.mediaAritmetica),
+                mediana: toNumber(cotacao.mediana),
+                nomeEmpresa1: cotacao.nomeEmpresa1 || null,
+                nomeEmpresa2: cotacao.nomeEmpresa2 || null,
+                nomeEmpresa3: cotacao.nomeEmpresa3 || null,
+                nomeEmpresa4: cotacao.nomeEmpresa4 || null,
+                nomeEmpresa5: cotacao.nomeEmpresa5 || null,
+                nomeEmpresa6: cotacao.nomeEmpresa6 || null,
+                supplier1Id: cotacao.supplier1Id ? parseInt(cotacao.supplier1Id) : null,
+                supplier2Id: cotacao.supplier2Id ? parseInt(cotacao.supplier2Id) : null,
+                supplier3Id: cotacao.supplier3Id ? parseInt(cotacao.supplier3Id) : null,
+                supplier4Id: cotacao.supplier4Id ? parseInt(cotacao.supplier4Id) : null,
+                supplier5Id: cotacao.supplier5Id ? parseInt(cotacao.supplier5Id) : null,
+                supplier6Id: cotacao.supplier6Id ? parseInt(cotacao.supplier6Id) : null,
+                empresa1: toNumber(cotacao.empresa1),
+                empresa2: toNumber(cotacao.empresa2),
+                empresa3: toNumber(cotacao.empresa3),
+                empresa4: toNumber(cotacao.empresa4),
+                empresa5: toNumber(cotacao.empresa5),
+                empresa6: toNumber(cotacao.empresa6),
+                justificativa: cotacao.justificativa || '',
+                status: 'Concluída'
             };
 
-            // Criar serviço ou insumo
-            const created = await apiMethod.call(api, data);
+            // Criar cotação via API
+            const created = await api.createQuotation(data);
 
             // Upload de anexos
             if (cotacao.attachments && cotacao.attachments.length > 0) {
@@ -702,10 +889,9 @@ async function saveBulkCotacoes() {
     if (sucessos > 0) {
         closeBulkImportModal();
         resetBulkImport();
-        if (typeof loadServicos === 'function') {
-            loadServicos();
-        } else if (typeof loadInsumos === 'function') {
-            loadInsumos();
+        // Recarregar as cotações após salvar
+        if (typeof loadQuotations === 'function') {
+            loadQuotations();
         }
     }
 }
