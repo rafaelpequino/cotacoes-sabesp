@@ -1003,67 +1003,6 @@
 
             <div class="company-detail-section">
                 <div class="company-detail-section-header">
-                    <h3>🏢 Dados Cadastrais</h3>
-                    <button type="button" id="btnEditCompanyData" class="btn-edit-section" onclick="toggleEditCompanyData()">✏️ Editar</button>
-                </div>
-                <div id="companyDataView">
-                    <div class="company-info-grid">
-                        <div class="company-info-item">
-                            <span class="company-info-label">CNPJ</span>
-                            <span class="company-info-value" id="cdvCNPJ">-</span>
-                        </div>
-                        <div class="company-info-item">
-                            <span class="company-info-label">Telefone</span>
-                            <span class="company-info-value" id="cdvTelefone">-</span>
-                        </div>
-                        <div class="company-info-item">
-                            <span class="company-info-label">Data da Cotação</span>
-                            <span class="company-info-value" id="cdvDataCotacao">-</span>
-                        </div>
-                        <div class="company-info-item">
-                            <span class="company-info-label">Pessoa Contatada</span>
-                            <span class="company-info-value" id="cdvPessoaContatada">-</span>
-                        </div>
-                        <div class="company-info-item full-span">
-                            <span class="company-info-label">Endereço</span>
-                            <span class="company-info-value" id="cdvEndereco">-</span>
-                        </div>
-                    </div>
-                </div>
-                <div id="companyDataEdit" style="display:none;">
-                    <div class="form-row form-row-4col">
-                        <div class="form-group">
-                            <label>CNPJ</label>
-                            <input type="text" id="cdeInputCNPJ" placeholder="00.000.000/0001-00" maxlength="18" />
-                        </div>
-                        <div class="form-group">
-                            <label>Telefone</label>
-                            <input type="text" id="cdeInputTelefone" placeholder="(00) 00000-0000" maxlength="20" />
-                        </div>
-                        <div class="form-group">
-                            <label>Data da Cotação</label>
-                            <input type="date" id="cdeInputDataCotacao" />
-                        </div>
-                        <div class="form-group">
-                            <label>Pessoa Contatada</label>
-                            <input type="text" id="cdeInputPessoaContatada" placeholder="Nome do contato" maxlength="200" />
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group full-width">
-                            <label>Endereço</label>
-                            <input type="text" id="cdeInputEndereco" placeholder="Rua, número, cidade..." maxlength="500" />
-                        </div>
-                    </div>
-                    <div class="modal-actions" style="margin-top:8px; padding-top:8px; border-top:1px solid #eee;">
-                        <button type="button" class="btn-cancel" onclick="toggleEditCompanyData()">Cancelar</button>
-                        <button type="button" class="btn-submit" onclick="saveCompanyData()">Salvar Dados</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="company-detail-section" style="margin-top:24px;">
-                <div class="company-detail-section-header">
                     <h3>📋 Histórico de Contatos</h3>
                     <button type="button" class="btn-edit-section" onclick="toggleAddLogForm()">➕ Novo Contato</button>
                 </div>

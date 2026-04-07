@@ -1100,22 +1100,23 @@ body.modal-open {
 
 /* Botão de detalhes da empresa nos cards */
 .btn-company-detail {
-    margin-top: 6px;
-    padding: 4px 10px;
-    font-size: 11px;
+    padding: 6px 10px;
+    font-size: 12px;
     background: transparent;
-    border: 1px solid #19d6ff;
+    border: 1px solid #ccc;
     border-radius: 6px;
-    color: #0097b2;
+    color: #555;
     cursor: pointer;
     font-weight: 600;
-    transition: background 0.2s, color 0.2s;
-    align-self: flex-start;
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 80px;
 }
 
 .btn-company-detail:hover {
-    background: #19d6ff;
-    color: #fff;
+    background: #f5f5f5;
+    border-color: #999;
+    color: #333;
 }
 
 /* Modal de detalhes da empresa — sobreposto ao modal principal */
@@ -1128,8 +1129,8 @@ body.modal-open {
 }
 
 .company-detail-modal-content {
-    max-width: 560px;
-    width: 92%;
+    max-width: 380px;
+    width: 80%;
     max-height: 82vh;
     overflow-y: auto;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
@@ -2926,19 +2927,21 @@ body.modal-open {
 }
 
 .btn-supplier-details {
-    background: #e8f5ff;
-    color: #0288d1;
-    border: 1px solid #81d4fa;
     padding: 6px 10px;
-    border-radius: 4px;
     font-size: 12px;
+    background: transparent;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    color: #555;
     cursor: pointer;
+    font-weight: 600;
     transition: all 0.2s;
     flex: 1;
     min-width: 80px;
 }
 
 .btn-supplier-details:hover {
-    background: #b3e5fc;
-    border-color: #4fc3f7;
+    background: #f5f5f5;
+    border-color: #999;
+    color: #333;
 }
