@@ -79,8 +79,7 @@ CotacoesEPC/
 ├── Pages/                 # Páginas Razor
 │   ├── Index.cshtml
 │   ├── dashboard.cshtml
-│   ├── servicos.cshtml
-│   ├── insumos.cshtml
+│   ├── cotacoes.cshtml
 │   └── planilhas.cshtml
 ├── wwwroot/              # Arquivos estáticos
 │   ├── css/
@@ -95,19 +94,12 @@ CotacoesEPC/
 - `POST /api/auth/login` - Login
 - `POST /api/auth/register` - Registrar novo usuário
 
-### Serviços (Cotações)
-- `GET /api/services` - Listar serviços
-- `GET /api/services/{id}` - Obter serviço específico
-- `POST /api/services` - Criar novo serviço
-- `PUT /api/services/{id}` - Atualizar serviço
-- `DELETE /api/services/{id}` - Deletar serviço
-
-### Insumos
-- `GET /api/inputs` - Listar insumos
-- `GET /api/inputs/{id}` - Obter insumo específico
-- `POST /api/inputs` - Criar novo insumo
-- `PUT /api/inputs/{id}` - Atualizar insumo
-- `DELETE /api/inputs/{id}` - Deletar insumo
+### Cotações
+- `GET /api/services` - Listar cotações
+- `GET /api/services/{id}` - Obter cotação específica
+- `POST /api/services` - Criar nova cotação
+- `PUT /api/services/{id}` - Atualizar cotação
+- `DELETE /api/services/{id}` - Deletar cotação
 
 ### Planilhas
 - `GET /api/spreadsheets` - Listar planilhas

@@ -1,4 +1,4 @@
-// PATCH para servicos-page.js e insumos-page.js
+// PATCH para cotacoes-page.js
 // Substituir a função saveServico/saveInsumo pela versão corrigida abaixo:
 
 async function saveServico() {
