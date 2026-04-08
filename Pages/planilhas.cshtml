@@ -44,26 +44,82 @@
         <button class="btn-nova-cotacao" onclick="openUploadModal()">+ Nova Planilha</button>
     </div>
 
-    <section class="servicos-filters">
+    <!-- BUSCA POR TEXTO - LINHA 1 -->
+    <section class="servicos-filters" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 12px;">
         <div class="search-group">
             <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar por nome" />
             <button class="btn-filtrar" id="btnFiltrar">🔍 Buscar</button>
-            <button class="btn-limpar" id="btnLimpar">Limpar Busca</button>
+            <button class="btn-limpar" id="btnLimpar">Limpar Filtros</button>
         </div>
-        
-        <div class="filter-group">
-            <label class="filter-label">Ordenar por:</label>
-            <select class="filter-select" id="sortSelect">
-                <option value="">Mais Recentes</option>
-                <option value="antigos">Mais Antigos</option>
+    </section>
+
+    <!-- FILTROS ESTRUTURADOS - LINHA 2 -->
+    <section class="servicos-filters" style="display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+        <div class="filter-group" style="flex: 1; min-width: 140px; margin: 0;">
+            <label class="filter-label" style="margin-bottom: 4px;">Setor:</label>
+            <select class="filter-select" id="filterSelect" style="width: 100%;">
+                <option value="">Todos</option>
             </select>
         </div>
 
-        <div class="filter-group">
-            <label class="filter-label">Filtrar por:</label>
-            <select class="filter-select" id="filterSelect">
-                <option value="">Todos os Setores</option>
-            </select>
+        <div style="flex: 2; min-width: 280px; display: flex; gap: 6px; align-items: flex-end;">
+            <div style="flex: 0.5; min-width: 60px;">
+                <label class="filter-label" style="margin-bottom: 4px; font-size: 11px;">I0 De:</label>
+                <select class="filter-select" id="i0StartMonth" style="width: 100%; font-size: 12px;">
+                    <option value="">Mês</option>
+                    <option value="1">Jan</option>
+                    <option value="2">Fev</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Abr</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Jun</option>
+                    <option value="7">Jul</option>
+                    <option value="8">Ago</option>
+                    <option value="9">Set</option>
+                    <option value="10">Out</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Dez</option>
+                </select>
+            </div>
+            <div style="flex: 0.4; min-width: 50px;">
+                <select class="filter-select" id="i0StartYear" style="width: 100%; font-size: 12px;">
+                    <option value="">Ano</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                </select>
+            </div>
+
+            <div style="flex: 0.5; min-width: 60px;">
+                <label class="filter-label" style="margin-bottom: 4px; font-size: 11px;">Até:</label>
+                <select class="filter-select" id="i0EndMonth" style="width: 100%; font-size: 12px;">
+                    <option value="">Mês</option>
+                    <option value="1">Jan</option>
+                    <option value="2">Fev</option>
+                    <option value="3">Mar</option>
+                    <option value="4">Abr</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Jun</option>
+                    <option value="7">Jul</option>
+                    <option value="8">Ago</option>
+                    <option value="9">Set</option>
+                    <option value="10">Out</option>
+                    <option value="11">Nov</option>
+                    <option value="12">Dez</option>
+                </select>
+            </div>
+            <div style="flex: 0.4; min-width: 50px;">
+                <select class="filter-select" id="i0EndYear" style="width: 100%; font-size: 12px;">
+                    <option value="">Ano</option>
+                    <option value="2024">2024</option>
+                    <option value="2025">2025</option>
+                    <option value="2026">2026</option>
+                    <option value="2027">2027</option>
+                    <option value="2028">2028</option>
+                </select>
+            </div>
         </div>
     </section>
 
@@ -79,8 +135,9 @@
             <thead>
                 <tr>
                     <th>Descrição</th>
-                    <th>Data</th>
+                    <th>I0</th>
                     <th>Setor</th>
+                    <th>Data</th>
                     <th>Responsável</th>
                     <th>Tamanho</th>
                     <th></th>
@@ -114,6 +171,38 @@
                         <option value="">Selecione um setor</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label>I0 Mês</label>
+                    <select id="i0Month">
+                        <option value="">Mês</option>
+                        <option value="1">Jan</option>
+                        <option value="2">Fev</option>
+                        <option value="3">Mar</option>
+                        <option value="4">Abr</option>
+                        <option value="5">Mai</option>
+                        <option value="6">Jun</option>
+                        <option value="7">Jul</option>
+                        <option value="8">Ago</option>
+                        <option value="9">Set</option>
+                        <option value="10">Out</option>
+                        <option value="11">Nov</option>
+                        <option value="12">Dez</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>I0 Ano</label>
+                    <select id="i0Year">
+                        <option value="">Ano</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
                 <div class="form-group full-width">
                     <label>Arquivo Excel*</label>
                     <div class="file-upload-area" id="fileUploadArea">

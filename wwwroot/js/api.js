@@ -259,13 +259,16 @@ class ApiClient {
     }
 
     // Spreadsheets endpoints
-    async getSpreadsheets(search = null, sort = null, filter = null) {
+    async getSpreadsheets(search = null, sectorId = null, i0StartMonth = null, i0StartYear = null, i0EndMonth = null, i0EndYear = null) {
         let endpoint = '/spreadsheets';
         const params = new URLSearchParams();
         
         if (search) params.append('search', search);
-        if (sort) params.append('sort', sort);
-        if (filter) params.append('filter', filter);
+        if (sectorId) params.append('sectorId', sectorId);
+        if (i0StartMonth) params.append('i0StartMonth', i0StartMonth);
+        if (i0StartYear) params.append('i0StartYear', i0StartYear);
+        if (i0EndMonth) params.append('i0EndMonth', i0EndMonth);
+        if (i0EndYear) params.append('i0EndYear', i0EndYear);
         
         if (params.toString()) {
             endpoint += '?' + params.toString();

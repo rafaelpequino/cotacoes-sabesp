@@ -40,7 +40,13 @@ namespace CotacoesEPC.Controllers
 
         // GET: api/spreadsheets
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
+        public async Task<IActionResult> GetAll(
+            [FromQuery] string? search, 
+            [FromQuery] int? sectorId,
+            [FromQuery] int? i0StartMonth,
+            [FromQuery] int? i0StartYear,
+            [FromQuery] int? i0EndMonth,
+            [FromQuery] int? i0EndYear)
         {
             var userId = GetUserId();
             // Mostrar TODAS as planilhas (compartilhadas entre usuários)
@@ -56,26 +62,76 @@ namespace CotacoesEPC.Controllers
                 );
             }
 
-            // Aplicar ordenação
-            query = sort switch
+            // Aplicar filtro por setor
+            if (sectorId.HasValue && sectorId.Value > 0)
             {
-                "recentes" => query.OrderByDescending(s => s.CreatedAt),
-                "antigos" => query.OrderBy(s => s.CreatedAt),
-                _ => query.OrderByDescending(s => s.CreatedAt) // Relevância/padrão
-            };
-
-            // Aplicar filtro por setor (apenas se um setor específico foi selecionado)
-            if (!string.IsNullOrEmpty(filter))
-            {
-                if (int.TryParse(filter, out int sectorId))
-                {
-                    query = query.Where(s => s.SectorId == sectorId);
-                }
+                query = query.Where(s => s.SectorId == sectorId);
             }
+
+            // Aplicar ordenação padrão
+            query = query.OrderByDescending(s => s.CreatedAt);
 
             var spreadsheets = await query.ToListAsync();
 
+            // Aplicar filtro por range de I0 (em memória)
+            if (i0StartMonth.HasValue || i0StartYear.HasValue || i0EndMonth.HasValue || i0EndYear.HasValue)
+            {
+                spreadsheets = FilterByI0Range(spreadsheets, i0StartMonth, i0StartYear, i0EndMonth, i0EndYear).ToList();
+            }
+
             return Ok(spreadsheets);
+        }
+
+        private IEnumerable<Spreadsheet> FilterByI0Range(
+            IEnumerable<Spreadsheet> spreadsheets,
+            int? startMonth,
+            int? startYear,
+            int? endMonth,
+            int? endYear)
+        {
+            return spreadsheets.Where(s => IsI0InRange(s.I0Month, s.I0Year, startMonth, startYear, endMonth, endYear));
+        }
+
+        private bool IsI0InRange(int? i0Month, int? i0Year, int? startMonth, int? startYear, int? endMonth, int? endYear)
+        {
+            // Se não há I0 na planilha, não incluir
+            if (!i0Month.HasValue || !i0Year.HasValue)
+                return false;
+
+            // Se não há filtro de range, incluir
+            if (!startMonth.HasValue && !startYear.HasValue && !endMonth.HasValue && !endYear.HasValue)
+                return true;
+
+            // Comparação: ano.mês (ex: 2025.01)
+            var i0Value = i0Year.Value * 100 + i0Month.Value;
+
+            // Verificar limite inferior
+            if (startYear.HasValue && startMonth.HasValue)
+            {
+                var startValue = startYear.Value * 100 + startMonth.Value;
+                if (i0Value < startValue)
+                    return false;
+            }
+            else if (startYear.HasValue && !startMonth.HasValue)
+            {
+                if (i0Year.Value < startYear.Value)
+                    return false;
+            }
+
+            // Verificar limite superior
+            if (endYear.HasValue && endMonth.HasValue)
+            {
+                var endValue = endYear.Value * 100 + endMonth.Value;
+                if (i0Value > endValue)
+                    return false;
+            }
+            else if (endYear.HasValue && !endMonth.HasValue)
+            {
+                if (i0Year.Value > endYear.Value)
+                    return false;
+            }
+
+            return true;
         }
 
         // GET: api/spreadsheets/{id}
@@ -107,25 +163,38 @@ namespace CotacoesEPC.Controllers
                 });
             }
 
-            var userId = GetUserId();
-
-            var spreadsheet = new Spreadsheet
+            try
             {
-                UserId = userId,
-                Name = request.Name,
-                Description = request.Description,
-                SectorId = request.SectorId,
-                FilePath = request.FilePath,
-                FileType = request.FileType,
-                FileSize = request.FileSize,
-                IsShared = request.IsShared,
-                CreatedAt = DateTime.UtcNow
-            };
+                var userId = GetUserId();
 
-            _context.Spreadsheets.Add(spreadsheet);
-            await _context.SaveChangesAsync();
+                var spreadsheet = new Spreadsheet
+                {
+                    UserId = userId,
+                    Name = request.Name,
+                    Description = request.Description,
+                    SectorId = request.SectorId,
+                    I0Month = request.I0Month,
+                    I0Year = request.I0Year,
+                    FilePath = request.FilePath,
+                    FileType = request.FileType,
+                    FileSize = request.FileSize,
+                    IsShared = request.IsShared,
+                    CreatedAt = DateTime.UtcNow
+                };
 
-            return CreatedAtAction(nameof(GetById), new { id = spreadsheet.Id }, spreadsheet);
+                _context.Spreadsheets.Add(spreadsheet);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction(nameof(GetById), new { id = spreadsheet.Id }, spreadsheet);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { 
+                    message = "Ocorreu um erro ao processar sua requisição. Tente novamente mais tarde.",
+                    error = ex.Message,
+                    innerError = ex.InnerException?.Message
+                });
+            }
         }
 
         // PUT: api/spreadsheets/{id}
@@ -145,6 +214,8 @@ namespace CotacoesEPC.Controllers
             spreadsheet.Name = request.Name;
             spreadsheet.Description = request.Description;
             spreadsheet.SectorId = request.SectorId;
+            spreadsheet.I0Month = request.I0Month;
+            spreadsheet.I0Year = request.I0Year;
             spreadsheet.FilePath = request.FilePath;
             spreadsheet.FileType = request.FileType;
             spreadsheet.FileSize = request.FileSize;
@@ -223,6 +294,12 @@ namespace CotacoesEPC.Controllers
         public long? FileSize { get; set; }
 
         public bool IsShared { get; set; } = false;
+
+        [Range(1, 12, ErrorMessage = "Mês do I0 deve estar entre 1 e 12")]
+        public int? I0Month { get; set; }
+
+        [Range(2020, 2099, ErrorMessage = "Ano do I0 deve estar entre 2020 e 2099")]
+        public int? I0Year { get; set; }
     }
 
     public class UpdateSpreadsheetRequest : CreateSpreadsheetRequest

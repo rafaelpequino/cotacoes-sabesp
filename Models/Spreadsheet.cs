@@ -22,6 +22,12 @@ namespace CotacoesEPC.Models
         [ForeignKey(nameof(Sector))]
         public int? SectorId { get; set; }
 
+        [Range(1, 12)]
+        public int? I0Month { get; set; }
+
+        [Range(2020, 2099)]
+        public int? I0Year { get; set; }
+
         [StringLength(500)]
         public string? FilePath { get; set; }
 

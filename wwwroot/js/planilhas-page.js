@@ -6,6 +6,12 @@ let sectorsData = [];
 let usersData = [];
 let currentUserId = null;
 
+// Mapa de meses em português
+const monthsMap = {
+    1: 'Jan', 2: 'Fev', 3: 'Mar', 4: 'Abr', 5: 'Mai', 6: 'Jun',
+    7: 'Jul', 8: 'Ago', 9: 'Set', 10: 'Out', 11: 'Nov', 12: 'Dez'
+};
+
 // Função para humanizar erros (cópia do método em crud.js)
 function humanizeError(errorMessage) {
     // Se já começa com uma mensagem clara, retornar
@@ -45,7 +51,7 @@ async function loadSectors() {
             sectorsData.forEach(sector => {
                 const option = document.createElement('option');
                 option.value = sector.id;
-                option.textContent = sector.name;
+                option.textContent = converterMaiuscula(sector.name);
                 sectorSelect.appendChild(option);
             });
         }
@@ -56,7 +62,7 @@ async function loadSectors() {
             sectorsData.forEach(sector => {
                 const option = document.createElement('option');
                 option.value = sector.id;
-                option.textContent = sector.name;
+                option.textContent = converterMaiuscula(sector.name);
                 filterSelect.appendChild(option);
             });
         }
@@ -87,7 +93,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadPlanilhas() {
     try {
-        planilhasPageData = await api.getSpreadsheets();
+        const searchValue = document.getElementById('searchInput')?.value || '';
+        const sectorId = document.getElementById('filterSelect')?.value || '';
+        const i0StartMonth = document.getElementById('i0StartMonth')?.value || '';
+        const i0StartYear = document.getElementById('i0StartYear')?.value || '';
+        const i0EndMonth = document.getElementById('i0EndMonth')?.value || '';
+        const i0EndYear = document.getElementById('i0EndYear')?.value || '';
+        
+        planilhasPageData = await api.getSpreadsheets(searchValue, sectorId, i0StartMonth, i0StartYear, i0EndMonth, i0EndYear);
         renderPlanilhasTable(planilhasPageData);
     } catch (error) {
         planilhasPageData = [];
@@ -120,11 +133,16 @@ function renderPlanilhasTable(planilhas) {
         
         // Procurar o nome do setor
         const sector = sectorsData.find(s => s.id === planilha.sectorId);
-        const sectorName = sector ? sector.name : '-';
+        const sectorName = sector ? converterMaiuscula(sector.name) : '-';
         
         // Procurar o nome do usuário
         const owner = usersData.find(u => u.id === planilha.userId);
-        const ownerName = owner ? owner.name : 'N/A';
+        const ownerName = owner ? converterMaiuscula(owner.name) : 'N/A';
+        
+        // Formatear I0
+        const i0Display = planilha.i0Month && planilha.i0Year 
+            ? `${monthsMap[planilha.i0Month] || ''}/${String(planilha.i0Year).slice(-2)}`
+            : '-';
         
         // Verificar se é o proprietário
         const isOwner = currentUserId === planilha.userId;
@@ -136,9 +154,10 @@ function renderPlanilhasTable(planilhas) {
             ` : '';
         
         row.innerHTML = `
-            <td>${planilha.name || '-'}</td>
-            <td>${new Date(planilha.createdAt).toLocaleDateString('pt-BR')}</td>
+            <td>${converterMaiuscula(planilha.name) || '-'}</td>
+            <td>${i0Display}</td>
             <td>${sectorName}</td>
+            <td>${new Date(planilha.createdAt).toLocaleDateString('pt-BR')}</td>
             <td>${ownerName}</td>
             <td>${planilha.fileSize ? (planilha.fileSize / 1024).toFixed(2) + ' KB' : '-'}</td>
             <td class="actions">
@@ -171,56 +190,53 @@ function setupEventListeners() {
 
 function setupFilterListeners() {
     const searchInput = document.getElementById('searchInput');
-    const sortSelect = document.getElementById('sortSelect');
     const filterSelect = document.getElementById('filterSelect');
+    const i0StartMonth = document.getElementById('i0StartMonth');
+    const i0StartYear = document.getElementById('i0StartYear');
+    const i0EndMonth = document.getElementById('i0EndMonth');
+    const i0EndYear = document.getElementById('i0EndYear');
     const btnFiltrar = document.getElementById('btnFiltrar');
     const btnLimpar = document.getElementById('btnLimpar');
 
     if (btnFiltrar) {
-        btnFiltrar.addEventListener('click', applyFilters);
+        btnFiltrar.addEventListener('click', loadPlanilhas);
     }
 
     if (btnLimpar) {
         btnLimpar.addEventListener('click', clearFilters);
     }
 
-    // Ordenação dispara requisição automaticamente
-    if (sortSelect) {
-        sortSelect.addEventListener('change', applyFilters);
-    }
-
     // Filtro por setor dispara requisição automaticamente
     if (filterSelect) {
-        filterSelect.addEventListener('change', applyFilters);
+        filterSelect.addEventListener('change', loadPlanilhas);
+    }
+
+    // Filtros de I0 disparam requisição automaticamente
+    if (i0StartMonth) {
+        i0StartMonth.addEventListener('change', loadPlanilhas);
+    }
+    if (i0StartYear) {
+        i0StartYear.addEventListener('change', loadPlanilhas);
+    }
+    if (i0EndMonth) {
+        i0EndMonth.addEventListener('change', loadPlanilhas);
+    }
+    if (i0EndYear) {
+        i0EndYear.addEventListener('change', loadPlanilhas);
     }
 
     // Permitir busca ao digitar (Enter)
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
-                applyFilters();
+                loadPlanilhas();
             }
         });
     }
 }
 
 async function applyFilters() {
-    const search = document.getElementById('searchInput')?.value || '';
-    const sort = document.getElementById('sortSelect')?.value || '';
-    const filter = document.getElementById('filterSelect')?.value || '';
-
-    try {
-        planilhasPageData = await api.getSpreadsheets(search || null, sort || null, filter || null);
-        renderPlanilhasTable(planilhasPageData);
-        updateSearchIndicator(search);
-    } catch (error) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Erro ao Filtrar',
-            text: humanizeError(error.message),
-            confirmButtonColor: '#d32f2f'
-        });
-    }
+    await loadPlanilhas();
 }
 
 function updateSearchIndicator(searchText) {
@@ -237,8 +253,11 @@ function updateSearchIndicator(searchText) {
 
 function clearFilters() {
     document.getElementById('searchInput').value = '';
-    document.getElementById('sortSelect').value = '';
     document.getElementById('filterSelect').value = '';
+    document.getElementById('i0StartMonth').value = '';
+    document.getElementById('i0StartYear').value = '';
+    document.getElementById('i0EndMonth').value = '';
+    document.getElementById('i0EndYear').value = '';
     document.getElementById('searchIndicator').style.display = 'none';
     loadPlanilhas();
 }
@@ -291,6 +310,8 @@ async function savePlanilha() {
     }
     const sectorSelect = document.getElementById('sectorSelect');
     const sector = sectorSelect?.value || '';
+    const i0Month = document.getElementById('i0Month')?.value || '';
+    const i0Year = document.getElementById('i0Year')?.value || '';
     const description = form.querySelector('textarea')?.value || '';
     const fileInput = form.querySelector('input[type="file"]');
     
@@ -367,7 +388,9 @@ async function savePlanilha() {
             // Modo de edição - atualizar planilha
             const data = {
                 name: name,
-                sectorId: parseInt(sector),
+                sectorId: sector ? parseInt(sector) : null,
+                i0Month: i0Month ? parseInt(i0Month) : null,
+                i0Year: i0Year ? parseInt(i0Year) : null,
                 description: description || null,
                 // Todas as planilhas são compartilhadas
                 isShared: true
@@ -398,7 +421,9 @@ async function savePlanilha() {
             // Modo de criação - criar nova planilha
             const data = {
                 name: name,
-                sectorId: parseInt(sector),
+                sectorId: sector ? parseInt(sector) : null,
+                i0Month: i0Month ? parseInt(i0Month) : null,
+                i0Year: i0Year ? parseInt(i0Year) : null,
                 description: description || null,
                 filePath: filePath,
                 fileType: fileType,
