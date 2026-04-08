@@ -25,12 +25,108 @@ namespace CotacoesEPC.Controllers
             return int.Parse(userId ?? "0");
         }
 
+        /// <summary>
+        /// Parse I0 format "Mês/YY" to DateTime for comparison
+        /// Example: "Jan/25" -> 2025-01-01, "Dez/25" -> 2025-12-01
+        /// </summary>
+        private DateTime? ParseI0ToDateTime(string i0)
+        {
+            if (string.IsNullOrWhiteSpace(i0))
+                return null;
+
+            var parts = i0.Trim().Split('/');
+            if (parts.Length != 2)
+                return null;
+
+            var monthName = parts[0].Trim();
+            var yearStr = parts[1].Trim();
+
+            if (!int.TryParse(yearStr, out var year))
+                return null;
+
+            // Adicionar 2000 se o ano tiver 2 dígitos (ex: 25 -> 2025)
+            if (year < 100)
+                year += 2000;
+
+            var months = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
+            {
+                { "Jan", 1 }, { "Janeiro", 1 },
+                { "Fev", 2 }, { "Fevereiro", 2 },
+                { "Mar", 3 }, { "Março", 3 },
+                { "Abr", 4 }, { "Abril", 4 },
+                { "Mai", 5 }, { "Maio", 5 },
+                { "Jun", 6 }, { "Junho", 6 },
+                { "Jul", 7 }, { "Julho", 7 },
+                { "Ago", 8 }, { "Agosto", 8 },
+                { "Set", 9 }, { "Setembro", 9 },
+                { "Out", 10 }, { "Outubro", 10 },
+                { "Nov", 11 }, { "Novembro", 11 },
+                { "Dez", 12 }, { "Dezembro", 12 }
+            };
+
+            if (!months.TryGetValue(monthName, out var month))
+                return null;
+
+            try
+            {
+                return new DateTime(year, month, 1);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Check if I0 is within range (inclusive)
+        /// Compares by constructing DateTime from mês/ano
+        /// </summary>
+        private bool IsI0InRange(string i0, int? startMonth, int? startYear, int? endMonth, int? endYear)
+        {
+            var i0Date = ParseI0ToDateTime(i0);
+            if (!i0Date.HasValue)
+                return false;
+
+            // Se temos data de início
+            if (startMonth.HasValue && startYear.HasValue)
+            {
+                try
+                {
+                    var startDate = new DateTime(startYear.Value, startMonth.Value, 1);
+                    if (i0Date < startDate)
+                        return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            // Se temos data de fim
+            if (endMonth.HasValue && endYear.HasValue)
+            {
+                try
+                {
+                    var endDate = new DateTime(endYear.Value, endMonth.Value, 1);
+                    if (i0Date > endDate)
+                        return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         // GET: api/quotations
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] string? sort, [FromQuery] string? filter)
+        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] int? sectorId, [FromQuery] int? userId, [FromQuery] int? i0StartMonth, [FromQuery] int? i0StartYear, [FromQuery] int? i0EndMonth, [FromQuery] int? i0EndYear)
         {
             var query = _context.Quotations.AsQueryable();
 
+            // Filtro por busca de texto
             if (!string.IsNullOrEmpty(search))
             {
                 var words = search.ToLower()
@@ -47,15 +143,30 @@ namespace CotacoesEPC.Controllers
                 }
             }
 
-            query = sort switch
+            // Filtro por setor
+            if (sectorId.HasValue && sectorId.Value > 0)
             {
-                "recentes" => query.OrderByDescending(q => q.CreatedAt),
-                "preço_menor" => query.OrderBy(q => q.PrecoAdotado),
-                "preço_maior" => query.OrderByDescending(q => q.PrecoAdotado),
-                _ => query.OrderByDescending(q => q.CreatedAt)
-            };
+                query = query.Where(q => q.SectorId == sectorId.Value);
+            }
 
+            // Filtro por responsável (usuário)
+            if (userId.HasValue && userId.Value > 0)
+            {
+                query = query.Where(q => q.UserId == userId.Value);
+            }
+
+            // Executar query antes de filtrar I0 (pois I0 requer processamento em memória)
             var quotations = await query.ToListAsync();
+
+            // Filtro por range de I0 (em memória)
+            if ((i0StartMonth.HasValue && i0StartYear.HasValue) || (i0EndMonth.HasValue && i0EndYear.HasValue))
+            {
+                quotations = quotations.Where(q => IsI0InRange(q.OriginalId, i0StartMonth, i0StartYear, i0EndMonth, i0EndYear)).ToList();
+            }
+
+            // Ordenação padrão por data de criação (descendente)
+            quotations = quotations.OrderByDescending(q => q.CreatedAt).ToList();
+
             return Ok(quotations);
         }
 
