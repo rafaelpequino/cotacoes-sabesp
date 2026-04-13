@@ -312,7 +312,6 @@ async function savePlanilha() {
     const sector = sectorSelect?.value || '';
     const i0Month = document.getElementById('i0Month')?.value || '';
     const i0Year = document.getElementById('i0Year')?.value || '';
-    const description = form.querySelector('textarea')?.value || '';
     const fileInput = form.querySelector('input[type="file"]');
     
     if (!name) {
@@ -329,6 +328,24 @@ async function savePlanilha() {
             icon: 'warning',
             title: 'Campo obrigatório',
             text: 'Por favor, selecione um setor'
+        });
+        return;
+    }
+
+    if (!i0Month) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, selecione o mês do I0'
+        });
+        return;
+    }
+
+    if (!i0Year) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campo obrigatório',
+            text: 'Por favor, selecione o ano do I0'
         });
         return;
     }
@@ -391,7 +408,6 @@ async function savePlanilha() {
                 sectorId: sector ? parseInt(sector) : null,
                 i0Month: i0Month ? parseInt(i0Month) : null,
                 i0Year: i0Year ? parseInt(i0Year) : null,
-                description: description || null,
                 // Todas as planilhas são compartilhadas
                 isShared: true
             };
@@ -424,7 +440,6 @@ async function savePlanilha() {
                 sectorId: sector ? parseInt(sector) : null,
                 i0Month: i0Month ? parseInt(i0Month) : null,
                 i0Year: i0Year ? parseInt(i0Year) : null,
-                description: description || null,
                 filePath: filePath,
                 fileType: fileType,
                 fileSize: fileSize,
@@ -542,12 +557,10 @@ async function editPlanilha(id) {
 
     // Popular campos
     const nameInput = document.getElementById('planilhaNameInput');
-    const descriptionInput = document.getElementById('planilhaDescriptionInput');
     const sectorSelect = document.getElementById('sectorSelect');
     const isSharedCheckbox = document.getElementById('isSharedCheckbox');
 
     if (nameInput) nameInput.value = planilha.name || '';
-    if (descriptionInput) descriptionInput.value = planilha.description || '';
     if (sectorSelect) sectorSelect.value = planilha.sectorId || '';
     if (isSharedCheckbox) isSharedCheckbox.checked = planilha.isShared || false;
 

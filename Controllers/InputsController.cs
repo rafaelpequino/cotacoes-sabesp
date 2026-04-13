@@ -88,7 +88,7 @@ namespace CotacoesEPC.Controllers
                 return false;
 
             // Se temos data de início
-            if (startMonth.HasValue && startYear.HasValue)
+            if (startYear.HasValue && startMonth.HasValue)
             {
                 try
                 {
@@ -101,9 +101,14 @@ namespace CotacoesEPC.Controllers
                     return false;
                 }
             }
+            else if (startYear.HasValue && !startMonth.HasValue)
+            {
+                if (i0Date.Value.Year < startYear.Value)
+                    return false;
+            }
 
             // Se temos data de fim
-            if (endMonth.HasValue && endYear.HasValue)
+            if (endYear.HasValue && endMonth.HasValue)
             {
                 try
                 {
@@ -115,6 +120,11 @@ namespace CotacoesEPC.Controllers
                 {
                     return false;
                 }
+            }
+            else if (endYear.HasValue && !endMonth.HasValue)
+            {
+                if (i0Date.Value.Year > endYear.Value)
+                    return false;
             }
 
             return true;
@@ -159,7 +169,7 @@ namespace CotacoesEPC.Controllers
             var quotations = await query.ToListAsync();
 
             // Filtro por range de I0 (em memória)
-            if ((i0StartMonth.HasValue && i0StartYear.HasValue) || (i0EndMonth.HasValue && i0EndYear.HasValue))
+            if (i0StartMonth.HasValue || i0StartYear.HasValue || i0EndMonth.HasValue || i0EndYear.HasValue)
             {
                 quotations = quotations.Where(q => IsI0InRange(q.OriginalId, i0StartMonth, i0StartYear, i0EndMonth, i0EndYear)).ToList();
             }
