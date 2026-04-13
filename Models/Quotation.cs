@@ -102,6 +102,8 @@ namespace CotacoesEPC.Models
 
         public DateTime? UpdatedAt { get; set; }
 
+        public int CopyCount { get; set; } = 0;
+
         // Navigation properties
         public virtual User? User { get; set; }
 

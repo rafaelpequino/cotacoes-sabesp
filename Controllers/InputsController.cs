@@ -3,6 +3,7 @@ using CotacoesEPC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Concurrent;
 using System.Security.Claims;
 
 namespace CotacoesEPC.Controllers
@@ -13,6 +14,10 @@ namespace CotacoesEPC.Controllers
     public class QuotationsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
+
+        // Debounce: chave = "{userId}_{quotationId}", valor = último timestamp de cópia
+        private static readonly ConcurrentDictionary<string, DateTime> _lastCopyTime = new();
+        private static readonly TimeSpan _debouncePeriod = TimeSpan.FromSeconds(30);
 
         public QuotationsController(ApplicationDbContext context)
         {
@@ -323,6 +328,36 @@ namespace CotacoesEPC.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(quotation);
+        }
+
+        // POST: api/quotations/{id}/increment-copy
+        [HttpPost("{id}/increment-copy")]
+        public async Task<IActionResult> IncrementCopy(int id)
+        {
+            var userId = GetUserId();
+            var key = $"{userId}_{id}";
+            var now = DateTime.UtcNow;
+
+            // Verificar debounce: mesmo usuário no mesmo item em menos de 30s não conta
+            if (_lastCopyTime.TryGetValue(key, out var lastCopy) && now - lastCopy < _debouncePeriod)
+            {
+                var quotationNow = await _context.Quotations.FindAsync(id);
+                if (quotationNow == null)
+                    return NotFound(new { message = "Cotação não encontrada" });
+
+                return Ok(new { copyCount = quotationNow.CopyCount, debounced = true });
+            }
+
+            var quotation = await _context.Quotations.FindAsync(id);
+            if (quotation == null)
+                return NotFound(new { message = "Cotação não encontrada" });
+
+            quotation.CopyCount++;
+            await _context.SaveChangesAsync();
+
+            _lastCopyTime[key] = now;
+
+            return Ok(new { copyCount = quotation.CopyCount, debounced = false });
         }
 
         // DELETE: api/quotations/{id}

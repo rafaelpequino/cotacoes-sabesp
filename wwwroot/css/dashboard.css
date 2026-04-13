@@ -532,15 +532,13 @@
     }
 
     /* Limitar texto do item a 3 linhas */
-    .servicos-table td:nth-child(3) {
+    .item-text-clamp {
         display: -webkit-box;
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
-        word-wrap: break-word;
-        white-space: normal;
         overflow: hidden;
-        text-overflow: ellipsis;
-        max-height: 90px;
+        word-break: break-word;
+        white-space: normal;
         line-height: 1.4;
     }
 

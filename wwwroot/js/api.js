@@ -210,6 +210,10 @@ class ApiClient {
     async updateQuotationStatus(id, status) {
         return this.request(`/quotations/${id}/status`, 'PATCH', { status });
     }
+
+    async incrementQuotationCopyCount(id) {
+        return this.request(`/quotations/${id}/increment-copy`, 'POST');
+    }
     async getSectors() {
         return this.request('/sectors');
     }
