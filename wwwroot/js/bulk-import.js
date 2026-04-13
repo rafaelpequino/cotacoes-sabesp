@@ -770,6 +770,47 @@ function clearBulkData() {
 }
 
 // ========================================
+// AUTO-CRIAR FORNECEDORES NÃO CADASTRADOS (bulk)
+// ========================================
+async function bulkAutoCreateMissingSuppliers(data) {
+    let suppliers = await SupplierSelect.loadSuppliersGlobal();
+
+    for (let i = 1; i <= 6; i++) {
+        const nomeKey = `nomeEmpresa${i}`;
+        const idKey = `supplier${i}Id`;
+        const nome = (data[nomeKey] || '').trim();
+
+        if (!nome || data[idKey]) continue;
+
+        const normalizado = nome.toLowerCase();
+        const existing = suppliers.find(s => (s.nomeFantasia || '').toLowerCase() === normalizado);
+
+        if (existing) {
+            data[idKey] = existing.id;
+        } else {
+            try {
+                const token = document.cookie.split(';').map(c => c.trim())
+                    .find(c => c.startsWith('authToken='))?.split('=')[1];
+                const resp = await fetch('/api/suppliers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
+                    body: JSON.stringify({ nomeFantasia: nome })
+                });
+                if (resp.ok) {
+                    const novoFornecedor = await resp.json();
+                    data[idKey] = novoFornecedor.id;
+                    suppliers.push(novoFornecedor);
+                    SupplierSelect.suppliersCache = suppliers;
+                    console.log(`✓ Fornecedor criado automaticamente (bulk): "${nome}" (ID ${novoFornecedor.id})`);
+                }
+            } catch (err) {
+                console.warn(`Não foi possível criar fornecedor "${nome}":`, err);
+            }
+        }
+    }
+}
+
+// ========================================
 // SALVAR TODAS AS COTAÇÕES
 // ========================================
 async function saveBulkCotacoes() {
@@ -848,6 +889,7 @@ async function saveBulkCotacoes() {
             };
 
             // Criar cotação via API
+            await bulkAutoCreateMissingSuppliers(data);
             const created = await api.createQuotation(data);
 
             // Upload de anexos

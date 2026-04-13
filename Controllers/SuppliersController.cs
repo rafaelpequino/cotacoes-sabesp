@@ -43,10 +43,9 @@ namespace CotacoesEPC.Controllers
 
             query = sort switch
             {
-                "recentes" => query.OrderByDescending(s => s.DataCadastro),
-                "antigos" => query.OrderBy(s => s.DataCadastro),
+                "antigos" => query.OrderBy(s => s.DataCadastro).ThenBy(s => s.NomeFantasia),
                 "nome" => query.OrderBy(s => s.NomeFantasia),
-                _ => query.OrderByDescending(s => s.DataCadastro)
+                _ => query.OrderByDescending(s => s.DataCadastro).ThenBy(s => s.NomeFantasia)
             };
 
             var suppliers = await query.ToListAsync();
