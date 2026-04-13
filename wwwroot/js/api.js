@@ -172,13 +172,14 @@ class ApiClient {
     }
 
     // Quotations endpoints (consolidação de Services e Inputs)
-    async getQuotations(search = null, sectorId = null, userId = null, i0StartMonth = null, i0StartYear = null, i0EndMonth = null, i0EndYear = null) {
+    async getQuotations(search = null, sectorId = null, userId = null, supplierId = null, i0StartMonth = null, i0StartYear = null, i0EndMonth = null, i0EndYear = null) {
         let endpoint = '/quotations';
         const params = new URLSearchParams();
         
         if (search) params.append('search', search);
         if (sectorId) params.append('sectorId', sectorId);
         if (userId) params.append('userId', userId);
+        if (supplierId) params.append('supplierId', supplierId);
         if (i0StartMonth) params.append('i0StartMonth', i0StartMonth);
         if (i0StartYear) params.append('i0StartYear', i0StartYear);
         if (i0EndMonth) params.append('i0EndMonth', i0EndMonth);

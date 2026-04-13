@@ -137,7 +137,7 @@ namespace CotacoesEPC.Controllers
 
         // GET: api/quotations
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] int? sectorId, [FromQuery] int? userId, [FromQuery] int? i0StartMonth, [FromQuery] int? i0StartYear, [FromQuery] int? i0EndMonth, [FromQuery] int? i0EndYear)
+        public async Task<IActionResult> GetAll([FromQuery] string? search, [FromQuery] int? sectorId, [FromQuery] int? userId, [FromQuery] int? supplierId, [FromQuery] int? i0StartMonth, [FromQuery] int? i0StartYear, [FromQuery] int? i0EndMonth, [FromQuery] int? i0EndYear)
         {
             var query = _context.Quotations.AsQueryable();
 
@@ -168,6 +168,20 @@ namespace CotacoesEPC.Controllers
             if (userId.HasValue && userId.Value > 0)
             {
                 query = query.Where(q => q.UserId == userId.Value);
+            }
+
+            // Filtro por fornecedor
+            if (supplierId.HasValue && supplierId.Value > 0)
+            {
+                var sid = supplierId.Value;
+                query = query.Where(q =>
+                    q.Supplier1Id == sid ||
+                    q.Supplier2Id == sid ||
+                    q.Supplier3Id == sid ||
+                    q.Supplier4Id == sid ||
+                    q.Supplier5Id == sid ||
+                    q.Supplier6Id == sid
+                );
             }
 
             // Executar query antes de filtrar I0 (pois I0 requer processamento em memória)
