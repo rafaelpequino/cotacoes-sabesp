@@ -1120,7 +1120,23 @@
 
     // MODAL INTENÇÃO DE COTAÇÃO
     function openIntencaoModal() {
-        document.getElementById('intencaoModal').style.display = 'flex';
+        const modal = document.getElementById('intencaoModal');
+        if (modal) {
+            // Usar a mesma função para popular setores que é usada em createModal e editModal
+            const select = modal.querySelector('select[name="sectorId"]');
+            if (select) {
+                while (select.options.length > 1) {
+                    select.remove(1);
+                }
+                sectorsData.forEach(sector => {
+                    const option = document.createElement('option');
+                    option.value = sector.id;
+                    option.textContent = sector.name;
+                    select.appendChild(option);
+                });
+            }
+            modal.style.display = 'flex';
+        }
     }
 
     function closeIntencaoModal() {
