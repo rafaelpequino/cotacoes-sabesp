@@ -1683,14 +1683,16 @@ body.modal-open {
 
 /* Coluna do Item com largura maior e limite de 2 linhas */
 .bulk-table td:nth-child(3) {
-    max-width: 300px;
-    min-width: 200px;
+    max-width: 350px;
+    min-width: 220px;
+    width: 350px;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    line-height: 1.4;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-word;
+    max-height: 56px;
+    vertical-align: top;
 }
 
 .bulk-table select {
