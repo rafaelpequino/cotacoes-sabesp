@@ -110,6 +110,7 @@
 .user-name {
     font-weight: 500;
     color: #1a1a1a;
+    white-space: nowrap;
 }
 
 /* Dropdown Menu Styles */
@@ -502,7 +503,7 @@
     .servicos-table table {
         width: 100%;
         border-collapse: collapse;
-        min-width: 800px;
+        table-layout: auto;
     }
 
     .servicos-table thead {
@@ -519,7 +520,7 @@
         font-weight: 600;
         color: #333;
         border-bottom: 2px solid #eee;
-        white-space: nowrap;
+        white-space: normal;
     }
 
     .servicos-table td {
@@ -529,6 +530,16 @@
         border-bottom: 1px solid #eee;
         vertical-align: middle;
         text-align: left;
+    }
+
+    /* Coluna Item - mínimo 150px */
+    .servicos-table td:nth-child(3) {
+        min-width: 150px;
+    }
+
+    /* Coluna Preço de Forn. Adotado - permite quebra de título */
+    .servicos-table th:nth-child(4) {
+        min-width: 100px;
     }
 
     /* Limitar texto do item a 3 linhas */
@@ -1295,6 +1306,24 @@ body.modal-open {
     gap: 8px;
 }
 
+/* RESPONSIVIDADE DO HEADER */
+@media (max-width: 900px) {
+    .user-name {
+        display: none;
+    }
+}
+
+@media (max-width: 900px) {
+    .menu {
+        gap: 16px;
+    }
+
+    .menu-item {
+        padding: 6px 12px;
+        font-size: 14px;
+    }
+}
+
 /* RESPONSIVIDADE */
 @media (max-width: 1200px) {
     .stats-grid {
@@ -2002,8 +2031,26 @@ body.modal-open {
 
     .servicos-filters {
         gap: 12px;
+        flex-wrap: wrap;
     }
 }
+
+/* Mobile e Tablets menores */
+@media (max-width: 768px) {
+    .servicos-filters {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .search-group {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .filter-select {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
 
 /* Mobile e Tablets menores */
 @media (max-width: 768px) {
@@ -2120,8 +2167,14 @@ body.modal-open {
     }
 
     .btn-nova-intencao {
-        justify-content: center;
         width: 100%;
+        background: transparent !important;
+        color: #f57f17 !important;
+        border: 2px solid #f57f17 !important;
+        padding: 8px 18px !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
     }
 
     .servicos-filters {
@@ -2560,6 +2613,13 @@ body.modal-open {
 }
 
 /* Print styles */
+@media (max-width: 768px) {
+    .filter-io-range {
+        flex-basis: 100%;
+        width: 100%;
+    }
+}
+
 @media print {
     .dashboard-header,
     .servicos-filters,
@@ -2651,29 +2711,29 @@ body.modal-open {
 
 /* Checkbox "Cancelar esta cotação" no edit modal */
 .cancelar-check-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 4px !important;
 }
 
 .cancelar-check-row input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    cursor: pointer;
-    accent-color: #dc3545;
-    margin: 0;
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    accent-color: #dc3545 !important;
+    margin: 0 !important;
 }
 
 .cancelar-check-label {
-    font-size: 0.9em;
-    font-weight: 500;
-    color: #555;
-    cursor: pointer;
-    margin: 0;
-    line-height: 1.2;
-    user-select: none;
+    font-size: 0.9em !important;
+    font-weight: 500 !important;
+    color: #555 !important;
+    cursor: pointer !important;
+    margin: 0 !important;
+    line-height: 1.2 !important;
+    user-select: none !important;
 }
 
 .status-auto-note {
@@ -2683,40 +2743,47 @@ body.modal-open {
     margin-top: 2px;
 }
 
-/* Botão de ação inline de status (cancelar / reativar) */
-.action-btn-status {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    padding: 2px 4px;
-    border-radius: 4px;
-    vertical-align: middle;
-    opacity: 0.65;
-    transition: opacity 0.15s, background 0.15s;
-    line-height: 1;
+/* Botão de ação inline de status - LIMPO */
+button.action-btn-status {
+    /* Todas as propriedades são definidas inline no HTML */
 }
 
-.action-btn-status:hover {
-    opacity: 1;
-    background: rgba(0,0,0,0.06);
+/* Célula de Status - coluna 6 */
+.servicos-table td:nth-child(6) {
+    min-width: 140px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    padding: 12px 16px !important;
+    vertical-align: top !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.servicos-table td:nth-child(6) .status-badge {
+    flex-shrink: 0 !important;
+    min-width: fit-content !important;
 }
 
 /* Botão Nova Intenção de Cotação */
-.btn-nova-intencao {
-    background: transparent;
-    color: #f57f17;
-    border: 2px solid #f57f17;
-    padding: 8px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
+button.btn-nova-intencao {
+    background: transparent !important;
+    color: #f57f17 !important;
+    border: 2px solid #f57f17 !important;
+    padding: 8px 18px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    transition: background 0.2s, color 0.2s !important;
 }
 
-.btn-nova-intencao:hover {
-    background: #fff8e1;
+button.btn-nova-intencao:hover {
+    background: #fff8e1 !important;
 }
 
 /* ========================================
