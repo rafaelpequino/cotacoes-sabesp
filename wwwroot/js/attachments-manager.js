@@ -1,7 +1,7 @@
 // Gerenciamento de Anexos com Descrição
 // Este arquivo gerencia upload, visualização e exclusão de anexos PDF com descrições
 
-let pendingAttachments = []; // Array de { file, description }
+let pendingAttachments = []; // Array de { file, description, companyName }
 let currentServiceAttachments = []; // Anexos existentes
 let currentEntityType = ''; // Tipo da entidade (Service ou Input)
 let currentEntityId = 0; // ID da entidade
@@ -20,6 +20,41 @@ function setupAttachmentHandlers() {
     }
 }
 
+// Retorna nomes de empresas preenchidos no modal informado
+function getCompanyNamesFromModal(modalId) {
+    // Usa instâncias do SupplierSelect se disponível (mais confiável que hidden inputs)
+    if (typeof window.getModalCompanyNames === 'function') {
+        return window.getModalCompanyNames(modalId);
+    }
+    // Fallback: lê hidden inputs do modal
+    const modal = document.getElementById(modalId);
+    if (!modal) return [];
+    const names = [];
+    for (let i = 1; i <= 6; i++) {
+        const input = modal.querySelector(`input[name="nomeEmpresa${i}"]`);
+        const name = input ? input.value.trim() : '';
+        if (name) names.push(name);
+    }
+    return names;
+}
+
+// Monta HTML do select de empresa para o Swal
+function buildCompanySelectHtml(companyNames) {
+    if (!companyNames || companyNames.length === 0) return '';
+    const options = companyNames.map(n => `<option value="${n}">${n}</option>`).join('');
+    const fieldStyle = 'width: 100%; padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; box-sizing: border-box; outline: none;';
+    const labelStyle = 'font-size: 13px; color: #555; display: block; margin-bottom: 6px;';
+    return `
+        <div style="margin-top: 14px; text-align: left;">
+            <label style="${labelStyle}">Vincular a uma empresa (opcional)</label>
+            <select id="swal-company-select" style="${fieldStyle}">
+                <option value="">— Nenhuma empresa —</option>
+                ${options}
+            </select>
+        </div>
+    `;
+}
+
 async function handleCreateAttachmentsChange(event) {
     const files = Array.from(event.target.files);
     
@@ -36,13 +71,19 @@ async function handleCreateAttachmentsChange(event) {
         return;
     }
     
+    const companyNames = getCompanyNamesFromModal('createModal');
+    
     // Solicitar descrição para cada arquivo
     for (const file of files) {
-        const { value: description } = await Swal.fire({
+        const { value: result } = await Swal.fire({
             title: `Descrição do anexo`,
             html: `
-                <p style="margin-bottom: 10px; color: #666;">Arquivo: <strong>${file.name}</strong></p>
-                <input id="swal-input1" class="swal2-input" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 90%; max-width: 100%; box-sizing: border-box;">
+                <p style="margin-bottom: 14px; color: #666; text-align: left;">Arquivo: <strong>${file.name}</strong></p>
+                <div style="text-align: left;">
+                    <label style="font-size: 13px; color: #555; display: block; margin-bottom: 6px;">Descrição*</label>
+                    <input id="swal-input1" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 100%; padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; box-sizing: border-box; outline: none;">
+                </div>
+                ${buildCompanySelectHtml(companyNames)}
             `,
             width: '600px',
             focusConfirm: false,
@@ -51,21 +92,26 @@ async function handleCreateAttachmentsChange(event) {
             cancelButtonText: 'Cancelar',
             confirmButtonColor: '#13d0ff',
             cancelButtonColor: '#999',
+            didOpen: () => {
+                const input = document.getElementById('swal-input1');
+                if (input) input.focus();
+            },
             preConfirm: () => {
                 const desc = document.getElementById('swal-input1').value;
                 if (!desc || desc.trim() === '') {
                     Swal.showValidationMessage('A descrição é obrigatória');
                     return false;
                 }
-                return desc.trim();
+                const companyEl = document.getElementById('swal-company-select');
+                return { description: desc.trim(), companyName: companyEl ? (companyEl.value || null) : null };
             }
         });
         
-        if (description) {
+        if (result) {
             // Verificar se já existe
             const exists = pendingAttachments.find(a => a.file.name === file.name && a.file.size === file.size);
             if (!exists) {
-                pendingAttachments.push({ file, description });
+                pendingAttachments.push({ file, description: result.description, companyName: result.companyName });
             }
         }
     }
@@ -90,13 +136,19 @@ async function handleEditAttachmentsChange(event) {
         return;
     }
     
+    const companyNames = getCompanyNamesFromModal('editModal');
+    
     // Solicitar descrição para cada arquivo
     for (const file of files) {
-        const { value: description } = await Swal.fire({
+        const { value: result } = await Swal.fire({
             title: `Descrição do anexo`,
             html: `
-                <p style="margin-bottom: 10px; color: #666;">Arquivo: <strong>${file.name}</strong></p>
-                <input id="swal-input1" class="swal2-input" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 90%; max-width: 100%; box-sizing: border-box;">
+                <p style="margin-bottom: 14px; color: #666; text-align: left;">Arquivo: <strong>${file.name}</strong></p>
+                <div style="text-align: left;">
+                    <label style="font-size: 13px; color: #555; display: block; margin-bottom: 6px;">Descrição*</label>
+                    <input id="swal-input1" placeholder="Ex: Proposta comercial, Orçamento, etc." style="width: 100%; padding: 8px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 14px; color: #333; box-sizing: border-box; outline: none;">
+                </div>
+                ${buildCompanySelectHtml(companyNames)}
             `,
             width: '600px',
             focusConfirm: false,
@@ -105,20 +157,25 @@ async function handleEditAttachmentsChange(event) {
             cancelButtonText: 'Cancelar',
             confirmButtonColor: '#13d0ff',
             cancelButtonColor: '#999',
+            didOpen: () => {
+                const input = document.getElementById('swal-input1');
+                if (input) input.focus();
+            },
             preConfirm: () => {
                 const desc = document.getElementById('swal-input1').value;
                 if (!desc || desc.trim() === '') {
                     Swal.showValidationMessage('A descrição é obrigatória');
                     return false;
                 }
-                return desc.trim();
+                const companyEl = document.getElementById('swal-company-select');
+                return { description: desc.trim(), companyName: companyEl ? (companyEl.value || null) : null };
             }
         });
         
-        if (description) {
+        if (result) {
             const exists = pendingAttachments.find(a => a.file.name === file.name && a.file.size === file.size);
             if (!exists) {
-                pendingAttachments.push({ file, description });
+                pendingAttachments.push({ file, description: result.description, companyName: result.companyName });
             }
         }
     }
@@ -151,7 +208,7 @@ function renderPendingAttachments(mode) {
                 <button type="button" onclick="removePendingAttachment(${index}, '${mode}')" style="background: #d32f2f; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 12px;">Remover</button>
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 12px; color: #666;">
-                <span><strong>Descrição:</strong> ${attachment.description}</span>
+                <span><strong>Descrição:</strong> ${attachment.description}${attachment.companyName ? ` &nbsp;|&nbsp; <strong>Empresa:</strong> ${attachment.companyName}` : ''}</span>
                 <span>${formatFileSize(attachment.file.size)}</span>
             </div>
         `;
@@ -205,7 +262,7 @@ function renderEditAttachments() {
                         </div>
                     </div>
                     <div style="font-size: 12px; color: #666;">
-                        <span><strong>Descrição:</strong> ${att.description}</span>
+                        <span><strong>Descrição:</strong> ${att.description}${att.companyName ? ` &nbsp;|&nbsp; <strong>Empresa:</strong> ${att.companyName}` : ''}</span>
                         <span style="float: right;">${formatFileSize(att.fileSize)}</span>
                     </div>
                 </div>
@@ -224,7 +281,7 @@ function renderEditAttachments() {
                         <button type="button" onclick="removePendingAttachment(${index}, 'edit')" style="background: #d32f2f; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer; font-size: 12px;">Remover</button>
                     </div>
                     <div style="font-size: 12px; color: #666;">
-                        <span><strong>Descrição:</strong> ${attachment.description}</span>
+                        <span><strong>Descrição:</strong> ${attachment.description}${attachment.companyName ? ` &nbsp;|&nbsp; <strong>Empresa:</strong> ${attachment.companyName}` : ''}</span>
                         <span style="float: right;">${formatFileSize(attachment.file.size)}</span>
                     </div>
                 </div>
@@ -272,7 +329,7 @@ function renderViewAttachments() {
                     </div>
                 </div>
                 <div style="font-size: 12px; color: #666;">
-                    <span><strong>Descrição:</strong> ${att.description}</span>
+                    <span><strong>Descrição:</strong> ${att.description}${att.companyName ? ` &nbsp;|&nbsp; <strong>Empresa:</strong> ${att.companyName}` : ''}</span>
                     <span style="float: right;">${formatFileSize(att.fileSize)}</span>
                 </div>
             </div>
@@ -352,7 +409,7 @@ async function uploadPendingAttachments(entityType, entityId) {
     
     try {
         for (const attachment of pendingAttachments) {
-            await api.uploadAttachment(entityType, entityId, attachment.file, attachment.description);
+            await api.uploadAttachment(entityType, entityId, attachment.file, attachment.description, attachment.companyName || null);
         }
         pendingAttachments = [];
     } catch (error) {

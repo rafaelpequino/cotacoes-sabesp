@@ -56,6 +56,7 @@ namespace CotacoesEPC.Controllers
                     a.Id,
                     a.OriginalFileName,
                     a.Description,
+                    a.CompanyName,
                     a.FileSize,
                     a.UploadedAt,
                     a.UserId,
@@ -73,7 +74,8 @@ namespace CotacoesEPC.Controllers
             [FromForm] string entityType, 
             [FromForm] int entityId, 
             [FromForm] IFormFile file,
-            [FromForm] string description)
+            [FromForm] string description,
+            [FromForm] string? companyName = null)
         {
             try
             {
@@ -139,6 +141,7 @@ namespace CotacoesEPC.Controllers
                     EntityId = entityId,
                     UserId = userId,
                     Description = description,
+                    CompanyName = string.IsNullOrWhiteSpace(companyName) ? null : companyName.Trim(),
                     UploadedAt = DateTime.UtcNow
                 };
 
@@ -150,6 +153,7 @@ namespace CotacoesEPC.Controllers
                     attachment.Id,
                     attachment.OriginalFileName,
                     attachment.Description,
+                    attachment.CompanyName,
                     attachment.FileSize,
                     attachment.UploadedAt,
                     CanEdit = true

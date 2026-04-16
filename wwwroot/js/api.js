@@ -381,13 +381,16 @@ class ApiClient {
         return this.request(`/attachments?entityType=${entityType}&entityId=${entityId}`);
     }
 
-    async uploadAttachment(entityType, entityId, file, description) {
+    async uploadAttachment(entityType, entityId, file, description, companyName = null) {
         const token = await this.getToken();
         const formData = new FormData();
         formData.append('entityType', entityType);
         formData.append('entityId', entityId);
         formData.append('file', file);
         formData.append('description', description);
+        if (companyName) {
+            formData.append('companyName', companyName);
+        }
 
         const headers = {};
         if (token) {

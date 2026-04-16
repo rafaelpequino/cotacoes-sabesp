@@ -643,6 +643,33 @@ function openBulkAttachmentDescriptionModal() {
     input.value = '';
     modal.style.display = 'block';
     
+    // Populate company select with names from the current cotação
+    const companyGroup = document.getElementById('bulkAttachmentCompanyGroup');
+    const companySelect = document.getElementById('bulkAttachmentCompanySelect');
+    companySelect.innerHTML = '<option value="">— Nenhuma empresa —</option>';
+    
+    if (currentViewAttachmentsIndex !== null && bulkCotacoesData[currentViewAttachmentsIndex]) {
+        const cotacao = bulkCotacoesData[currentViewAttachmentsIndex];
+        const names = [];
+        for (let i = 1; i <= 6; i++) {
+            const n = (cotacao[`nomeEmpresa${i}`] || '').trim();
+            if (n) names.push(n);
+        }
+        if (names.length > 0) {
+            names.forEach(n => {
+                const opt = document.createElement('option');
+                opt.value = n;
+                opt.textContent = n;
+                companySelect.appendChild(opt);
+            });
+            companyGroup.style.display = 'block';
+        } else {
+            companyGroup.style.display = 'none';
+        }
+    } else {
+        companyGroup.style.display = 'none';
+    }
+    
     // Focar no input
     setTimeout(() => input.focus(), 100);
     
@@ -679,6 +706,9 @@ function confirmBulkAttachmentDescription() {
         return;
     }
 
+    const companySelect = document.getElementById('bulkAttachmentCompanySelect');
+    const companyName = companySelect ? (companySelect.value || null) : null;
+
     if (pendingBulkFiles && currentViewAttachmentsIndex !== null) {
         const cotacao = bulkCotacoesData[currentViewAttachmentsIndex];
         
@@ -686,6 +716,7 @@ function confirmBulkAttachmentDescription() {
             cotacao.attachments.push({
                 file: file,
                 description: descricao,
+                companyName: companyName,
                 filename: file.name
             });
         });
@@ -716,7 +747,7 @@ function displayBulkAttachments(index) {
             <div class="bulk-view-attachment-item">
                 <div>
                     <strong>📎 ${att.filename}</strong>
-                    <p>${att.description}</p>
+                    <p>${att.description}${att.companyName ? ` &nbsp;|&nbsp; <strong>Empresa:</strong> ${att.companyName}` : ''}</p>
                 </div>
                 <button class="btn-remove" onclick="removeBulkAttachment(${index}, ${attIndex})">❌</button>
             </div>
@@ -895,7 +926,7 @@ async function saveBulkCotacoes() {
             // Upload de anexos
             if (cotacao.attachments && cotacao.attachments.length > 0) {
                 for (const attachment of cotacao.attachments) {
-                    await api.uploadAttachment(entityType, created.id, attachment.file, attachment.description);
+                    await api.uploadAttachment(entityType, created.id, attachment.file, attachment.description, attachment.companyName || null);
                 }
             }
 

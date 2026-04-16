@@ -1045,6 +1045,12 @@
                 <label>Descrição*</label>
                 <input type="text" id="bulkAttachmentDescription" placeholder="Ex: Orçamento da empresa X" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px;" />
             </div>
+            <div class="form-group" id="bulkAttachmentCompanyGroup" style="display: none; margin-top: 12px;">
+                <label>Vincular a uma empresa (opcional)</label>
+                <select id="bulkAttachmentCompanySelect" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; color: #333;">
+                    <option value="">— Nenhuma empresa —</option>
+                </select>
+            </div>
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeBulkAttachmentDescriptionModal()">Cancelar</button>
                 <button type="button" class="btn-submit" onclick="confirmBulkAttachmentDescription()">Confirmar</button>
@@ -1382,15 +1388,15 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/api.js" asp-append-version="true"></script>
-<script src="~/js/attachments-manager.js"></script>
-<script src="~/js/clipboard-parser.js"></script>
-<script src="~/js/site.js"></script>
-<script src="~/js/crud.js"></script>
-<script src="~/js/suppliers-selector.js"></script>
-<script src="~/js/searchable-supplier-select.js"></script>
-<script src="~/js/bulk-import.js"></script>
-<script src="~/js/company-details-modal.js"></script>
-<script src="~/js/cotacoes-page.js"></script>
+<script src="~/js/attachments-manager.js" asp-append-version="true"></script>
+<script src="~/js/clipboard-parser.js" asp-append-version="true"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/crud.js" asp-append-version="true"></script>
+<script src="~/js/suppliers-selector.js" asp-append-version="true"></script>
+<script src="~/js/searchable-supplier-select.js" asp-append-version="true"></script>
+<script src="~/js/bulk-import.js" asp-append-version="true"></script>
+<script src="~/js/company-details-modal.js" asp-append-version="true"></script>
+<script src="~/js/cotacoes-page.js" asp-append-version="true"></script>
 
 <script>
     // Inicializar handlers de anexos após o DOM carregar

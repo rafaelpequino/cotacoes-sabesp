@@ -30,6 +30,9 @@ namespace CotacoesEPC.Models
 
         public long FileSize { get; set; }
 
+        [StringLength(200)]
+        public string? CompanyName { get; set; } // Empresa vinculada ao anexo (opcional)
+
         [Required]
         [StringLength(20)]
         public string EntityType { get; set; } = string.Empty; // "Service" ou "Input"
