@@ -739,6 +739,7 @@ body.modal-open {
     border: 2px solid #e3e8ef;
     border-radius: 10px;
     transition: all 0.2s ease;
+    overflow: visible;
 }
 
 .form-group-pair:hover {
@@ -2798,28 +2799,33 @@ button.btn-nova-intencao:hover {
     width: 100%;
 }
 
+/* Increased specificity to beat .form-group input (0-1-1) */
+.searchable-supplier-select .supplier-search-input,
 .supplier-search-input {
     width: 100%;
-    padding: 12px 35px 12px 12px;
-    border: 2px solid #b0b0b0;
-    border-radius: 6px;
+    padding: 12px 35px 12px 12px !important;
+    border: 2px solid #b0b0b0 !important;
+    border-radius: 6px !important;
     font-size: 14px;
     font-family: inherit;
-    background: #fff;
+    background: #fff !important;
     transition: all 0.2s;
     appearance: none;
+    box-shadow: none !important;
 }
 
+.searchable-supplier-select .supplier-search-input:hover,
 .supplier-search-input:hover {
-    border-color: #19d6ff;
-    background: #f9fafb;
+    border-color: #19d6ff !important;
+    background: #f9fafb !important;
 }
 
+.searchable-supplier-select .supplier-search-input:focus,
 .supplier-search-input:focus {
-    outline: none;
-    border-color: #19d6ff;
-    box-shadow: 0 0 0 3px rgba(25, 214, 255, 0.15);
-    background: #fff;
+    outline: none !important;
+    border-color: #19d6ff !important;
+    box-shadow: 0 0 0 3px rgba(25, 214, 255, 0.15) !important;
+    background: #fff !important;
 }
 
 .supplier-search-input::placeholder {
@@ -2828,14 +2834,16 @@ button.btn-nova-intencao:hover {
 }
 
 /* Estados do input após seleção */
+.searchable-supplier-select .supplier-search-input.has-selection,
 .supplier-search-input.has-selection {
-    background: #f0f7ff;
-    border-color: #19d6ff;
+    background: #f0f7ff !important;
+    border-color: #19d6ff !important;
 }
 
+.searchable-supplier-select .supplier-search-input.has-custom,
 .supplier-search-input.has-custom {
-    background: #fff8e1;
-    border-color: #ff9800;
+    background: #fff8e1 !important;
+    border-color: #ff9800 !important;
 }
 
 /* Ícone de dropdown (pseudo-elemento) */
@@ -2852,27 +2860,31 @@ button.btn-nova-intencao:hover {
     line-height: 0;
 }
 
-/* Badge de status de seleção */
+/* Badge de status de seleção - fica dentro do .searchable-supplier-select, abaixo do input */
 .supplier-status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
+    display: none; /* gerenciado por JS via style.display */
+    margin-top: 5px;
     padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    margin-left: 6px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    line-height: 1.2;
     white-space: nowrap;
+    border-width: 1px;
+    border-style: solid;
 }
 
 .supplier-status-badge.selected {
-    background: #c8e6c9;
-    color: #2e7d32;
+    background: #e8f5e9 !important;
+    color: #2e7d32 !important;
+    border-color: #a5d6a7 !important;
 }
 
 .supplier-status-badge.custom {
-    background: #ffe0b2;
-    color: #e65100;
+    background: #fff3e0 !important;
+    color: #bf360c !important;
+    border-color: #ffcc80 !important;
 }
 
 .supplier-dropdown {
@@ -2893,23 +2905,28 @@ button.btn-nova-intencao:hover {
 }
 
 .supplier-option {
-    padding: 12px 12px;
+    padding: 9px 14px 9px 16px;
     cursor: pointer;
-    transition: all 0.15s;
-    color: #333;
-    font-size: 14px;
-    border-bottom: 1px solid #f0f0f0;
+    transition: background 0.1s, color 0.1s;
+    color: #444;
+    font-size: 13px;
+    border-bottom: 1px solid #f3f3f3;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    background: #fff;
+    user-select: none;
 }
 
 .supplier-option::before {
-    content: '○';
-    font-size: 16px;
-    min-width: 16px;
-    color: #aaa;
-    transition: all 0.15s;
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #d0d0d0;
+    flex-shrink: 0;
+    transition: background 0.1s;
 }
 
 .supplier-option:last-child {
@@ -2917,28 +2934,23 @@ button.btn-nova-intencao:hover {
 }
 
 .supplier-option:hover {
-    background-color: #f0f7ff;
-    color: #19d6ff;
-    font-weight: 500;
-    padding-left: 16px;
+    background-color: #f0fbff;
+    color: #0099bb;
+    font-weight: 600;
 }
 
 .supplier-option:hover::before {
-    color: #19d6ff;
-    content: '◉';
-    font-weight: bold;
+    background: #19d6ff;
 }
 
 .supplier-option.selected {
     background-color: #e8f5ff;
-    color: #19d6ff;
-    font-weight: 500;
+    color: #0099bb;
+    font-weight: 600;
 }
 
 .supplier-option.selected::before {
-    content: '✓';
-    color: #19d6ff;
-    font-weight: bold;
+    background: #19d6ff;
 }
 
 .supplier-option.outro-option {
