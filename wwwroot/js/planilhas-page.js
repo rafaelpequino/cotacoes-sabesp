@@ -102,6 +102,7 @@ async function loadPlanilhas() {
         
         planilhasPageData = await api.getSpreadsheets(searchValue, sectorId, i0StartMonth, i0StartYear, i0EndMonth, i0EndYear);
         renderPlanilhasTable(planilhasPageData);
+        updateSearchIndicator(searchValue);
     } catch (error) {
         planilhasPageData = [];
         renderPlanilhasTable([]);
