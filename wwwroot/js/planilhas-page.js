@@ -148,9 +148,8 @@ function renderPlanilhasTable(planilhas) {
         // Verificar se é o proprietário
         const isOwner = currentUserId === planilha.userId;
         
-        // Botões de editar e deletar apenas aparecem se for o dono
+        // Botão de deletar apenas aparece se for o dono
         const editDeleteButtons = isOwner ? `
-                <button class="action-btn" title="Editar" onclick="editPlanilha(${planilha.id})">✏️</button>
                 <button class="action-btn" title="Deletar" onclick="deletePlanilha(${planilha.id})">🗑</button>
             ` : '';
         
@@ -266,9 +265,6 @@ function clearFilters() {
 function openUploadModal() {
     const modal = document.getElementById('uploadModal');
     if (modal) {
-        // Resetar para modo de criação
-        modal.dataset.isEditing = 'false';
-        delete modal.dataset.planilhaId;
         const title = document.getElementById('uploadModalTitle');
         const submitButton = document.getElementById('uploadModalSubmitButton');
         if (title) title.textContent = 'Nova Planilha';
@@ -290,16 +286,12 @@ function closeUploadModal() {
     const modal = document.getElementById('uploadModal');
     if (modal) {
         modal.style.display = 'none';
-        modal.dataset.isEditing = 'false';
-        delete modal.dataset.planilhaId;
     }
 }
 
 async function savePlanilha() {
     const modal = document.getElementById('uploadModal');
     const form = modal.querySelector('form');
-    const isEditing = modal.dataset.isEditing === 'true';
-    const planilhaId = modal.dataset.planilhaId;
     
     // Buscar input de nome da planilha
     const nameInput = document.getElementById('planilhaNameInput') || form.querySelector('input[type="text"]');
@@ -351,21 +343,18 @@ async function savePlanilha() {
         return;
     }
 
-    // Se não está editando, arquivo é obrigatório
-    if (!isEditing) {
-        if (!fileInput || !fileInput.files.length) {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Arquivo obrigatório',
-                text: 'Por favor, selecione um arquivo'
-            });
-            return;
-        }
+    if (!fileInput || !fileInput.files.length) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Arquivo obrigatório',
+            text: 'Por favor, selecione um arquivo'
+        });
+        return;
     }
 
     // Mostrar loading
     Swal.fire({
-        title: isEditing ? 'Atualizando planilha...' : 'Enviando arquivo...',
+        title: 'Enviando arquivo...',
         text: 'Por favor, aguarde.',
         icon: 'info',
         allowOutsideClick: false,
@@ -402,65 +391,31 @@ async function savePlanilha() {
             fileSize = file.size;
         }
 
-        if (isEditing) {
-            // Modo de edição - atualizar planilha
-            const data = {
-                name: name,
-                sectorId: sector ? parseInt(sector) : null,
-                i0Month: i0Month ? parseInt(i0Month) : null,
-                i0Year: i0Year ? parseInt(i0Year) : null,
-                // Todas as planilhas são compartilhadas
-                isShared: true
-            };
+        const data = {
+            name: name,
+            sectorId: sector ? parseInt(sector) : null,
+            i0Month: i0Month ? parseInt(i0Month) : null,
+            i0Year: i0Year ? parseInt(i0Year) : null,
+            filePath: filePath,
+            fileType: fileType,
+            fileSize: fileSize,
+            // Todas as planilhas são compartilhadas
+            isShared: true
+        };
 
-            // Adicionar dados do arquivo apenas se houver novo arquivo
-            if (filePath) {
-                data.filePath = filePath;
-                data.fileType = fileType;
-                data.fileSize = fileSize;
-            }
+        await api.createSpreadsheet(data);
 
-            await api.updateSpreadsheet(planilhaId, data);
+        closeUploadModal();
+        form.reset();
 
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: 'Planilha atualizada com sucesso!',
-                confirmButtonColor: '#13d0ff'
-            }).then(() => {
-                closeUploadModal();
-                loadPlanilhas();
-                form.reset();
-                modal.dataset.isEditing = 'false';
-                delete modal.dataset.planilhaId;
-            });
-        } else {
-            // Modo de criação - criar nova planilha
-            const data = {
-                name: name,
-                sectorId: sector ? parseInt(sector) : null,
-                i0Month: i0Month ? parseInt(i0Month) : null,
-                i0Year: i0Year ? parseInt(i0Year) : null,
-                filePath: filePath,
-                fileType: fileType,
-                fileSize: fileSize,
-                // Todas as planilhas são compartilhadas
-                isShared: true
-            };
-
-            await api.createSpreadsheet(data);
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Sucesso!',
-                text: 'Planilha enviada e criada com sucesso!',
-                confirmButtonColor: '#13d0ff'
-            }).then(() => {
-                closeUploadModal();
-                loadPlanilhas();
-                form.reset();
-            });
-        }
+        Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: 'Planilha enviada e criada com sucesso!',
+            confirmButtonColor: '#13d0ff'
+        }).then(() => {
+            loadPlanilhas();
+        });
     } catch (error) {
         const mensagem = humanizeError(error.message);
         Swal.fire({
@@ -523,53 +478,6 @@ async function downloadPlanilha(id) {
             text: mensagem || 'Não foi possível fazer o download da planilha'
         });
     }
-}
-
-async function editPlanilha(id) {
-    const planilha = planilhasPageData.find(p => p.id === id);
-    if (!planilha) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Erro',
-            text: 'Planilha não encontrada'
-        });
-        return;
-    }
-
-    // Verificar se é o proprietário
-    if (currentUserId !== planilha.userId) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Não permitido',
-            text: 'Você só pode editar planilhas que você criou'
-        });
-        return;
-    }
-
-    // Abrir modal de edição (reutilizando o modal de upload)
-    const modal = document.getElementById('uploadModal');
-    const form = modal.querySelector('form');
-
-    // Ajustar título e botão
-    const title = document.getElementById('uploadModalTitle');
-    const submitButton = document.getElementById('uploadModalSubmitButton');
-    if (title) title.textContent = 'Editar Planilha';
-    if (submitButton) submitButton.textContent = 'Atualizar';
-
-    // Popular campos
-    const nameInput = document.getElementById('planilhaNameInput');
-    const sectorSelect = document.getElementById('sectorSelect');
-    const isSharedCheckbox = document.getElementById('isSharedCheckbox');
-
-    if (nameInput) nameInput.value = planilha.name || '';
-    if (sectorSelect) sectorSelect.value = planilha.sectorId || '';
-    if (isSharedCheckbox) isSharedCheckbox.checked = planilha.isShared || false;
-
-    // Armazenar ID para update
-    modal.dataset.planilhaId = id;
-    modal.dataset.isEditing = 'true';
-
-    modal.style.display = 'flex';
 }
 
 async function deletePlanilha(id) {

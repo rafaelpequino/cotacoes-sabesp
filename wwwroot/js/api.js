@@ -294,10 +294,6 @@ class ApiClient {
         return this.request('/spreadsheets', 'POST', data);
     }
 
-    async updateSpreadsheet(id, data) {
-        return this.request(`/spreadsheets/${id}`, 'PUT', data);
-    }
-
     async deleteSpreadsheet(id) {
         return this.request(`/spreadsheets/${id}`, 'DELETE');
     }

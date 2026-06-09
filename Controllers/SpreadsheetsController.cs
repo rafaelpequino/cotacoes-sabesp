@@ -197,40 +197,6 @@ namespace CotacoesEPC.Controllers
             }
         }
 
-        // PUT: api/spreadsheets/{id}
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] UpdateSpreadsheetRequest request)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var userId = GetUserId();
-            var spreadsheet = await _context.Spreadsheets
-                .FirstOrDefaultAsync(s => s.Id == id && s.UserId == userId);
-
-            if (spreadsheet == null)
-                return NotFound(new { message = "Planilha não encontrada" });
-
-            spreadsheet.Name = request.Name;
-            spreadsheet.Description = request.Description;
-            spreadsheet.SectorId = request.SectorId;
-            spreadsheet.I0Month = request.I0Month;
-            spreadsheet.I0Year = request.I0Year;
-            spreadsheet.FilePath = request.FilePath;
-            spreadsheet.FileType = request.FileType;
-            spreadsheet.FileSize = request.FileSize;
-            spreadsheet.IsShared = request.IsShared;
-            spreadsheet.UpdatedAt = DateTime.UtcNow;
-
-            if (request.IsShared)
-                spreadsheet.SharedAt = DateTime.UtcNow;
-
-            _context.Spreadsheets.Update(spreadsheet);
-            await _context.SaveChangesAsync();
-
-            return Ok(spreadsheet);
-        }
-
         // GET: api/spreadsheets/{id}/download
         [HttpGet("{id}/download")]
         public async Task<IActionResult> Download(int id)
@@ -302,8 +268,5 @@ namespace CotacoesEPC.Controllers
         public int? I0Year { get; set; }
     }
 
-    public class UpdateSpreadsheetRequest : CreateSpreadsheetRequest
-    {
-    }
 }
 
