@@ -9,6 +9,7 @@ publish/
 # Env
 .env
 .env.*
+!.env.example
 
 # Static files (se quiser ignorar tudo)
 wwwroot/*

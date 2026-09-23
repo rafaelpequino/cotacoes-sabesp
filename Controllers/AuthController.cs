@@ -32,8 +32,9 @@ namespace CotacoesEPC.Controllers
                 Response.Cookies.Append("authToken", token ?? string.Empty, new Microsoft.AspNetCore.Http.CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
-                    SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
+                    Secure = false,
+                    SameSite = SameSiteMode.Lax,
+                    Path = "/",
                     Expires = DateTimeOffset.UtcNow.AddDays(7)
                 });
 
@@ -92,8 +93,9 @@ namespace CotacoesEPC.Controllers
             Response.Cookies.Append("authToken", token ?? string.Empty, new Microsoft.AspNetCore.Http.CookieOptions
             {
                 HttpOnly = true,
-                Secure = true,
-                SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict,
+                Secure = false,
+                SameSite = SameSiteMode.Lax,
+                Path = "/",
                 Expires = DateTimeOffset.UtcNow.AddDays(7)
             });
 
