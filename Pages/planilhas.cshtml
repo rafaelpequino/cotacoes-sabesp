@@ -27,11 +27,11 @@
 
     <div class="user-area">
         <button class="user" type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="user-icon">R</div>
-            <span class="user-name">Rafael</span>
+            <div class="user-icon">@(Model.UserName?.FirstOrDefault().ToString().ToUpper() ?? "?")</div>
+            <span class="user-name">@Model.UserName</span>
         </button>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
-            <li><h6 class="dropdown-header d-md-none">Rafael</h6></li>
+            <li><h6 class="dropdown-header d-md-none">@Model.UserName</h6></li>
             <li><hr class="dropdown-divider d-md-none"></li>
             <li><a class="dropdown-item" href="#" onclick="logout(event)">Sair</a></li>
         </ul>
