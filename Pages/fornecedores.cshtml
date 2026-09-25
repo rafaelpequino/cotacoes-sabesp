@@ -196,6 +196,21 @@
             }
         }
     });
+
+    function updateFornecedoresEmptyState() {
+        const table = document.getElementById('fornecedoresTableElement');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const tbody = table ? table.querySelector('tbody') : null;
+        if (!table || !emptyMessage || !tbody) return;
+        const isEmpty = tbody.children.length === 0;
+        table.style.display = isEmpty ? 'none' : 'table';
+        emptyMessage.style.display = isEmpty ? 'block' : 'none';
+    }
+    document.addEventListener('DOMContentLoaded', updateFornecedoresEmptyState);
+    const fornecedoresTbody = document.querySelector('#fornecedoresTableElement tbody');
+    if (fornecedoresTbody) {
+        new MutationObserver(updateFornecedoresEmptyState).observe(fornecedoresTbody, { childList: true });
+    }
 </script>
 <script src="~/js/fornecedores-page.js" asp-append-version="true"></script>
 

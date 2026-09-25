@@ -150,7 +150,7 @@
 
     <section class="servicos-table">
         <div id="emptyMessage" style="display: none; text-align: center; color: #999; padding: 60px 20px; font-size: 18px;">
-            Nenhum insumo cadastrado. Crie um novo!
+            Nenhuma cotação cadastrada. Crie uma nova!
         </div>
         <table id="quotationsTableElement">
             <thead>
@@ -1429,4 +1429,20 @@
             setupAttachmentHandlers();
         }
     });
+
+    // Ocultar a tabela e mostrar a mensagem quando não houver cotações
+    function updateQuotationsEmptyState() {
+        const table = document.getElementById('quotationsTableElement');
+        const emptyMessage = document.getElementById('emptyMessage');
+        const tbody = table ? table.querySelector('tbody') : null;
+        if (!table || !emptyMessage || !tbody) return;
+        const isEmpty = tbody.children.length === 0;
+        table.style.display = isEmpty ? 'none' : 'table';
+        emptyMessage.style.display = isEmpty ? 'block' : 'none';
+    }
+    document.addEventListener('DOMContentLoaded', updateQuotationsEmptyState);
+    const quotationsTbody = document.querySelector('#quotationsTableElement tbody');
+    if (quotationsTbody) {
+        new MutationObserver(updateQuotationsEmptyState).observe(quotationsTbody, { childList: true });
+    }
 </script>

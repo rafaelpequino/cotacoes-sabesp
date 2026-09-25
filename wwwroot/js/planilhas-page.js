@@ -85,6 +85,8 @@ async function loadUsers() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // Mostrar a mensagem de vazio imediatamente, sem esperar as requisições, igual às páginas de cotações/fornecedores
+    renderPlanilhasTable([]);
     await loadSectors();
     await loadUsers();
     await loadPlanilhas();
