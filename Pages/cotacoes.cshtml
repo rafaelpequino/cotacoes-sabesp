@@ -1117,8 +1117,37 @@
 
 <script>
     // MODAL CRIAR
-    function openCreateModal() {
-        document.getElementById('createModal').style.display = 'flex';
+    // Remove acentos, caixa baixa e caracteres especiais (ex.: "Âguas Claras" -> "AGUAS CLARAS")
+    function normalizeSectorName(name) {
+        return (name || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toUpperCase()
+            .replace(/[^A-Z0-9 ]/g, '');
+    }
+
+    async function populateSectorSelect(select) {
+        if (!select) return;
+        while (select.options.length > 1) {
+            select.remove(1);
+        }
+        try {
+            const sectors = await api.getSectors();
+            sectors.forEach(sector => {
+                const option = document.createElement('option');
+                option.value = sector.id;
+                option.textContent = normalizeSectorName(sector.name);
+                select.appendChild(option);
+            });
+        } catch (error) {
+            console.error('Erro ao carregar setores:', error);
+        }
+    }
+
+    async function openCreateModal() {
+        const modal = document.getElementById('createModal');
+        await populateSectorSelect(modal.querySelector('select[name="sectorId"]'));
+        modal.style.display = 'flex';
     }
 
     function closeCreateModal() {
@@ -1126,22 +1155,10 @@
     }
 
     // MODAL INTENÇÃO DE COTAÇÃO
-    function openIntencaoModal() {
+    async function openIntencaoModal() {
         const modal = document.getElementById('intencaoModal');
         if (modal) {
-            // Usar a mesma função para popular setores que é usada em createModal e editModal
-            const select = modal.querySelector('select[name="sectorId"]');
-            if (select) {
-                while (select.options.length > 1) {
-                    select.remove(1);
-                }
-                sectorsData.forEach(sector => {
-                    const option = document.createElement('option');
-                    option.value = sector.id;
-                    option.textContent = sector.name;
-                    select.appendChild(option);
-                });
-            }
+            await populateSectorSelect(modal.querySelector('select[name="sectorId"]'));
             modal.style.display = 'flex';
         }
     }
