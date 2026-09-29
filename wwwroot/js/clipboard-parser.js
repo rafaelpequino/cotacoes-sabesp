@@ -225,6 +225,13 @@ function fillFormWithParsedData(modal, parsedData) {
                 nomeInput.value = (companyName || '').trim();
             }
             
+            // Refletir também no input visível de busca do fornecedor
+            const supplierContainer = modal.querySelector(`.searchable-supplier-select[data-company-index="${i}"]`);
+            const visibleInput = supplierContainer ? supplierContainer.querySelector('.supplier-search-input') : null;
+            if (visibleInput) {
+                visibleInput.value = (companyName || '').trim();
+            }
+            
             if (valorInput) {
                 valorInput.value = parsedData[`empresa${i}`] || '';
             }
