@@ -1357,13 +1357,10 @@
                 clearTimeout(escTimeout);
 
                 if (escPressCount === 1) {
-                    // Primeira vez: avisar
-                    console.log('⚠️ Pressione ESC novamente para fechar');
                     escTimeout = setTimeout(() => {
                         escPressCount = 0;
                     }, 1000);
                 } else if (escPressCount >= 2) {
-                    // Segunda vez: fechar
                     closeBulkImportModal();
                     escPressCount = 0;
                 }
