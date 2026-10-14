@@ -9,46 +9,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>@ViewData["Title"] - CotacoesEPC</title>
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-<link rel="stylesheet" href="~/css/dashboard.css" />
+<link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
 
 <header class="dashboard-header">
     <div class="logo-area">
         <img src="~/images/sabesp.svg" alt="sabesp" class="logo" />
     </div>
 
-    <button class="menu-toggle" aria-label="Menu">☰</button>
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span class="hamburger-icon"></span></button>
 
     <nav class="menu">
-        <a class="menu-item" href="/dashboard">Dashboard</a>
+        <a class="menu-item" href="/dashboard">Início</a>
         <a class="menu-item" href="/cotacoes">Cotações</a>
         <a class="menu-item" href="/fornecedores">Fornecedores</a>
         <a class="menu-item active" href="/planilhas">Planilhas</a>
+        <a class="menu-item menu-logout" href="#" onclick="logout(event)">Sair</a>
     </nav>
 
     <div class="user-area">
-        <button class="user" type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="user" id="userMenuBtn">
             <div class="user-icon">@(Model.UserName?.FirstOrDefault().ToString().ToUpper() ?? "?")</div>
             <span class="user-name">@Model.UserName</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
-            <li><h6 class="dropdown-header d-md-none">@Model.UserName</h6></li>
-            <li><hr class="dropdown-divider d-md-none"></li>
-            <li><a class="dropdown-item" href="#" onclick="logout(event)">Sair</a></li>
-        </ul>
+        </div>
     </div>
 </header>
 
 <main class="dashboard-container">
     <div class="servicos-header">
-        <h2 class="title">Planilhas</h2>
-        <button class="btn-nova-cotacao" onclick="openUploadModal()">+ Nova Planilha</button>
+        <div class="page-heading">
+            <h2 class="title">Planilhas</h2>
+            <p class="page-description">Organize e consulte as planilhas compartilhadas por setor.</p>
+        </div>
+        <div class="header-buttons">
+            <button class="btn-nova-cotacao btn-criar-individual" onclick="openUploadModal()"><span class="ui-icon ui-icon-plus" aria-hidden="true"></span> Nova Planilha</button>
+        </div>
     </div>
 
     <!-- BUSCA POR TEXTO - LINHA 1 -->
-    <section class="servicos-filters" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 12px;">
+    <section class="servicos-filters">
         <div class="search-group">
             <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar por nome" />
-            <button class="btn-filtrar" id="btnFiltrar">🔍 Buscar</button>
+            <button class="btn-filtrar" id="btnFiltrar"><span class="ui-icon ui-icon-search" aria-hidden="true"></span> Buscar</button>
             <button class="btn-limpar" id="btnLimpar">Limpar Filtros</button>
         </div>
     </section>
@@ -258,7 +259,7 @@
                 <div class="form-group full-width">
                     <label>Arquivo Atual</label>
                     <div class="current-file-info">
-                        <span>📄 Planilha_Padrão_Civil.xlsx</span>
+                        <span><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Planilha_Padrão_Civil.xlsx</span>
                         <span class="file-size">3.1 MB</span>
                     </div>
                     <p style="font-size: 12px; color: #999; margin-top: 8px;">Para alterar o arquivo, clique abaixo:</p>

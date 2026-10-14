@@ -305,8 +305,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
-<body>
+<body class="auth-shell">
     <div class="register-container">
         <div class="logo">
             <img src="~/images/sabesp.svg" alt="SABESP" />
@@ -349,7 +350,7 @@
                 <label for="password" class="form-label">Senha *</label>
                 <input type="password" class="form-control" id="password" name="password" required 
                        placeholder="Mínimo 6 caracteres" />
-                <button type="button" class="toggle-btn" onclick="togglePasswordVisibility('password')">👁</button>
+                <button type="button" class="toggle-btn" aria-label="Exibir senha" onclick="togglePasswordVisibility('password')"><span class="ui-icon ui-icon-eye" aria-hidden="true"></span></button>
                 <div class="form-text">Mínimo 6 caracteres, com letras e números</div>
             </div>
 
@@ -357,7 +358,7 @@
                 <label for="confirmPassword" class="form-label">Confirmar Senha *</label>
                 <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required 
                        placeholder="Confirme a senha" />
-                <button type="button" class="toggle-btn" onclick="togglePasswordVisibility('confirmPassword')">👁</button>
+                <button type="button" class="toggle-btn" aria-label="Exibir confirmação da senha" onclick="togglePasswordVisibility('confirmPassword')"><span class="ui-icon ui-icon-eye" aria-hidden="true"></span></button>
             </div>
 
             <div class="loading" id="loading">
@@ -493,4 +494,3 @@
     </script>
 </body>
 </html>
-

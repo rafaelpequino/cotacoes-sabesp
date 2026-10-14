@@ -16,43 +16,42 @@
         <img src="~/images/sabesp.svg" alt="sabesp" class="logo" />
     </div>
 
-    <button class="menu-toggle" aria-label="Menu">☰</button>
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span class="hamburger-icon"></span></button>
 
     <nav class="menu">
-        <a class="menu-item" href="/dashboard">Dashboard</a>
+        <a class="menu-item" href="/dashboard">Início</a>
         <a class="menu-item active" href="/cotacoes">Cotações</a>
         <a class="menu-item" href="/fornecedores">Fornecedores</a>
         <a class="menu-item" href="/planilhas">Planilhas</a>
+        <a class="menu-item menu-logout" href="#" onclick="logout(event)">Sair</a>
     </nav>
 
     <div class="user-area">
-        <button class="user" type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="user" id="userMenuBtn">
             <div class="user-icon">@(Model.UserName?.FirstOrDefault().ToString().ToUpper() ?? "?")</div>
             <span class="user-name">@Model.UserName</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
-            <li><h6 class="dropdown-header d-md-none">@Model.UserName</h6></li>
-            <li><hr class="dropdown-divider d-md-none"></li>
-            <li><a class="dropdown-item" href="#" onclick="logout(event)">Sair</a></li>
-        </ul>
+        </div>
     </div>
 </header>
 
 <main class="dashboard-container">
     <div class="servicos-header">
-        <h2 class="title">Cotações</h2>
+        <div class="page-heading">
+            <h2 class="title">Cotações</h2>
+            <p class="page-description">Gerencie e acompanhe todas as cotações de forma simples e eficiente.</p>
+        </div>
         <div class="header-buttons">
-            <button class="btn-nova-cotacao btn-criar-individual" onclick="openCreateModal()">+ Nova Cotação</button>
-            <button class="btn-nova-cotacao btn-secondary" onclick="openBulkImportModal()">Adicionar em Lote</button>
-            <button class="btn-nova-intencao" onclick="openIntencaoModal()" style="background: transparent !important; color: #f57f17 !important; border: 2px solid #f57f17 !important; padding: 8px 18px !important; border-radius: 8px !important; font-size: 14px !important; font-weight: 600 !important; cursor: pointer !important; transition: background 0.2s, color 0.2s !important;">+ Intenção de Cotação</button>
+            <button class="btn-nova-cotacao btn-criar-individual" onclick="openCreateModal()"><span class="ui-icon ui-icon-plus" aria-hidden="true"></span> Nova Cotação</button>
+            <button class="btn-nova-cotacao btn-secondary" onclick="openBulkImportModal()"><span class="ui-icon ui-icon-upload" aria-hidden="true"></span> Adicionar em Lote</button>
+            <button class="btn-nova-intencao" onclick="openIntencaoModal()"><span class="ui-icon ui-icon-plus" aria-hidden="true"></span> Intenção de Cotação</button>
         </div>
     </div>
 
     <!-- BUSCA POR TEXTO - LINHA 1 -->
-    <section class="servicos-filters" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 12px;">
+    <section class="servicos-filters">
         <div class="search-group">
-            <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar por item" />
-            <button class="btn-filtrar" id="btnFiltrar">🔍 Buscar</button>
+            <input type="text" class="search-input" id="searchInput" placeholder="Pesquisar por item..." />
+            <button class="btn-filtrar" id="btnFiltrar"><span class="ui-icon ui-icon-search" aria-hidden="true"></span> Buscar</button>
             <button class="btn-limpar" id="btnLimpar">Limpar Filtros</button>
         </div>
     </section>
@@ -161,7 +160,7 @@
                     <th>Preço de Forn. Adotado</th>
                     <th>Responsável</th>
                     <th>Status</th>
-                    <th title="Quantidade de vezes que os dados foram copiados">📋</th>
+                    <th title="Quantidade de vezes que os dados foram copiados"><span class="ui-icon ui-icon-copy" aria-hidden="true"></span></th>
                     <th></th>
                 </tr>
             </thead>
@@ -189,7 +188,7 @@
             </div>
             
             <div class="paste-button-container">
-                <button type="button" class="btn-paste" onclick="pasteFromClipboard()">📋 Colar dados da planilha</button>
+                <button type="button" class="btn-paste" onclick="pasteFromClipboard()"><span class="ui-icon ui-icon-copy" aria-hidden="true"></span> Colar dados da planilha</button>
             </div>
             
             <div class="form-row">
@@ -257,7 +256,7 @@
                             <input 
                                 type="text" 
                                 class="supplier-search-input" 
-                                placeholder="🔍 Selecione ou procure..." 
+                                placeholder="Selecione ou procure..."
                                 autocomplete="off"
                                 required
                             />
@@ -289,7 +288,7 @@
                             <input 
                                 type="text" 
                                 class="supplier-search-input" 
-                                placeholder="🔍 Selecione ou procure..." 
+                                placeholder="Selecione ou procure..."
                                 autocomplete="off"
                             />
                             <div class="supplier-dropdown" style="display: none;"></div>
@@ -321,7 +320,7 @@
                             <input 
                                 type="text" 
                                 class="supplier-search-input" 
-                                placeholder="🔍 Selecione ou procure..." 
+                                placeholder="Selecione ou procure..."
                                 autocomplete="off"
                             />
                             <div class="supplier-dropdown" style="display: none;"></div>
@@ -490,7 +489,7 @@
             </div>
 
             <div class="paste-button-container">
-                <button type="button" class="btn-paste" onclick="pasteFromClipboardEdit()">📋 Colar dados da planilha</button>
+                <button type="button" class="btn-paste" onclick="pasteFromClipboardEdit()"><span class="ui-icon ui-icon-copy" aria-hidden="true"></span> Colar dados da planilha</button>
             </div>
 
             <div class="form-row">
@@ -774,11 +773,11 @@
             <div class="view-section section-header">
                 <div class="view-row-header">
                     <div class="view-item-header">
-                        <span class="view-label">👤 Responsável</span>
+                        <span class="view-label"><span class="ui-icon ui-icon-user" aria-hidden="true"></span> Responsável</span>
                         <span class="view-value-header" id="view-responsible-name">-</span>
                     </div>
                     <div class="view-item-header">
-                        <span class="view-label">🏢 Setor</span>
+                        <span class="view-label"><span class="ui-icon ui-icon-building" aria-hidden="true"></span> Setor</span>
                         <span class="view-value-header" id="view-sector-name">-</span>
                     </div>
                 </div>
@@ -786,7 +785,7 @@
 
             <!-- SEÇÃO 2: Informações Principais -->
             <div class="view-section">
-                <h3>📋 Informações da Cotação</h3>
+                <h3><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Informações da Cotação</h3>
                 <div class="info-grid">
                     <div class="info-card">
                         <span class="info-label">I0 Original</span>
@@ -817,7 +816,7 @@
 
             <!-- SEÇÃO 3: Médias e Medianas -->
             <div class="view-section">
-                <h3>📊 Médias e Estatísticas</h3>
+                <h3><span class="ui-icon ui-icon-chart" aria-hidden="true"></span> Médias e Estatísticas</h3>
                 <div class="stats-grid">
                     <div class="stat-card">
                         <span class="stat-label">Média Adotada</span>
@@ -844,54 +843,54 @@
 
             <!-- SEÇÃO 4: Preços das Empresas -->
             <div class="view-section">
-                <h3>🏪 Cotações das Empresas</h3>
+                <h3><span class="ui-icon ui-icon-store" aria-hidden="true"></span> Cotações das Empresas</h3>
                 <div class="companies-grid">
                     <div class="company-card" id="company-card-1">
                         <span class="company-label" id="company-name-1">Empresa 1</span>
                         <span class="company-value" id="company-value-1">-</span>
                         <div class="company-buttons">
-                            <button class="btn-supplier-details" id="btn-supplier-details-1" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(1)">📋 Fornecedor</button>
-                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 1)">ℹ️ Contatos</button>
+                            <button class="btn-supplier-details" id="btn-supplier-details-1" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(1)"><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 1)"><span class="ui-icon ui-icon-info" aria-hidden="true"></span> Contatos</button>
                         </div>
                     </div>
                     <div class="company-card" id="company-card-2">
                         <span class="company-label" id="company-name-2">Empresa 2</span>
                         <span class="company-value" id="company-value-2">-</span>
                         <div class="company-buttons">
-                            <button class="btn-supplier-details" id="btn-supplier-details-2" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(2)">📋 Fornecedor</button>
-                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 2)">ℹ️ Contatos</button>
+                            <button class="btn-supplier-details" id="btn-supplier-details-2" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(2)"><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 2)"><span class="ui-icon ui-icon-info" aria-hidden="true"></span> Contatos</button>
                         </div>
                     </div>
                     <div class="company-card" id="company-card-3">
                         <span class="company-label" id="company-name-3">Empresa 3</span>
                         <span class="company-value" id="company-value-3">-</span>
                         <div class="company-buttons">
-                            <button class="btn-supplier-details" id="btn-supplier-details-3" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(3)">📋 Fornecedor</button>
-                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 3)">ℹ️ Contatos</button>
+                            <button class="btn-supplier-details" id="btn-supplier-details-3" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(3)"><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 3)"><span class="ui-icon ui-icon-info" aria-hidden="true"></span> Contatos</button>
                         </div>
                     </div>
                     <div class="company-card" id="company-card-4">
                         <span class="company-label" id="company-name-4">Empresa 4</span>
                         <span class="company-value" id="company-value-4">-</span>
                         <div class="company-buttons">
-                            <button class="btn-supplier-details" id="btn-supplier-details-4" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(4)">📋 Fornecedor</button>
-                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 4)">ℹ️ Contatos</button>
+                            <button class="btn-supplier-details" id="btn-supplier-details-4" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(4)"><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 4)"><span class="ui-icon ui-icon-info" aria-hidden="true"></span> Contatos</button>
                         </div>
                     </div>
                     <div class="company-card" id="company-card-5">
                         <span class="company-label" id="company-name-5">Empresa 5</span>
                         <span class="company-value" id="company-value-5">-</span>
                         <div class="company-buttons">
-                            <button class="btn-supplier-details" id="btn-supplier-details-5" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(5)">📋 Fornecedor</button>
-                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 5)">ℹ️ Contatos</button>
+                            <button class="btn-supplier-details" id="btn-supplier-details-5" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(5)"><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 5)"><span class="ui-icon ui-icon-info" aria-hidden="true"></span> Contatos</button>
                         </div>
                     </div>
                     <div class="company-card" id="company-card-6">
                         <span class="company-label" id="company-name-6">Empresa 6</span>
                         <span class="company-value" id="company-value-6">-</span>
                         <div class="company-buttons">
-                            <button class="btn-supplier-details" id="btn-supplier-details-6" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(6)">📋 Fornecedor</button>
-                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 6)">ℹ️ Contatos</button>
+                            <button class="btn-supplier-details" id="btn-supplier-details-6" title="Ver detalhes do fornecedor" style="display: none;" onclick="viewSupplierDetails(6)"><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Fornecedor</button>
+                            <button class="btn-company-detail" title="Ver / editar dados da empresa" onclick="openCompanyDetailModal('Quotation', 6)"><span class="ui-icon ui-icon-info" aria-hidden="true"></span> Contatos</button>
                         </div>
                     </div>
                 </div>
@@ -899,7 +898,7 @@
 
             <!-- SEÇÃO 5: Justificativa -->
             <div class="view-section">
-                <h3>📝 Justificativa</h3>
+                <h3><span class="ui-icon ui-icon-file" aria-hidden="true"></span> Justificativa</h3>
                 <div class="justification-box">
                     <p class="justification-text">-</p>
                 </div>
@@ -907,7 +906,7 @@
 
             <!-- SEÇÃO 6: Anexos -->
             <div class="view-section">
-                <h3>📎 Anexos (PDFs)</h3>
+                <h3><span class="ui-icon ui-icon-clip" aria-hidden="true"></span> Anexos (PDFs)</h3>
                 <div id="viewAttachmentsList">
                     <p class="view-text" style="color: #999;">Nenhum anexo disponível</p>
                 </div>
@@ -925,7 +924,7 @@
 <div id="intencaoModal" class="modal">
     <div class="modal-content" style="max-width: 500px; width: 95%;">
         <div class="modal-header">
-            <h2>🟡 Intenção de Cotação</h2>
+            <h2><span class="ui-icon ui-icon-clock" aria-hidden="true"></span> Intenção de Cotação</h2>
             <button class="modal-close" onclick="closeIntencaoModal()">&times;</button>
         </div>
         <form class="modal-form" id="intencaoForm">
@@ -970,7 +969,7 @@
             <!-- Área de colagem -->
             <div id="bulkPasteArea" class="bulk-paste-area">
                 <button onclick="bulkPasteFromClipboard()" class="btn btn-primary">
-                    📋 Colar do Excel
+                    <span class="ui-icon ui-icon-copy" aria-hidden="true"></span> Colar do Excel
                 </button>
             </div>
 
@@ -1072,8 +1071,8 @@
 
             <div class="company-detail-section">
                 <div class="company-detail-section-header">
-                    <h3>📋 Histórico de Contatos</h3>
-                    <button type="button" class="btn-edit-section" onclick="toggleAddLogForm()">➕ Novo Contato</button>
+                    <h3><span class="ui-icon ui-icon-history" aria-hidden="true"></span> Histórico de Contatos</h3>
+                    <button type="button" class="btn-edit-section" onclick="toggleAddLogForm()"><span class="ui-icon ui-icon-plus" aria-hidden="true"></span> Novo Contato</button>
                 </div>
                 <div id="logForm" style="display:none; background:#f8f9fa; padding:16px; border-radius:8px; margin-bottom:16px; border:1px solid #e0e0e0;">
                     <h4 id="logFormTitle" style="margin:0 0 12px; font-size:14px; color:#555;">Novo Contato</h4>
@@ -1413,12 +1412,23 @@
 <script src="~/js/cotacoes-page.js" asp-append-version="true"></script>
 
 <script>
+    function statusBadge(status) {
+        const states = {
+            'Concluída': { css: 'concluida', path: '<circle cx="12" cy="12" r="10" fill="currentColor" stroke="none"/><path d="m7.5 12.2 3 3 6-6.3" fill="none" stroke="#fff" stroke-width="2.2"/>' },
+            'Pendente': { css: 'pendente', path: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>' },
+            'Cancelada': { css: 'cancelada', path: '<path d="m7 7 10 10M17 7 7 17"/>' }
+        };
+        const state = states[status];
+        if (!state) return status || '-';
+        return `<span class="status-badge ${state.css}"><svg class="status-icon${state.css === 'concluida' ? ' status-icon-check' : ''}" viewBox="0 0 24 24" aria-hidden="true">${state.path}</svg>${status}</span>`;
+    }
+
     // Inicializar handlers de anexos após o DOM carregar
     document.addEventListener('DOMContentLoaded', () => {
         // Atualizar placeholders de todos os supplier selects
         document.querySelectorAll('.supplier-search-input').forEach(input => {
             if (input.placeholder.includes('Buscar')) {
-                input.placeholder = '🔍 Selecione ou procure...';
+                input.placeholder = 'Selecione ou procure...';
             }
         });
         

@@ -28,7 +28,7 @@ function resetBulkImport() {
     currentViewAttachmentsIndex = null;
     document.getElementById('bulkPasteArea').innerHTML = `
         <button onclick="bulkPasteFromClipboard()" class="btn btn-primary">
-            📋 Colar do Excel
+            Colar do Excel
         </button>
     `;
     document.getElementById('bulkPreviewArea').innerHTML = '';
@@ -41,7 +41,7 @@ async function bulkPasteFromClipboard() {
         if (!text || text.trim() === '') {
             Swal.fire({
                 icon: 'warning',
-                title: '⚠️ Nenhum dado',
+                title: 'Nenhum dado',
                 text: 'Nenhum dado encontrado na área de transferência!',
                 confirmButtonText: 'OK'
             });
@@ -51,7 +51,7 @@ async function bulkPasteFromClipboard() {
     } catch (err) {
         Swal.fire({
             icon: 'error',
-            title: '❌ Erro',
+            title: 'Erro',
             text: 'Erro ao ler dados da área de transferência. Verifique as permissões do navegador.',
             confirmButtonText: 'OK'
         });
@@ -86,7 +86,7 @@ function processBulkData(text) {
     if (lines.length < 2 || lines.length % 2 !== 0) {
         Swal.fire({
             icon: 'warning',
-            title: '⚠️ Formato inválido',
+            title: 'Formato inválido',
             text: 'Cada cotação deve ter 2 linhas (nomes das empresas + dados da cotação).',
             confirmButtonText: 'OK'
         });
@@ -157,7 +157,7 @@ function processBulkData(text) {
     if (bulkCotacoesData.length === 0) {
         Swal.fire({
             icon: 'warning',
-            title: '⚠️ Nenhuma cotação',
+            title: 'Nenhuma cotação',
             text: 'Nenhuma cotação válida foi encontrada!',
             confirmButtonText: 'OK'
         });
@@ -282,7 +282,7 @@ function displayBulkPreview() {
                     </button>
                 </td>
                 <td>
-                    <button class="btn-remove" onclick="removeBulkItem(${index})" title="Remover cotação">🗑️</button>
+                    <button class="btn-remove" onclick="removeBulkItem(${index})" title="Remover cotação" aria-label="Remover cotação"></button>
                 </td>
             </tr>
         `;
@@ -309,7 +309,7 @@ function updateAttachmentCount(index) {
     const count = cotacao.attachments?.length || 0;
     const btn = document.querySelector(`button[onclick="openBulkViewAttachmentsModal(${index})"]`);
     if (btn) {
-        btn.textContent = count > 0 ? `📎 ${count} anexo(s)` : '📎 Nenhum anexo';
+        btn.textContent = count > 0 ? `${count} anexo(s)` : 'Nenhum anexo';
     }
 }
 
@@ -317,7 +317,7 @@ function updateAttachmentCount(index) {
 function removeBulkItem(index) {
     Swal.fire({
         icon: 'warning',
-        title: '⚠️ Remover cotação?',
+        title: 'Remover cotação?',
         text: 'Deseja realmente remover esta cotação?',
         showCancelButton: true,
         confirmButtonText: 'Sim, remover',
@@ -368,7 +368,7 @@ async function loadSectorsForBulk() {
     } catch (error) {
         Swal.fire({
             icon: 'error',
-            title: '❌ Erro',
+            title: 'Erro',
             text: 'Erro ao carregar setores',
             confirmButtonText: 'OK'
         });
@@ -404,7 +404,7 @@ function openBulkCompaniesModal(index) {
     currentBulkCompaniesIndex = index;
 
     // Gerar HTML com 6 inputs (um por linha, full-width: 50% nome + 50% valor)
-    let html = '<h3>📊 Empresas e Valores</h3>';
+    let html = '<h3>Empresas e Valores</h3>';
     
     // Empresas 1-6 (uma por linha, ocupando 100% da largura)
     for (let i = 1; i <= 6; i++) {
@@ -422,7 +422,7 @@ function openBulkCompaniesModal(index) {
                         <input 
                             type="text" 
                             class="supplier-search-input bulk-supplier-input" 
-                            placeholder="🔍 Selecione ou procure..." 
+                            placeholder="Selecione ou procure..."
                             autocomplete="off"
                             value="${nomeValue}"
                         />
@@ -576,16 +576,16 @@ function openBulkPricesModal(index) {
     const content = document.getElementById('bulkPricesContent');
 
     const precos = [
-        { label: '💰 Preço Adotado', valor: cotacao.precoAdotado, highlight: true },
-        { label: '📊 Média Saneada', valor: cotacao.mediaSaneada, highlight: true },
-        { label: '📉 Menor Valor', valor: cotacao.menorValor },
-        { label: '📈 Média Aritmética', valor: cotacao.mediaAritmetica },
-        { label: '📊 Mediana', valor: cotacao.mediana },
-        { label: '🔧 Adotada - Preço Forn.', valor: cotacao.adotada },
-        { label: '⚙️ Preço de Montagem', valor: cotacao.precoMontagem }
+        { label: 'Preço Adotado', valor: cotacao.precoAdotado, highlight: true },
+        { label: 'Média Saneada', valor: cotacao.mediaSaneada, highlight: true },
+        { label: 'Menor Valor', valor: cotacao.menorValor },
+        { label: 'Média Aritmética', valor: cotacao.mediaAritmetica },
+        { label: 'Mediana', valor: cotacao.mediana },
+        { label: 'Adotada - Preço Forn.', valor: cotacao.adotada },
+        { label: 'Preço de Montagem', valor: cotacao.precoMontagem }
     ];
 
-    let html = '<h3>💰 Preços e Médias</h3><div class="bulk-prices-list">';
+    let html = '<h3>Preços e Médias</h3><div class="bulk-prices-list">';
 
     precos.forEach(p => {
         const highlightClass = p.highlight ? 'highlight' : '';
@@ -699,7 +699,7 @@ function confirmBulkAttachmentDescription() {
     if (!descricao) {
         Swal.fire({
             icon: 'warning',
-            title: '⚠️ Campo obrigatório',
+            title: 'Campo obrigatório',
             text: 'Descrição é obrigatória!',
             confirmButtonText: 'OK'
         });
@@ -746,10 +746,10 @@ function displayBulkAttachments(index) {
         html += `
             <div class="bulk-view-attachment-item">
                 <div>
-                    <strong>📎 ${att.filename}</strong>
+                    <strong>${att.filename}</strong>
                     <p>${att.description}${att.companyName ? ` &nbsp;|&nbsp; <strong>Empresa:</strong> ${att.companyName}` : ''}</p>
                 </div>
-                <button class="btn-remove" onclick="removeBulkAttachment(${index}, ${attIndex})">❌</button>
+                <button class="btn-remove" onclick="removeBulkAttachment(${index}, ${attIndex})" title="Remover anexo" aria-label="Remover anexo"></button>
             </div>
         `;
     });
@@ -760,7 +760,7 @@ function displayBulkAttachments(index) {
 function removeBulkAttachment(cotacaoIndex, attachmentIndex) {
     Swal.fire({
         icon: 'warning',
-        title: '⚠️ Remover anexo?',
+        title: 'Remover anexo?',
         text: 'Deseja remover este anexo?',
         showCancelButton: true,
         confirmButtonText: 'Sim, remover',
@@ -780,14 +780,14 @@ function removeBulkAttachment(cotacaoIndex, attachmentIndex) {
 // ========================================
 function clearBulkData() {
     if (typeof Swal === 'undefined') {
-        if (confirm('⚠️ Deseja realmente limpar todos os dados e recomeçar?')) {
+        if (confirm('Deseja realmente limpar todos os dados e recomeçar?')) {
             resetBulkImport();
         }
         return;
     }
 
     Swal.fire({
-        title: '⚠️ Limpar tudo?',
+        title: 'Limpar tudo?',
         text: 'Todos os dados serão perdidos. Deseja continuar?',
         icon: 'warning',
         showCancelButton: true,
@@ -850,7 +850,7 @@ async function saveBulkCotacoes() {
     if (semSetor.length > 0) {
         Swal.fire({
             icon: 'warning',
-            title: '⚠️ Setor não definido',
+            title: 'Setor não definido',
             text: `${semSetor.length} cotação(ões) sem setor definido!`,
             confirmButtonText: 'OK'
         });
@@ -940,20 +940,20 @@ async function saveBulkCotacoes() {
     // Feedback final
     if (typeof Swal !== 'undefined') {
         Swal.fire({
-            title: sucessos > 0 ? '✅ Concluído!' : '❌ Erro!',
+            title: sucessos > 0 ? 'Concluído!' : 'Erro!',
             html: `
-                <p>✅ ${sucessos} cotação(ões) salva(s) com sucesso</p>
-                ${erros > 0 ? `<p>❌ ${erros} erro(s)</p>` : ''}
+                <p>${sucessos} cotação(ões) salva(s) com sucesso</p>
+                ${erros > 0 ? `<p>${erros} erro(s)</p>` : ''}
             `,
             icon: sucessos > 0 ? 'success' : 'error'
         });
     } else {
         Swal.fire({
             icon: sucessos > 0 ? 'success' : 'error',
-            title: sucessos > 0 ? '✅ Concluído!' : '❌ Erro!',
+            title: sucessos > 0 ? 'Concluído!' : 'Erro!',
             html: `
-                <p>✅ ${sucessos} cotação(ões) salva(s) com sucesso</p>
-                ${erros > 0 ? `<p style="color: #dc3545;">❌ ${erros} erro(s)</p>` : ''}
+                <p>${sucessos} cotação(ões) salva(s) com sucesso</p>
+                ${erros > 0 ? `<p style="color: #dc3545;">${erros} erro(s)</p>` : ''}
             `,
             confirmButtonText: 'OK'
         });

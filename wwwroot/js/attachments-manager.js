@@ -324,8 +324,8 @@ function renderViewAttachments() {
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                     <span style="font-size: 14px; font-weight: 500;">📄 ${att.originalFileName}</span>
                     <div>
-                        <button type="button" onclick="viewAttachmentInNewTab(${att.id})" style="background: #ff9800; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px; margin-right: 4px;">👁 Visualizar</button>
-                        <button type="button" onclick="downloadAttachment(${att.id}, '${att.originalFileName}')" style="background: #19d6ff; color: white; border: none; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px;">⬇ Baixar</button>
+                        <button type="button" onclick="viewAttachmentInNewTab(${att.id})" style="background: #f1f3f4; color: #46515a; border: 1px solid #d7dde1; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px; margin-right: 4px;"><span class="ui-icon ui-icon-eye" aria-hidden="true"></span> Visualizar</button>
+                        <button type="button" onclick="downloadAttachment(${att.id}, '${att.originalFileName}')" style="background: #f1f3f4; color: #46515a; border: 1px solid #d7dde1; border-radius: 4px; padding: 6px 12px; cursor: pointer; font-size: 13px;"><span class="ui-icon ui-icon-download" aria-hidden="true"></span> Baixar</button>
                     </div>
                 </div>
                 <div style="font-size: 12px; color: #666;">

@@ -105,7 +105,7 @@ function updateRecentSpreadsheets(spreadsheets) {
                 <td>${spreadsheet.responsibleName || 'Desconhecido'}</td>
                 <td>
                     <button class="download-btn" onclick="downloadSpreadsheet(${spreadsheet.id}, event)" title="Baixar planilha">
-                        <span style="font-size: 16px;">⬇</span>
+                        <span class="ui-icon ui-icon-download" aria-hidden="true"></span>
                     </button>
                 </td>
             `;
@@ -191,4 +191,3 @@ document.addEventListener('DOMContentLoaded', loadDashboardData);
 
 // Recarregar dados a cada 30 segundos
 setInterval(loadDashboardData, 30000);
-

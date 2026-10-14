@@ -17,61 +17,60 @@
         <img src="~/images/sabesp.svg" alt="sabesp" class="logo" />
     </div>
 
-    <button class="menu-toggle" aria-label="Menu">☰</button>
+    <button class="menu-toggle" aria-label="Menu" aria-expanded="false"><span class="hamburger-icon"></span></button>
 
     <nav class="menu">
-        <a class="menu-item active" href="/dashboard">Dashboard</a>
+        <a class="menu-item active" href="/dashboard">Início</a>
         <a class="menu-item" href="/cotacoes">Cotações</a>
         <a class="menu-item" href="/fornecedores">Fornecedores</a>
         <a class="menu-item" href="/planilhas">Planilhas</a>
+        <a class="menu-item menu-logout" href="#" onclick="logout(event)">Sair</a>
     </nav>
 
     <div class="user-area">
-        <button class="user" type="button" id="userMenuBtn" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="user" id="userMenuBtn">
             <div class="user-icon">@(Model.UserName?.FirstOrDefault().ToString().ToUpper() ?? "?")</div>
             <span class="user-name">@Model.UserName</span>
-        </button>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenuBtn">
-            <li><h6 class="dropdown-header d-md-none">@Model.UserName</h6></li>
-            <li><hr class="dropdown-divider d-md-none"></li>
-            <li><a class="dropdown-item" href="#" onclick="logout(event)">Sair</a></li>
-        </ul>
+        </div>
     </div>
 </header>
 
 <main class="dashboard-container">
-    <h2 class="title">Sistema de Compartilhamento de Cotações</h2>
+    <div class="page-heading">
+        <h2 class="title">Visão geral</h2>
+        <p class="page-description">Acompanhe os principais indicadores do sistema de cotações.</p>
+    </div>
 
     <section class="cards">
-        <div class="card">
+        <a class="card" href="/cotacoes">
             <div class="icon">
-                <img src="~/images/icons/quotes.svg" alt="Cotações" />
+                <span class="ui-icon ui-icon-tag" aria-hidden="true"></span>
             </div>
             <div class="numbers">
                 <h3><span id="quotationsCount">0</span></h3>
                 <p>Cotações</p>
             </div>
-        </div>
+        </a>
 
-        <div class="card">
+        <a class="card" href="/fornecedores">
             <div class="icon">
-                <img src="~/images/icons/services.svg" alt="Fornecedores" />
+                <span class="ui-icon ui-icon-users" aria-hidden="true"></span>
             </div>
             <div class="numbers">
                 <h3><span id="suppliersCount">0</span></h3>
                 <p>Fornecedores</p>
             </div>
-        </div>
+        </a>
 
-        <div class="card">
+        <a class="card" href="/planilhas">
             <div class="icon">
-                <img src="~/images/icons/spreadsheets.svg" alt="Planilhas" />
+                <span class="ui-icon ui-icon-file" aria-hidden="true"></span>
             </div>
             <div class="numbers">
                 <h3><span id="spreadsheetsCount">0</span></h3>
                 <p>Planilhas</p>
             </div>
-        </div>
+        </a>
     </section>
 
 </main>

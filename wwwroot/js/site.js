@@ -152,10 +152,9 @@ document.addEventListener('DOMContentLoaded', function() {
         menuToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             menu.classList.toggle('active');
-            
-            // Animar ícone do hamburguer
-            const icon = menuToggle.textContent;
-            menuToggle.textContent = menu.classList.contains('active') ? '✕' : '☰';
+            const isOpen = menu.classList.contains('active');
+            menuToggle.querySelector('.hamburger-icon')?.classList.toggle('is-open', isOpen);
+            menuToggle.setAttribute('aria-expanded', String(isOpen));
         });
         
         // Fechar menu ao clicar em um item
@@ -163,7 +162,8 @@ document.addEventListener('DOMContentLoaded', function() {
         menuItems.forEach(item => {
             item.addEventListener('click', function() {
                 menu.classList.remove('active');
-                menuToggle.textContent = '☰';
+                menuToggle.querySelector('.hamburger-icon')?.classList.remove('is-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
             });
         });
         
@@ -171,7 +171,8 @@ document.addEventListener('DOMContentLoaded', function() {
         document.addEventListener('click', function(event) {
             if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
                 menu.classList.remove('active');
-                menuToggle.textContent = '☰';
+                menuToggle.querySelector('.hamburger-icon')?.classList.remove('is-open');
+                menuToggle.setAttribute('aria-expanded', 'false');
             }
         });
     }

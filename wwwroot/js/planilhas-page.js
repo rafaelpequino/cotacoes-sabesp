@@ -152,7 +152,7 @@ function renderPlanilhasTable(planilhas) {
         
         // Botão de deletar apenas aparece se for o dono
         const editDeleteButtons = isOwner ? `
-                <button class="action-btn" title="Deletar" onclick="deletePlanilha(${planilha.id})">🗑</button>
+                <button class="action-btn" title="Deletar" aria-label="Deletar" onclick="deletePlanilha(${planilha.id})"></button>
             ` : '';
         
         row.innerHTML = `
@@ -163,7 +163,7 @@ function renderPlanilhasTable(planilhas) {
             <td>${ownerName}</td>
             <td>${planilha.fileSize ? (planilha.fileSize / 1024).toFixed(2) + ' KB' : '-'}</td>
             <td class="actions">
-                <button class="action-btn" title="Download" onclick="downloadPlanilha(${planilha.id})">⬇️</button>
+                <button class="action-btn" title="Download" aria-label="Download" onclick="downloadPlanilha(${planilha.id})"></button>
                 ${editDeleteButtons}
             </td>
         `;
@@ -277,7 +277,7 @@ function openUploadModal() {
     } else {
         Swal.fire({
             icon: 'info',
-            title: 'ℹ️ Em desenvolvimento',
+            title: 'Em desenvolvimento',
             text: 'Funcionalidade de upload de planilhas em desenvolvimento',
             confirmButtonText: 'OK'
         });
